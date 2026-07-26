@@ -79,7 +79,7 @@ def fetch_transfers(address):
 
 
 def main():
-    send_telegram("✅ Whale Alert Bot çalıştı.")
+ 
     state = load_state()
     wallets = load_wallets()
 
