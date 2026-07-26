@@ -12,10 +12,11 @@ LARGE_BUY_THRESHOLD_USD = 1000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
-# Known Uniswap router addresses. Real swaps usually show the LIQUIDITY POOL
-# as the "from" address (a different address per token pair), not the router
-# itself -- so we no longer require a match here. Kept only to label a
-# transfer as "confirmed router swap" when it happens to match.
+# How many blocks back to scan on the very first run (~12s/block -> 300 blocks ~ 1 hour)
+FIRST_RUN_BLOCK_LOOKBACK = 300
+
+TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+
 DEX_ROUTERS = {
     "0x7a250d5630b4cf539739df2c5dacb4c659f2488d": "Uniswap V2",
     "0xe592427a0aece92de3edee1f18e0157c05861564": "Uniswap V3",
@@ -37,16 +38,29 @@ def save_state(state):
         json.dump(state, f, indent=2)
 
 
-def load_list_file(path):
+def load_tokens():
     items = []
-    with open(path, "r") as f:
+    with open(TOKENS_FILE, "r") as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
-            address, label = line.split(",", 1)
-            items.append((address.strip().lower(), label.strip()))
+            parts = [p.strip() for p in line.split(",")]
+            address, symbol, decimals = parts[0], parts[1], int(parts[2])
+            items.append((address.lower(), symbol, decimals))
     return items
+
+
+def load_exchanges():
+    addrs = set()
+    with open(EXCHANGES_FILE, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            address = line.split(",", 1)[0].strip().lower()
+            addrs.add(address)
+    return addrs
 
 
 def send_telegram(text):
@@ -65,70 +79,78 @@ def get_token_price_usd(contract_address):
         )
         data = r.json()
         return float(data.get(contract_address.lower(), {}).get("usd", 0) or 0)
-    except Exception:
+    except Exception as e:
+        print("Price fetch error:", e)
         return 0.0
 
 
-def fetch_token_transfers(contract_address):
+def get_latest_block():
+    r = requests.get(
+        "https://api.etherscan.io/api",
+        params={"module": "proxy", "action": "eth_blockNumber", "apikey": ETHERSCAN_KEY},
+        timeout=20,
+    )
+    result = r.json().get("result", "0x0")
+    return int(result, 16)
+
+
+def fetch_transfer_logs(contract_address, from_block, to_block):
     params = {
-        "module": "account",
-        "action": "tokentx",
-        "contractaddress": contract_address,
-        "sort": "desc",
-        "page": 1,
-        "offset": 50,
+        "module": "logs",
+        "action": "getLogs",
+        "address": contract_address,
+        "topic0": TRANSFER_TOPIC,
+        "fromBlock": from_block,
+        "toBlock": to_block,
         "apikey": ETHERSCAN_KEY,
     }
-    r = requests.get("https://api.etherscan.io/api", params=params, timeout=20)
+    r = requests.get("https://api.etherscan.io/api", params=params, timeout=30)
     data = r.json()
     result = data.get("result", [])
-    return result if isinstance(result, list) else []
+    if not isinstance(result, list):
+        print("getLogs unexpected response:", data.get("message"), data.get("result"))
+        return []
+    return result
+
+
+def topic_to_address(topic_hex):
+    return "0x" + topic_hex[-40:]
 
 
 def main():
     state = load_state()
-    tokens = load_list_file(TOKENS_FILE)
-    exchanges = load_list_file(EXCHANGES_FILE)
-    exchange_addresses = {addr for addr, _ in exchanges}
+    tokens = load_tokens()
+    exchange_addresses = load_exchanges()
 
-    print(f"Loaded {len(tokens)} tokens, {len(exchange_addresses)} exchange addresses")
+    latest_block = get_latest_block()
+    print(f"Latest block: {latest_block}, loaded {len(tokens)} tokens, {len(exchange_addresses)} exchange addresses")
 
-    for contract, symbol in tokens:
-        tstate = state.setdefault(contract, {"last_tx_hash": None, "accumulation": {}})
-        transfers = fetch_token_transfers(contract)
-        print(f"{symbol}: fetched {len(transfers)} recent transfers")
-        if not transfers:
-            continue
+    for contract, symbol, decimals in tokens:
+        tstate = state.setdefault(contract, {"last_block": None, "accumulation": {}})
+        from_block = tstate["last_block"] + 1 if tstate["last_block"] else latest_block - FIRST_RUN_BLOCK_LOOKBACK
 
-        transfers = list(reversed(transfers))
-        new_last_hash = tstate["last_tx_hash"]
-        seen_previous = tstate["last_tx_hash"] is None
+        logs = fetch_transfer_logs(contract, from_block, latest_block)
+        print(f"{symbol}: scanned blocks {from_block}-{latest_block}, found {len(logs)} transfer logs")
+
         price = get_token_price_usd(contract)
         print(f"{symbol}: price=${price}")
 
-        processed = 0
-        for tx in transfers:
-            tx_hash = tx.get("hash")
-            if not seen_previous:
-                if tx_hash == tstate["last_tx_hash"]:
-                    seen_previous = True
+        for log in logs:
+            topics = log.get("topics", [])
+            if len(topics) < 3:
+                continue
+            from_address = topic_to_address(topics[1])
+            to_address = topic_to_address(topics[2])
+            tx_hash = log.get("transactionHash", "")
+
+            if to_address in exchange_addresses or from_address in exchange_addresses:
                 continue
 
-            from_address = tx.get("from", "").lower()
-            to_address = tx.get("to", "").lower()
-            new_last_hash = tx_hash
-            processed += 1
-
-            # Skip transfers landing back in a known exchange wallet -- those
-            # are deposits, not a whale accumulating in their own wallet.
-            if to_address in exchange_addresses:
+            try:
+                raw_value = int(log.get("data", "0x0"), 16)
+            except ValueError:
                 continue
-            # Skip transfers FROM an exchange too (a withdrawal isn't a "buy").
-            if from_address in exchange_addresses:
-                continue
-
-            decimals = int(tx.get("tokenDecimal", 18) or 18)
-            amount = int(tx.get("value", 0)) / (10 ** decimals)
+            amount = raw_value / (10 ** decimals)
             usd_value = amount * price
             if usd_value <= 0:
                 continue
@@ -173,8 +195,7 @@ def main():
                     acc["since"] = now
                     acc["count"] = 0
 
-        print(f"{symbol}: processed {processed} new transfers")
-        tstate["last_tx_hash"] = new_last_hash
+        tstate["last_block"] = latest_block
 
     save_state(state)
     print("Done.")
