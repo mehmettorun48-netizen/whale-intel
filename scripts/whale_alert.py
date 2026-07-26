@@ -12,6 +12,10 @@ LARGE_BUY_THRESHOLD_USD = 1000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
+# Known Uniswap router addresses. Real swaps usually show the LIQUIDITY POOL
+# as the "from" address (a different address per token pair), not the router
+# itself -- so we no longer require a match here. Kept only to label a
+# transfer as "confirmed router swap" when it happens to match.
 DEX_ROUTERS = {
     "0x7a250d5630b4cf539739df2c5dacb4c659f2488d": "Uniswap V2",
     "0xe592427a0aece92de3edee1f18e0157c05861564": "Uniswap V3",
@@ -87,9 +91,12 @@ def main():
     exchanges = load_list_file(EXCHANGES_FILE)
     exchange_addresses = {addr for addr, _ in exchanges}
 
+    print(f"Loaded {len(tokens)} tokens, {len(exchange_addresses)} exchange addresses")
+
     for contract, symbol in tokens:
         tstate = state.setdefault(contract, {"last_tx_hash": None, "accumulation": {}})
         transfers = fetch_token_transfers(contract)
+        print(f"{symbol}: fetched {len(transfers)} recent transfers")
         if not transfers:
             continue
 
@@ -97,7 +104,9 @@ def main():
         new_last_hash = tstate["last_tx_hash"]
         seen_previous = tstate["last_tx_hash"] is None
         price = get_token_price_usd(contract)
+        print(f"{symbol}: price=${price}")
 
+        processed = 0
         for tx in transfers:
             tx_hash = tx.get("hash")
             if not seen_previous:
@@ -108,12 +117,14 @@ def main():
             from_address = tx.get("from", "").lower()
             to_address = tx.get("to", "").lower()
             new_last_hash = tx_hash
+            processed += 1
 
+            # Skip transfers landing back in a known exchange wallet -- those
+            # are deposits, not a whale accumulating in their own wallet.
             if to_address in exchange_addresses:
                 continue
-
-            is_dex_buy = from_address in DEX_ROUTERS
-            if not is_dex_buy:
+            # Skip transfers FROM an exchange too (a withdrawal isn't a "buy").
+            if from_address in exchange_addresses:
                 continue
 
             decimals = int(tx.get("tokenDecimal", 18) or 18)
@@ -122,18 +133,12 @@ def main():
             if usd_value <= 0:
                 continue
 
-            send_telegram(
-                f"🟢 <b>DEX Alım Tespit Edildi</b>\n"
-                f"Cüzdan: {to_address}\n"
-                f"Coin: {symbol}\n"
-                f"Miktar: {amount:,.2f} (~${usd_value:,.0f})\n"
-                f"DEX: {DEX_ROUTERS[from_address]}\n"
-                f"Tx: https://etherscan.io/tx/{tx_hash}"
-            )
+            router_label = DEX_ROUTERS.get(from_address)
+            tag = f" (via {router_label})" if router_label else ""
 
             if usd_value >= LARGE_BUY_THRESHOLD_USD:
                 send_telegram(
-                    f"🚨 <b>Büyük Whale Alımı</b>\n"
+                    f"🚨 <b>Büyük Cüzdan Hareketi</b>{tag}\n"
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
@@ -141,7 +146,7 @@ def main():
                 )
             elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
                 send_telegram(
-                    f"🚨 <b>Orta Ölçekli Alım</b>\n"
+                    f"🟢 <b>Cüzdan Hareketi</b>{tag}\n"
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
@@ -168,9 +173,11 @@ def main():
                     acc["since"] = now
                     acc["count"] = 0
 
+        print(f"{symbol}: processed {processed} new transfers")
         tstate["last_tx_hash"] = new_last_hash
 
     save_state(state)
+    print("Done.")
 
 
 if __name__ == "__main__":
