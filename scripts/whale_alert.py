@@ -8,6 +8,7 @@ BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
 SINGLE_BUY_THRESHOLD_USD = 5000
+LARGE_BUY_THRESHOLD_USD = 10000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
@@ -18,6 +19,8 @@ DEX_ROUTERS = {
 }
 
 STATE_FILE = "data/state.json"
+TOKENS_FILE = "config/tokens.txt"
+EXCHANGES_FILE = "config/exchanges.txt"
 
 
 def load_state():
@@ -30,16 +33,16 @@ def save_state(state):
         json.dump(state, f, indent=2)
 
 
-def load_wallets():
-    wallets = []
-    with open("config/wallets.txt", "r") as f:
+def load_list_file(path):
+    items = []
+    with open(path, "r") as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
             address, label = line.split(",", 1)
-            wallets.append((address.strip().lower(), label.strip()))
-    return wallets
+            items.append((address.strip().lower(), label.strip()))
+    return items
 
 
 def send_telegram(text):
@@ -62,14 +65,14 @@ def get_token_price_usd(contract_address):
         return 0.0
 
 
-def fetch_transfers(address):
+def fetch_token_transfers(contract_address):
     params = {
         "module": "account",
         "action": "tokentx",
-        "address": address,
+        "contractaddress": contract_address,
         "sort": "desc",
         "page": 1,
-        "offset": 20,
+        "offset": 50,
         "apikey": ETHERSCAN_KEY,
     }
     r = requests.get("https://api.etherscan.io/api", params=params, timeout=20)
@@ -79,63 +82,74 @@ def fetch_transfers(address):
 
 
 def main():
- 
     state = load_state()
-    wallets = load_wallets()
+    tokens = load_list_file(TOKENS_FILE)
+    exchanges = load_list_file(EXCHANGES_FILE)
+    exchange_addresses = {addr for addr, _ in exchanges}
 
-    for address, label in wallets:
-        wstate = state.setdefault(address, {"last_tx_hash": None, "accumulation": {}})
-        transfers = fetch_transfers(address)
+    for contract, symbol in tokens:
+        tstate = state.setdefault(contract, {"last_tx_hash": None, "accumulation": {}})
+        transfers = fetch_token_transfers(contract)
         if not transfers:
             continue
 
         transfers = list(reversed(transfers))
-        new_last_hash = wstate["last_tx_hash"]
-        seen_previous = wstate["last_tx_hash"] is None
+        new_last_hash = tstate["last_tx_hash"]
+        seen_previous = tstate["last_tx_hash"] is None
+        price = get_token_price_usd(contract)
 
         for tx in transfers:
             tx_hash = tx.get("hash")
             if not seen_previous:
-                if tx_hash == wstate["last_tx_hash"]:
+                if tx_hash == tstate["last_tx_hash"]:
                     seen_previous = True
                 continue
 
-            to_address = tx.get("to", "").lower()
             from_address = tx.get("from", "").lower()
-            if to_address != address:
-                new_last_hash = tx_hash
+            to_address = tx.get("to", "").lower()
+            new_last_hash = tx_hash
+
+            if to_address in exchange_addresses:
+                continue
+
+            is_dex_buy = from_address in DEX_ROUTERS
+            if not is_dex_buy:
                 continue
 
             decimals = int(tx.get("tokenDecimal", 18) or 18)
             amount = int(tx.get("value", 0)) / (10 ** decimals)
-            symbol = tx.get("tokenSymbol", "???")
-            contract = tx.get("contractAddress", "")
-            price = get_token_price_usd(contract) if contract else 0
             usd_value = amount * price
+            if usd_value <= 0:
+                continue
 
-            is_dex_buy = from_address in DEX_ROUTERS
+            send_telegram(
+                f"🟢 <b>DEX Alım Tespit Edildi</b>\n"
+                f"Cüzdan: {to_address}\n"
+                f"Coin: {symbol}\n"
+                f"Miktar: {amount:,.2f} (~${usd_value:,.0f})\n"
+                f"DEX: {DEX_ROUTERS[from_address]}\n"
+                f"Tx: https://etherscan.io/tx/{tx_hash}"
+            )
 
-            if is_dex_buy:
+            if usd_value >= LARGE_BUY_THRESHOLD_USD:
                 send_telegram(
-                    f"🟢 <b>DEX Alım Tespit Edildi</b>\n"
-                    f"Cüzdan: {label}\n"
-                    f"Coin: {symbol}\n"
-                    f"Miktar: {amount:,.2f} (~${usd_value:,.0f})\n"
-                    f"DEX: {DEX_ROUTERS[from_address]}\n"
-                    f"Tx: https://etherscan.io/tx/{tx_hash}"
-                )
-
-            if usd_value >= SINGLE_BUY_THRESHOLD_USD:
-                send_telegram(
-                    f"🚨 <b>Büyük Alım</b>\n"
-                    f"Cüzdan: {label}\n"
+                    f"🚨 <b>Büyük Whale Alımı</b>\n"
+                    f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
                     f"Tx: https://etherscan.io/tx/{tx_hash}"
                 )
-            elif usd_value > 0:
+            elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
+                send_telegram(
+                    f"🚨 <b>Orta Ölçekli Alım</b>\n"
+                    f"Cüzdan: {to_address}\n"
+                    f"Coin: {symbol}\n"
+                    f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
+                    f"Tx: https://etherscan.io/tx/{tx_hash}"
+                )
+            else:
                 now = int(time.time())
-                acc = wstate["accumulation"].setdefault(symbol, {"total_usd": 0.0, "since": now, "count": 0})
+                acc = tstate["accumulation"].setdefault(to_address, {"total_usd": 0.0, "since": now, "count": 0})
                 if now - acc["since"] > ACCUMULATION_WINDOW_SECONDS:
                     acc["total_usd"] = 0.0
                     acc["since"] = now
@@ -145,7 +159,7 @@ def main():
                 if acc["total_usd"] >= ACCUMULATION_THRESHOLD_USD:
                     send_telegram(
                         f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
-                        f"Cüzdan: {label}\n"
+                        f"Cüzdan: {to_address}\n"
                         f"Coin: {symbol}\n"
                         f"Toplam: ${acc['total_usd']:,.0f} ({acc['count']} işlemde)\n"
                         f"Son Tx: https://etherscan.io/tx/{tx_hash}"
@@ -154,9 +168,7 @@ def main():
                     acc["since"] = now
                     acc["count"] = 0
 
-            new_last_hash = tx_hash
-
-        wstate["last_tx_hash"] = new_last_hash
+        tstate["last_tx_hash"] = new_last_hash
 
     save_state(state)
 
