@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import re
 import requests
 
 ETHERSCAN_KEY = os.environ["ETHERSCAN_API_KEY"]
@@ -12,8 +13,8 @@ LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
-FIRST_RUN_BLOCK_LOOKBACK = 300  # ~1 hour
-NEW_PAIR_RETENTION_BLOCKS = 50400  # ~7 days, how long a pair stays "new"
+FIRST_RUN_BLOCK_LOOKBACK = 300
+NEW_PAIR_RETENTION_BLOCKS = 50400
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 PAIR_CREATED_TOPIC = "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e"
@@ -26,9 +27,17 @@ DEX_ROUTERS = {
     "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45": "Uniswap V3 Router 2",
 }
 
+EXCHANGE_KEYWORDS = [
+    "binance", "bybit", "okx", "okex", "coinbase", "kraken", "bitfinex",
+    "huobi", "htx", "bitget", "gate.io", "gateio", "kucoin", "mexc",
+    "upbit", "bithumb", "crypto.com", "poloniex", "bitstamp", "gemini",
+]
+
 STATE_FILE = "data/state.json"
 TOKENS_FILE = "config/tokens.txt"
 EXCHANGES_FILE = "config/exchanges.txt"
+
+_label_cache = {}
 
 
 def load_state():
@@ -121,46 +130,32 @@ def topic_to_address(topic_hex):
     return "0x" + topic_hex[-40:]
 
 
-def update_new_pairs(state, latest_block):
-    """Scans Uniswap V2 Factory for freshly created WETH pairs and keeps a
-    rolling watch-list of them so we can flag the first big buys into a
-    token that isn't listed anywhere yet."""
-    pairs_state = state.setdefault("new_pairs", {})
-    last_block = state.get("last_pair_block")
-    from_block = last_block + 1 if last_block else latest_block - FIRST_RUN_BLOCK_LOOKBACK
+def get_address_label(address):
+    """Reads Etherscan's own public name-tag for an address (the same label
+    shown on their website and picked up by Telegram's link preview). This
+    is web scraping, not an official API -- if Etherscan changes their page
+    layout this silently stops working and falls back to 'no label found'."""
+    if address in _label_cache:
+        return _label_cache[address]
+    label = ""
+    try:
+        r = requests.get(
+            f"https://etherscan.io/address/{address}",
+            headers={"User-Agent": "Mozilla/5.0 (compatible; WhaleIntelBot/1.0)"},
+            timeout=15,
+        )
+        match = re.search(r'<meta property="og:description" content="([^"]*)"', r.text)
+        if match:
+            label = match.group(1)
+    except Exception as e:
+        print("Label lookup error:", e)
+    _label_cache[address] = label
+    return label
 
-    logs = fetch_logs(UNISWAP_V2_FACTORY, PAIR_CREATED_TOPIC, from_block, latest_block)
-    print(f"PairCreated: scanned blocks {from_block}-{latest_block}, found {len(logs)} new pairs")
 
-    for log in logs:
-        topics = log.get("topics", [])
-        if len(topics) < 3:
-            continue
-        token0 = topic_to_address(topics[1])
-        token1 = topic_to_address(topics[2])
-        data = log.get("data", "0x")
-        try:
-            pair_address = "0x" + data[26:66]
-        except Exception:
-            continue
-
-        if token0 == WETH_ADDRESS:
-            new_token = token1
-        elif token1 == WETH_ADDRESS:
-            new_token = token0
-        else:
-            continue  # not a WETH pair, skip -- can't price it via our simple method
-
-        pairs_state[pair_address] = {"new_token": new_token, "created_block": latest_block}
-
-    # prune pairs older than the retention window so state.json doesn't grow forever
-    cutoff = latest_block - NEW_PAIR_RETENTION_BLOCKS
-    for addr in list(pairs_state.keys()):
-        if pairs_state[addr].get("created_block", 0) < cutoff:
-            del pairs_state[addr]
-
-    state["last_pair_block"] = latest_block
-    print(f"Tracking {len(pairs_state)} new WETH pairs")
+def is_exchange_label(label):
+    label_lower = label.lower()
+    return any(kw in label_lower for kw in EXCHANGE_KEYWORDS)
 
 
 def main():
@@ -171,8 +166,35 @@ def main():
     latest_block = get_latest_block()
     print(f"Latest block: {latest_block}, loaded {len(tokens)} tokens, {len(exchange_addresses)} exchange addresses")
 
-    update_new_pairs(state, latest_block)
-    new_pairs = state.get("new_pairs", {})
+    pairs_state = state.setdefault("new_pairs", {})
+    last_pair_block = state.get("last_pair_block")
+    pair_from_block = last_pair_block + 1 if last_pair_block else latest_block - FIRST_RUN_BLOCK_LOOKBACK
+    pair_logs = fetch_logs(UNISWAP_V2_FACTORY, PAIR_CREATED_TOPIC, pair_from_block, latest_block)
+    print(f"PairCreated: scanned blocks {pair_from_block}-{latest_block}, found {len(pair_logs)} new pairs")
+    for log in pair_logs:
+        topics = log.get("topics", [])
+        if len(topics) < 3:
+            continue
+        token0 = topic_to_address(topics[1])
+        token1 = topic_to_address(topics[2])
+        data = log.get("data", "0x")
+        try:
+            pair_address = "0x" + data[26:66]
+        except Exception:
+            continue
+        if token0 == WETH_ADDRESS:
+            new_token = token1
+        elif token1 == WETH_ADDRESS:
+            new_token = token0
+        else:
+            continue
+        pairs_state[pair_address] = {"new_token": new_token, "created_block": latest_block}
+    cutoff = latest_block - NEW_PAIR_RETENTION_BLOCKS
+    for addr in list(pairs_state.keys()):
+        if pairs_state[addr].get("created_block", 0) < cutoff:
+            del pairs_state[addr]
+    state["last_pair_block"] = latest_block
+    print(f"Tracking {len(pairs_state)} new WETH pairs")
 
     for contract, symbol, decimals in tokens:
         tstate = state.setdefault(contract, {"last_block": None, "accumulation": {}})
@@ -201,10 +223,8 @@ def main():
             if usd_value <= 0:
                 continue
 
-            # Special case: WETH flowing INTO a freshly created pair = someone
-            # buying a token that isn't listed anywhere else yet.
-            if symbol == "WETH" and to_address in new_pairs:
-                new_token = new_pairs[to_address]["new_token"]
+            if symbol == "WETH" and to_address in pairs_state:
+                new_token = pairs_state[to_address]["new_token"]
                 if usd_value >= SINGLE_BUY_THRESHOLD_USD:
                     send_telegram(
                         f"🆕 <b>Yeni Token'a Whale Girişi</b>\n"
@@ -215,7 +235,7 @@ def main():
                         f"Tx: https://etherscan.io/tx/{tx_hash}\n"
                         f"Token: https://etherscan.io/token/{new_token}"
                     )
-                continue  # don't also fire the generic alert below
+                continue
 
             if to_address in exchange_addresses or from_address in exchange_addresses:
                 continue
@@ -223,22 +243,28 @@ def main():
             router_label = DEX_ROUTERS.get(from_address)
             tag = f" (via {router_label})" if router_label else ""
 
-            if usd_value >= LARGE_BUY_THRESHOLD_USD:
-                send_telegram(
-                    f"🚨 <b>Büyük Cüzdan Hareketi</b>{tag}\n"
-                    f"Cüzdan: {to_address}\n"
-                    f"Coin: {symbol}\n"
-                    f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
-                    f"Tx: https://etherscan.io/tx/{tx_hash}"
-                )
-            elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
-                send_telegram(
-                    f"🟢 <b>Cüzdan Hareketi</b>{tag}\n"
-                    f"Cüzdan: {to_address}\n"
-                    f"Coin: {symbol}\n"
-                    f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
-                    f"Tx: https://etherscan.io/tx/{tx_hash}"
-                )
+            if usd_value >= SINGLE_BUY_THRESHOLD_USD:
+                label = get_address_label(to_address)
+                if is_exchange_label(label):
+                    print(f"Skipped (exchange label '{label}'): {to_address}")
+                    continue
+
+                if usd_value >= LARGE_BUY_THRESHOLD_USD:
+                    send_telegram(
+                        f"🚨 <b>Büyük Cüzdan Hareketi</b>{tag}\n"
+                        f"Cüzdan: {to_address}\n"
+                        f"Coin: {symbol}\n"
+                        f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
+                        f"Tx: https://etherscan.io/tx/{tx_hash}"
+                    )
+                else:
+                    send_telegram(
+                        f"🟢 <b>Cüzdan Hareketi</b>{tag}\n"
+                        f"Cüzdan: {to_address}\n"
+                        f"Coin: {symbol}\n"
+                        f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
+                        f"Tx: https://etherscan.io/tx/{tx_hash}"
+                    )
             else:
                 now = int(time.time())
                 acc = tstate["accumulation"].setdefault(to_address, {"total_usd": 0.0, "since": now, "count": 0})
@@ -249,6 +275,13 @@ def main():
                 acc["total_usd"] += usd_value
                 acc["count"] += 1
                 if acc["total_usd"] >= ACCUMULATION_THRESHOLD_USD:
+                    label = get_address_label(to_address)
+                    if is_exchange_label(label):
+                        print(f"Skipped accumulation (exchange label '{label}'): {to_address}")
+                        acc["total_usd"] = 0.0
+                        acc["since"] = now
+                        acc["count"] = 0
+                        continue
                     send_telegram(
                         f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
                         f"Cüzdan: {to_address}\n"
