@@ -38,6 +38,8 @@ TOKENS_FILE = "config/tokens.txt"
 EXCHANGES_FILE = "config/exchanges.txt"
 
 _label_cache = {}
+_label_lookup_count = 0
+_label_lookup_success = 0
 
 
 def load_state():
@@ -131,22 +133,32 @@ def topic_to_address(topic_hex):
 
 
 def get_address_label(address):
-    """Reads Etherscan's own public name-tag for an address (the same label
-    shown on their website and picked up by Telegram's link preview). This
-    is web scraping, not an official API -- if Etherscan changes their page
-    layout this silently stops working and falls back to 'no label found'."""
+    """Reads Etherscan's own public name-tag for an address. This is web
+    scraping, not an official API -- cloud IPs (like GitHub Actions runners)
+    are sometimes blocked or rate-limited by Etherscan's bot protection, in
+    which case this silently returns "" and the diagnostic counters below
+    will show a 0% success rate so we know to stop relying on it."""
+    global _label_lookup_count, _label_lookup_success
     if address in _label_cache:
         return _label_cache[address]
     label = ""
+    _label_lookup_count += 1
     try:
         r = requests.get(
             f"https://etherscan.io/address/{address}",
-            headers={"User-Agent": "Mozilla/5.0 (compatible; WhaleIntelBot/1.0)"},
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                              "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            },
             timeout=15,
         )
+        print(f"Label lookup for {address}: HTTP {r.status_code}, {len(r.text)} bytes")
         match = re.search(r'<meta property="og:description" content="([^"]*)"', r.text)
         if match:
             label = match.group(1)
+            _label_lookup_success += 1
+        else:
+            print(f"  No og:description meta tag found (page may be blocked/different layout)")
     except Exception as e:
         print("Label lookup error:", e)
     _label_cache[address] = label
@@ -156,6 +168,26 @@ def get_address_label(address):
 def is_exchange_label(label):
     label_lower = label.lower()
     return any(kw in label_lower for kw in EXCHANGE_KEYWORDS)
+
+
+def check_exchange_involvement(from_address, to_address, static_exchange_set):
+    """Returns (is_exchange, reason) -- checks the static list first (free,
+    no network call), then falls back to live label lookups on BOTH sides
+    of the transfer for whichever address isn't already known."""
+    if from_address in static_exchange_set:
+        return True, f"from_address in static list"
+    if to_address in static_exchange_set:
+        return True, f"to_address in static list"
+
+    from_label = get_address_label(from_address)
+    if is_exchange_label(from_label):
+        return True, f"from_address label='{from_label}'"
+
+    to_label = get_address_label(to_address)
+    if is_exchange_label(to_label):
+        return True, f"to_address label='{to_label}'"
+
+    return False, ""
 
 
 def main():
@@ -237,16 +269,13 @@ def main():
                     )
                 continue
 
-            if to_address in exchange_addresses or from_address in exchange_addresses:
-                continue
-
             router_label = DEX_ROUTERS.get(from_address)
             tag = f" (via {router_label})" if router_label else ""
 
             if usd_value >= SINGLE_BUY_THRESHOLD_USD:
-                label = get_address_label(to_address)
-                if is_exchange_label(label):
-                    print(f"Skipped (exchange label '{label}'): {to_address}")
+                is_exch, reason = check_exchange_involvement(from_address, to_address, exchange_addresses)
+                if is_exch:
+                    print(f"Skipped (exchange: {reason}): {tx_hash}")
                     continue
 
                 if usd_value >= LARGE_BUY_THRESHOLD_USD:
@@ -275,9 +304,9 @@ def main():
                 acc["total_usd"] += usd_value
                 acc["count"] += 1
                 if acc["total_usd"] >= ACCUMULATION_THRESHOLD_USD:
-                    label = get_address_label(to_address)
-                    if is_exchange_label(label):
-                        print(f"Skipped accumulation (exchange label '{label}'): {to_address}")
+                    is_exch, reason = check_exchange_involvement(from_address, to_address, exchange_addresses)
+                    if is_exch:
+                        print(f"Skipped accumulation (exchange: {reason}): {to_address}")
                         acc["total_usd"] = 0.0
                         acc["since"] = now
                         acc["count"] = 0
@@ -294,6 +323,12 @@ def main():
                     acc["count"] = 0
 
         tstate["last_block"] = latest_block
+
+    if _label_lookup_count:
+        print(f"Label lookups: {_label_lookup_success}/{_label_lookup_count} succeeded "
+              f"({100*_label_lookup_success//_label_lookup_count}%)")
+    else:
+        print("Label lookups: none needed this run")
 
     save_state(state)
     print("Done.")
