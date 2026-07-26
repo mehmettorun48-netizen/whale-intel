@@ -12,10 +12,13 @@ LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
-# How many blocks back to scan on the very first run (~12s/block -> 300 blocks ~ 1 hour)
-FIRST_RUN_BLOCK_LOOKBACK = 300
+FIRST_RUN_BLOCK_LOOKBACK = 300  # ~1 hour
+NEW_PAIR_RETENTION_BLOCKS = 50400  # ~7 days, how long a pair stays "new"
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+PAIR_CREATED_TOPIC = "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e"
+UNISWAP_V2_FACTORY = "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f".lower()
+WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2".lower()
 
 DEX_ROUTERS = {
     "0x7a250d5630b4cf539739df2c5dacb4c659f2488d": "Uniswap V2",
@@ -90,24 +93,22 @@ def get_latest_block():
         params={"chainid": 1, "module": "proxy", "action": "eth_blockNumber", "apikey": ETHERSCAN_KEY},
         timeout=20,
     )
-
     result = r.json().get("result", "0x0")
     return int(result, 16)
 
 
-def fetch_transfer_logs(contract_address, from_block, to_block):
+def fetch_logs(address, topic0, from_block, to_block):
     params = {
         "chainid": 1,
         "module": "logs",
         "action": "getLogs",
-        "address": contract_address,
-        "topic0": TRANSFER_TOPIC,
+        "address": address,
+        "topic0": topic0,
         "fromBlock": from_block,
         "toBlock": to_block,
         "apikey": ETHERSCAN_KEY,
     }
     r = requests.get("https://api.etherscan.io/v2/api", params=params, timeout=30)
-
     data = r.json()
     result = data.get("result", [])
     if not isinstance(result, list):
@@ -120,6 +121,48 @@ def topic_to_address(topic_hex):
     return "0x" + topic_hex[-40:]
 
 
+def update_new_pairs(state, latest_block):
+    """Scans Uniswap V2 Factory for freshly created WETH pairs and keeps a
+    rolling watch-list of them so we can flag the first big buys into a
+    token that isn't listed anywhere yet."""
+    pairs_state = state.setdefault("new_pairs", {})
+    last_block = state.get("last_pair_block")
+    from_block = last_block + 1 if last_block else latest_block - FIRST_RUN_BLOCK_LOOKBACK
+
+    logs = fetch_logs(UNISWAP_V2_FACTORY, PAIR_CREATED_TOPIC, from_block, latest_block)
+    print(f"PairCreated: scanned blocks {from_block}-{latest_block}, found {len(logs)} new pairs")
+
+    for log in logs:
+        topics = log.get("topics", [])
+        if len(topics) < 3:
+            continue
+        token0 = topic_to_address(topics[1])
+        token1 = topic_to_address(topics[2])
+        data = log.get("data", "0x")
+        try:
+            pair_address = "0x" + data[26:66]
+        except Exception:
+            continue
+
+        if token0 == WETH_ADDRESS:
+            new_token = token1
+        elif token1 == WETH_ADDRESS:
+            new_token = token0
+        else:
+            continue  # not a WETH pair, skip -- can't price it via our simple method
+
+        pairs_state[pair_address] = {"new_token": new_token, "created_block": latest_block}
+
+    # prune pairs older than the retention window so state.json doesn't grow forever
+    cutoff = latest_block - NEW_PAIR_RETENTION_BLOCKS
+    for addr in list(pairs_state.keys()):
+        if pairs_state[addr].get("created_block", 0) < cutoff:
+            del pairs_state[addr]
+
+    state["last_pair_block"] = latest_block
+    print(f"Tracking {len(pairs_state)} new WETH pairs")
+
+
 def main():
     state = load_state()
     tokens = load_tokens()
@@ -128,11 +171,14 @@ def main():
     latest_block = get_latest_block()
     print(f"Latest block: {latest_block}, loaded {len(tokens)} tokens, {len(exchange_addresses)} exchange addresses")
 
+    update_new_pairs(state, latest_block)
+    new_pairs = state.get("new_pairs", {})
+
     for contract, symbol, decimals in tokens:
         tstate = state.setdefault(contract, {"last_block": None, "accumulation": {}})
         from_block = tstate["last_block"] + 1 if tstate["last_block"] else latest_block - FIRST_RUN_BLOCK_LOOKBACK
 
-        logs = fetch_transfer_logs(contract, from_block, latest_block)
+        logs = fetch_logs(contract, TRANSFER_TOPIC, from_block, latest_block)
         print(f"{symbol}: scanned blocks {from_block}-{latest_block}, found {len(logs)} transfer logs")
 
         price = get_token_price_usd(contract)
@@ -146,9 +192,6 @@ def main():
             to_address = topic_to_address(topics[2])
             tx_hash = log.get("transactionHash", "")
 
-            if to_address in exchange_addresses or from_address in exchange_addresses:
-                continue
-
             try:
                 raw_value = int(log.get("data", "0x0"), 16)
             except ValueError:
@@ -156,6 +199,25 @@ def main():
             amount = raw_value / (10 ** decimals)
             usd_value = amount * price
             if usd_value <= 0:
+                continue
+
+            # Special case: WETH flowing INTO a freshly created pair = someone
+            # buying a token that isn't listed anywhere else yet.
+            if symbol == "WETH" and to_address in new_pairs:
+                new_token = new_pairs[to_address]["new_token"]
+                if usd_value >= SINGLE_BUY_THRESHOLD_USD:
+                    send_telegram(
+                        f"🆕 <b>Yeni Token'a Whale Girişi</b>\n"
+                        f"Yeni Token Kontrat: {new_token}\n"
+                        f"Havuz: {to_address}\n"
+                        f"Alım: {amount:,.4f} WETH (${usd_value:,.0f})\n"
+                        f"Alıcı: {from_address}\n"
+                        f"Tx: https://etherscan.io/tx/{tx_hash}\n"
+                        f"Token: https://etherscan.io/token/{new_token}"
+                    )
+                continue  # don't also fire the generic alert below
+
+            if to_address in exchange_addresses or from_address in exchange_addresses:
                 continue
 
             router_label = DEX_ROUTERS.get(from_address)
