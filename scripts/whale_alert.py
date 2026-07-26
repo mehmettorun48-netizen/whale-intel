@@ -86,16 +86,18 @@ def get_token_price_usd(contract_address):
 
 def get_latest_block():
     r = requests.get(
-        "https://api.etherscan.io/api",
-        params={"module": "proxy", "action": "eth_blockNumber", "apikey": ETHERSCAN_KEY},
+        "https://api.etherscan.io/v2/api",
+        params={"chainid": 1, "module": "proxy", "action": "eth_blockNumber", "apikey": ETHERSCAN_KEY},
         timeout=20,
     )
+
     result = r.json().get("result", "0x0")
     return int(result, 16)
 
 
 def fetch_transfer_logs(contract_address, from_block, to_block):
     params = {
+        "chainid": 1,
         "module": "logs",
         "action": "getLogs",
         "address": contract_address,
@@ -104,7 +106,8 @@ def fetch_transfer_logs(contract_address, from_block, to_block):
         "toBlock": to_block,
         "apikey": ETHERSCAN_KEY,
     }
-    r = requests.get("https://api.etherscan.io/api", params=params, timeout=30)
+    r = requests.get("https://api.etherscan.io/v2/api", params=params, timeout=30)
+
     data = r.json()
     result = data.get("result", [])
     if not isinstance(result, list):
