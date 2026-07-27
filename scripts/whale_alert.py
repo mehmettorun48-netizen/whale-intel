@@ -1,7 +1,6 @@
 import os
 import json
 import time
-import re
 import requests
 
 ETHERSCAN_KEY = os.environ["ETHERSCAN_API_KEY"]
@@ -27,19 +26,11 @@ DEX_ROUTERS = {
     "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45": "Uniswap V3 Router 2",
 }
 
-EXCHANGE_KEYWORDS = [
-    "binance", "bybit", "okx", "okex", "coinbase", "kraken", "bitfinex",
-    "huobi", "htx", "bitget", "gate.io", "gateio", "kucoin", "mexc",
-    "upbit", "bithumb", "crypto.com", "poloniex", "bitstamp", "gemini",
-]
-
 STATE_FILE = "data/state.json"
 TOKENS_FILE = "config/tokens.txt"
 EXCHANGES_FILE = "config/exchanges.txt"
 
-_label_cache = {}
-_label_lookup_count = 0
-_label_lookup_success = 0
+_dexscreener_cache = {}
 
 
 def load_state():
@@ -98,6 +89,30 @@ def get_token_price_usd(contract_address):
         return 0.0
 
 
+def get_new_token_info(token_address):
+    """Free DexScreener lookup for a token's name/symbol -- used only for
+    the brand-new tokens flagged by the PairCreated watcher, since those
+    aren't in our known tokens.txt list and we don't know their symbol yet."""
+    if token_address in _dexscreener_cache:
+        return _dexscreener_cache[token_address]
+    info = {"symbol": "???", "name": "Unknown"}
+    try:
+        r = requests.get(
+            f"https://api.dexscreener.com/latest/dex/tokens/{token_address}",
+            timeout=15,
+        )
+        data = r.json()
+        pairs = data.get("pairs") or []
+        if pairs:
+            base = pairs[0].get("baseToken", {})
+            info["symbol"] = base.get("symbol", "???")
+            info["name"] = base.get("name", "Unknown")
+    except Exception as e:
+        print("DexScreener lookup error:", e)
+    _dexscreener_cache[token_address] = info
+    return info
+
+
 def get_latest_block():
     r = requests.get(
         "https://api.etherscan.io/v2/api",
@@ -132,62 +147,8 @@ def topic_to_address(topic_hex):
     return "0x" + topic_hex[-40:]
 
 
-def get_address_label(address):
-    """Reads Etherscan's own public name-tag for an address. This is web
-    scraping, not an official API -- cloud IPs (like GitHub Actions runners)
-    are sometimes blocked or rate-limited by Etherscan's bot protection, in
-    which case this silently returns "" and the diagnostic counters below
-    will show a 0% success rate so we know to stop relying on it."""
-    global _label_lookup_count, _label_lookup_success
-    if address in _label_cache:
-        return _label_cache[address]
-    label = ""
-    _label_lookup_count += 1
-    try:
-        r = requests.get(
-            f"https://etherscan.io/address/{address}",
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                              "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-            },
-            timeout=15,
-        )
-        print(f"Label lookup for {address}: HTTP {r.status_code}, {len(r.text)} bytes")
-        match = re.search(r'<meta property="og:description" content="([^"]*)"', r.text)
-        if match:
-            label = match.group(1)
-            _label_lookup_success += 1
-        else:
-            print(f"  No og:description meta tag found (page may be blocked/different layout)")
-    except Exception as e:
-        print("Label lookup error:", e)
-    _label_cache[address] = label
-    return label
-
-
-def is_exchange_label(label):
-    label_lower = label.lower()
-    return any(kw in label_lower for kw in EXCHANGE_KEYWORDS)
-
-
-def check_exchange_involvement(from_address, to_address, static_exchange_set):
-    """Returns (is_exchange, reason) -- checks the static list first (free,
-    no network call), then falls back to live label lookups on BOTH sides
-    of the transfer for whichever address isn't already known."""
-    if from_address in static_exchange_set:
-        return True, f"from_address in static list"
-    if to_address in static_exchange_set:
-        return True, f"to_address in static list"
-
-    from_label = get_address_label(from_address)
-    if is_exchange_label(from_label):
-        return True, f"from_address label='{from_label}'"
-
-    to_label = get_address_label(to_address)
-    if is_exchange_label(to_label):
-        return True, f"to_address label='{to_label}'"
-
-    return False, ""
+def is_exchange_related(from_address, to_address, exchange_set):
+    return from_address in exchange_set or to_address in exchange_set
 
 
 def main():
@@ -256,44 +217,44 @@ def main():
                 continue
 
             if symbol == "WETH" and to_address in pairs_state:
-                new_token = pairs_state[to_address]["new_token"]
+                new_token_address = pairs_state[to_address]["new_token"]
                 if usd_value >= SINGLE_BUY_THRESHOLD_USD:
+                    info = get_new_token_info(new_token_address)
                     send_telegram(
                         f"🆕 <b>Yeni Token'a Whale Girişi</b>\n"
-                        f"Yeni Token Kontrat: {new_token}\n"
+                        f"Coin: {info['name']} ({info['symbol']})\n"
+                        f"Kontrat: {new_token_address}\n"
                         f"Havuz: {to_address}\n"
                         f"Alım: {amount:,.4f} WETH (${usd_value:,.0f})\n"
                         f"Alıcı: {from_address}\n"
                         f"Tx: https://etherscan.io/tx/{tx_hash}\n"
-                        f"Token: https://etherscan.io/token/{new_token}"
+                        f"DexScreener: https://dexscreener.com/ethereum/{new_token_address}"
                     )
+                continue
+
+            if is_exchange_related(from_address, to_address, exchange_addresses):
+                print(f"Skipped (exchange, static list): {tx_hash}")
                 continue
 
             router_label = DEX_ROUTERS.get(from_address)
             tag = f" (via {router_label})" if router_label else ""
 
-            if usd_value >= SINGLE_BUY_THRESHOLD_USD:
-                is_exch, reason = check_exchange_involvement(from_address, to_address, exchange_addresses)
-                if is_exch:
-                    print(f"Skipped (exchange: {reason}): {tx_hash}")
-                    continue
-
-                if usd_value >= LARGE_BUY_THRESHOLD_USD:
-                    send_telegram(
-                        f"🚨 <b>Büyük Cüzdan Hareketi</b>{tag}\n"
-                        f"Cüzdan: {to_address}\n"
-                        f"Coin: {symbol}\n"
-                        f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
-                        f"Tx: https://etherscan.io/tx/{tx_hash}"
-                    )
-                else:
-                    send_telegram(
-                        f"🟢 <b>Cüzdan Hareketi</b>{tag}\n"
-                        f"Cüzdan: {to_address}\n"
-                        f"Coin: {symbol}\n"
-                        f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
-                        f"Tx: https://etherscan.io/tx/{tx_hash}"
-                    )
+            if usd_value >= LARGE_BUY_THRESHOLD_USD:
+                send_telegram(
+                    f"🚨 <b>Büyük Cüzdan Hareketi</b>{tag}\n"
+                    f"Cüzdan: {to_address}\n"
+                    f"Coin: {symbol}\n"
+                    f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
+                    f"Tx: https://etherscan.io/tx/{tx_hash}"
+                )
+            elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
+                send_telegram(
+                    f"🟢 <b>Cüzdan Hareketi</b>{tag}\n"
+                    f"Cüzdan: {to_address}\n"
+                    f"Coin: {symbol}\n"
+                    f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
+                    f"Tx: https://etherscan.io/tx/{tx_hash}"
+                )
             else:
                 now = int(time.time())
                 acc = tstate["accumulation"].setdefault(to_address, {"total_usd": 0.0, "since": now, "count": 0})
@@ -304,31 +265,19 @@ def main():
                 acc["total_usd"] += usd_value
                 acc["count"] += 1
                 if acc["total_usd"] >= ACCUMULATION_THRESHOLD_USD:
-                    is_exch, reason = check_exchange_involvement(from_address, to_address, exchange_addresses)
-                    if is_exch:
-                        print(f"Skipped accumulation (exchange: {reason}): {to_address}")
-                        acc["total_usd"] = 0.0
-                        acc["since"] = now
-                        acc["count"] = 0
-                        continue
-                    send_telegram(
-                        f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
-                        f"Cüzdan: {to_address}\n"
-                        f"Coin: {symbol}\n"
-                        f"Toplam: ${acc['total_usd']:,.0f} ({acc['count']} işlemde)\n"
-                        f"Son Tx: https://etherscan.io/tx/{tx_hash}"
-                    )
+                    if not is_exchange_related(to_address, to_address, exchange_addresses):
+                        send_telegram(
+                            f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
+                            f"Cüzdan: {to_address}\n"
+                            f"Coin: {symbol}\n"
+                            f"Toplam: ${acc['total_usd']:,.0f} ({acc['count']} işlemde)\n"
+                            f"Son Tx: https://etherscan.io/tx/{tx_hash}"
+                        )
                     acc["total_usd"] = 0.0
                     acc["since"] = now
                     acc["count"] = 0
 
         tstate["last_block"] = latest_block
-
-    if _label_lookup_count:
-        print(f"Label lookups: {_label_lookup_success}/{_label_lookup_count} succeeded "
-              f"({100*_label_lookup_success//_label_lookup_count}%)")
-    else:
-        print("Label lookups: none needed this run")
 
     save_state(state)
     print("Done.")
