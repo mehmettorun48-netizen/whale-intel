@@ -113,6 +113,39 @@ def check_dex_pair(address):
     _pair_cache[address] = result
     return result
 
+V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
+V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
+
+
+def is_real_swap(tx_hash):
+    """Confirms this transaction contains an actual Uniswap Swap event, not
+    just a WETH transfer that happens to land in a pool address (which also
+    happens on liquidity add/remove -- those are NOT purchases)."""
+    try:
+        r = requests.get(
+            "https://api.etherscan.io/v2/api",
+            params={
+                "chainid": 1,
+                "module": "proxy",
+                "action": "eth_getTransactionReceipt",
+                "txhash": tx_hash,
+                "apikey": ETHERSCAN_KEY,
+            },
+            timeout=20,
+        )
+        result = r.json().get("result") or {}
+        logs = result.get("logs", [])
+        for log in logs:
+            topic0 = (log.get("topics") or [""])[0]
+            if topic0 in (V2_SWAP_TOPIC, V3_SWAP_TOPIC):
+                return True
+        return False
+    except Exception as e:
+        print("Swap check error:", e)
+        return False
+
+
+def get_tx_sender(tx_hash):
 
 def get_tx_sender(tx_hash):
     """The real whale wallet is whoever signed the transaction, not the
