@@ -13,24 +13,23 @@ ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
 FIRST_RUN_BLOCK_LOOKBACK = 300
-NEW_PAIR_RETENTION_BLOCKS = 50400
+
+CLUSTER_WINDOW_SECONDS = 24 * 3600
+CLUSTER_TIERS = [
+    (10, "🔴 Balinalar Yoğun Alıyor"),
+    (5, "🟠 Güçlü Balina Birikimi"),
+    (2, "🟡 Balina Birikimi Başladı"),
+]
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-PAIR_CREATED_TOPIC = "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e"
-UNISWAP_V2_FACTORY = "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f".lower()
 WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2".lower()
-
-DEX_ROUTERS = {
-    "0x7a250d5630b4cf539739df2c5dacb4c659f2488d": "Uniswap V2",
-    "0xe592427a0aece92de3edee1f18e0157c05861564": "Uniswap V3",
-    "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45": "Uniswap V3 Router 2",
-}
 
 STATE_FILE = "data/state.json"
 TOKENS_FILE = "config/tokens.txt"
 EXCHANGES_FILE = "config/exchanges.txt"
 
-_dexscreener_cache = {}
+_pair_cache = {}
+_price_cache = {}
 
 
 def load_state():
@@ -76,6 +75,9 @@ def send_telegram(text):
 
 
 def get_token_price_usd(contract_address):
+    if contract_address in _price_cache:
+        return _price_cache[contract_address]
+    price = 0.0
     try:
         r = requests.get(
             "https://api.coingecko.com/api/v3/simple/token_price/ethereum",
@@ -83,33 +85,55 @@ def get_token_price_usd(contract_address):
             timeout=15,
         )
         data = r.json()
-        return float(data.get(contract_address.lower(), {}).get("usd", 0) or 0)
+        price = float(data.get(contract_address.lower(), {}).get("usd", 0) or 0)
     except Exception as e:
         print("Price fetch error:", e)
-        return 0.0
+    _price_cache[contract_address] = price
+    return price
 
 
-def get_new_token_info(token_address):
-    """Free DexScreener lookup for a brand-new token's name/symbol -- these
-    aren't in our known tokens.txt list yet, so we don't know their symbol."""
-    if token_address in _dexscreener_cache:
-        return _dexscreener_cache[token_address]
-    info = {"symbol": "???", "name": "Unknown"}
+def check_dex_pair(address):
+    """Asks DexScreener whether this address is a known DEX pair contract.
+    If yes, returns its live data (token names, price, market cap, liquidity,
+    dex name) -- works for brand-new AND long-established pairs alike."""
+    if address in _pair_cache:
+        return _pair_cache[address]
+    result = None
     try:
         r = requests.get(
-            f"https://api.dexscreener.com/latest/dex/tokens/{token_address}",
+            f"https://api.dexscreener.com/latest/dex/pairs/ethereum/{address}",
             timeout=15,
         )
         data = r.json()
         pairs = data.get("pairs") or []
         if pairs:
-            base = pairs[0].get("baseToken", {})
-            info["symbol"] = base.get("symbol", "???")
-            info["name"] = base.get("name", "Unknown")
+            result = pairs[0]
     except Exception as e:
-        print("DexScreener lookup error:", e)
-    _dexscreener_cache[token_address] = info
-    return info
+        print("DexScreener pair lookup error:", e)
+    _pair_cache[address] = result
+    return result
+
+
+def get_tx_sender(tx_hash):
+    """The real whale wallet is whoever signed the transaction, not the
+    router/pair contract that shows up as the internal Transfer 'from'."""
+    try:
+        r = requests.get(
+            "https://api.etherscan.io/v2/api",
+            params={
+                "chainid": 1,
+                "module": "proxy",
+                "action": "eth_getTransactionByHash",
+                "txhash": tx_hash,
+                "apikey": ETHERSCAN_KEY,
+            },
+            timeout=20,
+        )
+        result = r.json().get("result") or {}
+        return (result.get("from") or "").lower()
+    except Exception as e:
+        print("Tx sender lookup error:", e)
+        return ""
 
 
 def get_latest_block():
@@ -146,8 +170,28 @@ def topic_to_address(topic_hex):
     return "0x" + topic_hex[-40:]
 
 
-def is_exchange_related(from_address, to_address, exchange_set):
-    return from_address in exchange_set or to_address in exchange_set
+def update_cluster(state, token_contract, whale_address, usd_value):
+    """Tracks how many DISTINCT whales bought this token recently. Returns
+    (distinct_count, total_usd, newly_crossed_tier_label_or_None)."""
+    clusters = state.setdefault("clusters", {})
+    c = clusters.setdefault(token_contract, {"whales": {}, "total_usd": 0.0, "last_tier": 0})
+
+    now = int(time.time())
+    c["whales"][whale_address] = now
+    c["total_usd"] += usd_value
+
+    cutoff = now - CLUSTER_WINDOW_SECONDS
+    c["whales"] = {addr: ts for addr, ts in c["whales"].items() if ts >= cutoff}
+    distinct_count = len(c["whales"])
+
+    newly_crossed = None
+    for threshold, label in CLUSTER_TIERS:
+        if distinct_count >= threshold and c["last_tier"] < threshold:
+            newly_crossed = label
+            c["last_tier"] = threshold
+            break
+
+    return distinct_count, c["total_usd"], newly_crossed
 
 
 def main():
@@ -157,36 +201,6 @@ def main():
 
     latest_block = get_latest_block()
     print(f"Latest block: {latest_block}, loaded {len(tokens)} tokens, {len(exchange_addresses)} exchange addresses")
-
-    pairs_state = state.setdefault("new_pairs", {})
-    last_pair_block = state.get("last_pair_block")
-    pair_from_block = last_pair_block + 1 if last_pair_block else latest_block - FIRST_RUN_BLOCK_LOOKBACK
-    pair_logs = fetch_logs(UNISWAP_V2_FACTORY, PAIR_CREATED_TOPIC, pair_from_block, latest_block)
-    print(f"PairCreated: scanned blocks {pair_from_block}-{latest_block}, found {len(pair_logs)} new pairs")
-    for log in pair_logs:
-        topics = log.get("topics", [])
-        if len(topics) < 3:
-            continue
-        token0 = topic_to_address(topics[1])
-        token1 = topic_to_address(topics[2])
-        data = log.get("data", "0x")
-        try:
-            pair_address = "0x" + data[26:66]
-        except Exception:
-            continue
-        if token0 == WETH_ADDRESS:
-            new_token = token1
-        elif token1 == WETH_ADDRESS:
-            new_token = token0
-        else:
-            continue
-        pairs_state[pair_address] = {"new_token": new_token, "created_block": latest_block}
-    cutoff = latest_block - NEW_PAIR_RETENTION_BLOCKS
-    for addr in list(pairs_state.keys()):
-        if pairs_state[addr].get("created_block", 0) < cutoff:
-            del pairs_state[addr]
-    state["last_pair_block"] = latest_block
-    print(f"Tracking {len(pairs_state)} new WETH pairs")
 
     for contract, symbol, decimals in tokens:
         tstate = state.setdefault(contract, {"last_block": None, "accumulation": {}})
@@ -215,32 +229,67 @@ def main():
             if usd_value <= 0:
                 continue
 
-            if symbol == "WETH" and to_address in pairs_state:
-                new_token_address = pairs_state[to_address]["new_token"]
-                if usd_value >= SINGLE_BUY_THRESHOLD_USD:
-                    info = get_new_token_info(new_token_address)
-                    send_telegram(
-                        f"🆕 <b>Yeni Token'a Whale Girişi</b>\n"
-                        f"Coin: {info['name']} ({info['symbol']})\n"
-                        f"Kontrat: {new_token_address}\n"
-                        f"Havuz: {to_address}\n"
-                        f"Alım: {amount:,.4f} WETH (${usd_value:,.0f})\n"
-                        f"Alıcı: {from_address}\n"
-                        f"Tx: https://etherscan.io/tx/{tx_hash}\n"
-                        f"Grafik: https://dexscreener.com/ethereum/{new_token_address}"
-                    )
-                continue
+            # --- WETH-based generic DEX buy detection (Phase 1 + 3) ---
+            if symbol == "WETH":
+                pair = check_dex_pair(to_address)
+                if pair:
+                    base = pair.get("baseToken", {})
+                    quote = pair.get("quoteToken", {})
+                    bought = base if base.get("address", "").lower() != WETH_ADDRESS else quote
+                    bought_address = bought.get("address", "").lower()
+                    bought_symbol = bought.get("symbol", "???")
+                    bought_name = bought.get("name", "Unknown")
+                    token_price = float(pair.get("priceUsd", 0) or 0)
+                    dex_name = pair.get("dexId", "Unknown DEX")
+                    mcap = pair.get("marketCap") or pair.get("fdv") or 0
+                    liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
 
-            if is_exchange_related(from_address, to_address, exchange_addresses):
+                    if usd_value < SINGLE_BUY_THRESHOLD_USD:
+                        continue
+
+                    whale = get_tx_sender(tx_hash)
+                    if not whale or whale in exchange_addresses:
+                        continue
+
+                    received_amount = (usd_value / token_price) if token_price > 0 else 0
+                    priority = "🚨" if usd_value >= LARGE_BUY_THRESHOLD_USD else "🟢"
+
+                    send_telegram(
+                        f"{priority} <b>Yeni Balina Alımı</b>\n\n"
+                        f"Satın Alınan Coin: {bought_name} ({bought_symbol})\n"
+                        f"Kontrat: {bought_address}\n\n"
+                        f"Harcanan: {amount:,.4f} WETH\n"
+                        f"Alınan: {received_amount:,.0f} {bought_symbol}\n"
+                        f"USD: ${usd_value:,.0f}\n\n"
+                        f"Fiyat: ${token_price:.10f}\n"
+                        f"Market Cap: ${mcap:,.0f}\n"
+                        f"Likidite: ${liquidity:,.0f}\n"
+                        f"DEX: {dex_name}\n\n"
+                        f"Balina: {whale}\n"
+                        f"Tx: https://etherscan.io/tx/{tx_hash}\n"
+                        f"Grafik: https://dexscreener.com/ethereum/{to_address}"
+                    )
+
+                    count, total_usd, tier_label = update_cluster(state, bought_address, whale, usd_value)
+                    if tier_label:
+                        send_telegram(
+                            f"{tier_label}\n\n"
+                            f"Coin: {bought_name} ({bought_symbol})\n"
+                            f"Kontrat: {bought_address}\n"
+                            f"Farklı Balina Sayısı: {count}\n"
+                            f"Toplam Alım: ${total_usd:,.0f}\n"
+                            f"Grafik: https://dexscreener.com/ethereum/{to_address}"
+                        )
+                    continue
+
+            # --- Fallback: direct transfers of tracked tokens not routed via WETH pair ---
+            if from_address in exchange_addresses or to_address in exchange_addresses:
                 print(f"Skipped (exchange, static list): {tx_hash}")
                 continue
 
-            router_label = DEX_ROUTERS.get(from_address)
-            tag = f" (via {router_label})" if router_label else ""
-
             if usd_value >= LARGE_BUY_THRESHOLD_USD:
                 send_telegram(
-                    f"🚨 <b>Büyük Cüzdan Hareketi</b>{tag}\n"
+                    f"🚨 <b>Büyük Cüzdan Hareketi</b>\n"
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
@@ -249,7 +298,7 @@ def main():
                 )
             elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
                 send_telegram(
-                    f"🟢 <b>Cüzdan Hareketi</b>{tag}\n"
+                    f"🟢 <b>Cüzdan Hareketi</b>\n"
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
@@ -266,15 +315,14 @@ def main():
                 acc["total_usd"] += usd_value
                 acc["count"] += 1
                 if acc["total_usd"] >= ACCUMULATION_THRESHOLD_USD:
-                    if not is_exchange_related(to_address, to_address, exchange_addresses):
-                        send_telegram(
-                            f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
-                            f"Cüzdan: {to_address}\n"
-                            f"Coin: {symbol}\n"
-                            f"Toplam: ${acc['total_usd']:,.0f} ({acc['count']} işlemde)\n"
-                            f"Son Tx: https://etherscan.io/tx/{tx_hash}\n"
-                            f"Grafik: https://dexscreener.com/ethereum/{contract}"
-                        )
+                    send_telegram(
+                        f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
+                        f"Cüzdan: {to_address}\n"
+                        f"Coin: {symbol}\n"
+                        f"Toplam: ${acc['total_usd']:,.0f} ({acc['count']} işlemde)\n"
+                        f"Son Tx: https://etherscan.io/tx/{tx_hash}\n"
+                        f"Grafik: https://dexscreener.com/ethereum/{contract}"
+                    )
                     acc["total_usd"] = 0.0
                     acc["since"] = now
                     acc["count"] = 0
