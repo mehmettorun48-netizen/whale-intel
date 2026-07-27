@@ -90,9 +90,8 @@ def get_token_price_usd(contract_address):
 
 
 def get_new_token_info(token_address):
-    """Free DexScreener lookup for a token's name/symbol -- used only for
-    the brand-new tokens flagged by the PairCreated watcher, since those
-    aren't in our known tokens.txt list and we don't know their symbol yet."""
+    """Free DexScreener lookup for a brand-new token's name/symbol -- these
+    aren't in our known tokens.txt list yet, so we don't know their symbol."""
     if token_address in _dexscreener_cache:
         return _dexscreener_cache[token_address]
     info = {"symbol": "???", "name": "Unknown"}
@@ -228,7 +227,7 @@ def main():
                         f"Alım: {amount:,.4f} WETH (${usd_value:,.0f})\n"
                         f"Alıcı: {from_address}\n"
                         f"Tx: https://etherscan.io/tx/{tx_hash}\n"
-                        f"DexScreener: https://dexscreener.com/ethereum/{new_token_address}"
+                        f"Grafik: https://dexscreener.com/ethereum/{new_token_address}"
                     )
                 continue
 
@@ -245,7 +244,8 @@ def main():
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
-                    f"Tx: https://etherscan.io/tx/{tx_hash}"
+                    f"Tx: https://etherscan.io/tx/{tx_hash}\n"
+                    f"Grafik: https://dexscreener.com/ethereum/{contract}"
                 )
             elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
                 send_telegram(
@@ -253,7 +253,8 @@ def main():
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
-                    f"Tx: https://etherscan.io/tx/{tx_hash}"
+                    f"Tx: https://etherscan.io/tx/{tx_hash}\n"
+                    f"Grafik: https://dexscreener.com/ethereum/{contract}"
                 )
             else:
                 now = int(time.time())
@@ -271,7 +272,8 @@ def main():
                             f"Cüzdan: {to_address}\n"
                             f"Coin: {symbol}\n"
                             f"Toplam: ${acc['total_usd']:,.0f} ({acc['count']} işlemde)\n"
-                            f"Son Tx: https://etherscan.io/tx/{tx_hash}"
+                            f"Son Tx: https://etherscan.io/tx/{tx_hash}\n"
+                            f"Grafik: https://dexscreener.com/ethereum/{contract}"
                         )
                     acc["total_usd"] = 0.0
                     acc["since"] = now
