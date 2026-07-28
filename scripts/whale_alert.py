@@ -12,6 +12,8 @@ LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
+LOW_CAP_THRESHOLD_USD = 500_000  # market cap below this = "yeni/düşük cap coin"
+
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
 CLUSTER_WINDOW_SECONDS = 24 * 3600
@@ -300,19 +302,30 @@ def main():
                         continue
 
                     received_amount = (usd_value / token_price) if token_price > 0 else 0
-                    priority = "🚨" if usd_value >= LARGE_BUY_THRESHOLD_USD else "🟢"
+
+                    is_low_cap = 0 < mcap < LOW_CAP_THRESHOLD_USD
+                    if is_low_cap:
+                        priority = "🔥"
+                        header = "ERKEN BALİNA - DÜŞÜK CAP"
+                    elif usd_value >= LARGE_BUY_THRESHOLD_USD:
+                        priority = "🚨"
+                        header = "Yeni Balina Alımı"
+                    else:
+                        priority = "🟢"
+                        header = "Yeni Balina Alımı"
 
                     send_telegram(
-                        f"{priority} <b>Yeni Balina Alımı</b>\n\n"
+                        f"{priority} <b>{header}</b>\n\n"
+                        f"<pre>"
                         f"Satın Alınan Coin: {bought_name} ({bought_symbol})\n"
                         f"Kontrat: {bought_address}\n\n"
-                        f"Harcanan: {amount:,.4f} WETH\n"
                         f"Alınan: {received_amount:,.2f} {bought_symbol}\n"
                         f"USD: ${usd_value:,.0f}\n\n"
-                        f"Fiyat: ${token_price:.6f}\n"
+                        f"Fiyat: ${token_price:.8f}\n"
                         f"Market Cap: ${mcap:,.0f}\n"
                         f"Likidite: ${liquidity:,.0f}\n"
-                        f"DEX: {dex_name}\n\n"
+                        f"DEX: {dex_name}"
+                        f"</pre>\n"
                         f"Balina: {whale}\n"
                         f"Tx: https://etherscan.io/tx/{tx_hash}\n"
                         f"Grafik: https://dexscreener.com/ethereum/{to_address}"
