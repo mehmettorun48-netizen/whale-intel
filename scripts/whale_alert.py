@@ -24,6 +24,9 @@ CLUSTER_TIERS = [
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2".lower()
 
+V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
+V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
+
 STATE_FILE = "data/state.json"
 TOKENS_FILE = "config/tokens.txt"
 EXCHANGES_FILE = "config/exchanges.txt"
@@ -93,9 +96,6 @@ def get_token_price_usd(contract_address):
 
 
 def check_dex_pair(address):
-    """Asks DexScreener whether this address is a known DEX pair contract.
-    If yes, returns its live data (token names, price, market cap, liquidity,
-    dex name) -- works for brand-new AND long-established pairs alike."""
     if address in _pair_cache:
         return _pair_cache[address]
     result = None
@@ -112,9 +112,6 @@ def check_dex_pair(address):
         print("DexScreener pair lookup error:", e)
     _pair_cache[address] = result
     return result
-
-V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
-V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
 
 
 def is_real_swap(tx_hash):
@@ -146,10 +143,6 @@ def is_real_swap(tx_hash):
 
 
 def get_tx_sender(tx_hash):
-
-def get_tx_sender(tx_hash):
-    """The real whale wallet is whoever signed the transaction, not the
-    router/pair contract that shows up as the internal Transfer 'from'."""
     try:
         r = requests.get(
             "https://api.etherscan.io/v2/api",
@@ -204,8 +197,6 @@ def topic_to_address(topic_hex):
 
 
 def update_cluster(state, token_contract, whale_address, usd_value):
-    """Tracks how many DISTINCT whales bought this token recently. Returns
-    (distinct_count, total_usd, newly_crossed_tier_label_or_None)."""
     clusters = state.setdefault("clusters", {})
     c = clusters.setdefault(token_contract, {"whales": {}, "total_usd": 0.0, "last_tier": 0})
 
@@ -262,10 +253,16 @@ def main():
             if usd_value <= 0:
                 continue
 
-            # --- WETH-based generic DEX buy detection (Phase 1 + 3) ---
             if symbol == "WETH":
                 pair = check_dex_pair(to_address)
                 if pair:
+                    if usd_value < SINGLE_BUY_THRESHOLD_USD:
+                        continue
+
+                    if not is_real_swap(tx_hash):
+                        print(f"Skipped (not a real swap, likely liquidity add/remove): {tx_hash}")
+                        continue
+
                     base = pair.get("baseToken", {})
                     quote = pair.get("quoteToken", {})
                     bought = base if base.get("address", "").lower() != WETH_ADDRESS else quote
@@ -276,9 +273,6 @@ def main():
                     dex_name = pair.get("dexId", "Unknown DEX")
                     mcap = pair.get("marketCap") or pair.get("fdv") or 0
                     liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
-
-                    if usd_value < SINGLE_BUY_THRESHOLD_USD:
-                        continue
 
                     whale = get_tx_sender(tx_hash)
                     if not whale or whale in exchange_addresses:
@@ -315,7 +309,6 @@ def main():
                         )
                     continue
 
-            # --- Fallback: direct transfers of tracked tokens not routed via WETH pair ---
             if from_address in exchange_addresses or to_address in exchange_addresses:
                 print(f"Skipped (exchange, static list): {tx_hash}")
                 continue
