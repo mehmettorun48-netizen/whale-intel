@@ -33,7 +33,6 @@ STATE_FILE = "data/state.json"
 TOKENS_FILE = "config/tokens.txt"
 EXCHANGES_FILE = "config/exchanges.txt"
 
-_pair_cache = {}
 _price_cache = {}
 
 
@@ -97,53 +96,16 @@ def get_token_price_usd(contract_address):
     return price
 
 
-def check_dex_pair(address):
-    if address in _pair_cache:
-        return _pair_cache[address]
-    result = None
-    try:
-        r = requests.get(
-            f"https://api.dexscreener.com/latest/dex/pairs/ethereum/{address}",
-            timeout=15,
-        )
-        data = r.json()
-        pairs = data.get("pairs") or []
-        if pairs:
-            result = pairs[0]
-    except Exception as e:
-        print("DexScreener pair lookup error:", e)
-    _pair_cache[address] = result
-    return result
+_receipt_cache = {}
 
 
-def resolve_bought_token_and_price(pair):
-    """DexScreener's priceUsd/priceNative are always relative to the pair's
-    BASE token -- if the base token happens to be WETH (not the token the
-    whale actually bought), using priceUsd directly gives WETH's price, not
-    the purchased token's. This converts correctly either way."""
-    base = pair.get("baseToken", {})
-    quote = pair.get("quoteToken", {})
-    base_is_weth = base.get("address", "").lower() == WETH_ADDRESS
-
-    price_usd_base = float(pair.get("priceUsd", 0) or 0)
-    price_native = float(pair.get("priceNative", 0) or 0)  # base priced in quote units
-
-    if base_is_weth:
-        bought = quote
-        # 1 base(WETH) = price_native quote-tokens, and 1 base(WETH) = price_usd_base USD
-        # => 1 quote-token = price_usd_base / price_native USD
-        bought_price_usd = (price_usd_base / price_native) if price_native > 0 else 0.0
-    else:
-        bought = base
-        bought_price_usd = price_usd_base
-
-    return bought, bought_price_usd
-
-
-def is_real_swap(tx_hash):
-    """Confirms this transaction contains an actual Uniswap Swap event, not
-    just a WETH transfer that happens to land in a pool address (which also
-    happens on liquidity add/remove -- those are NOT purchases)."""
+def get_tx_receipt(tx_hash):
+    """Fetches (and caches) the full transaction receipt, including all logs
+    and the tx sender. Used both to confirm a real swap happened and to find
+    which token the whale actually ended up receiving."""
+    if tx_hash in _receipt_cache:
+        return _receipt_cache[tx_hash]
+    result = {}
     try:
         r = requests.get(
             "https://api.etherscan.io/v2/api",
@@ -157,35 +119,88 @@ def is_real_swap(tx_hash):
             timeout=20,
         )
         result = r.json().get("result") or {}
-        logs = result.get("logs", [])
-        for log in logs:
-            topic0 = (log.get("topics") or [""])[0]
-            if topic0 in (V2_SWAP_TOPIC, V3_SWAP_TOPIC):
-                return True
-        return False
     except Exception as e:
-        print("Swap check error:", e)
-        return False
+        print("Receipt fetch error:", e)
+    _receipt_cache[tx_hash] = result
+    return result
 
 
-def get_tx_sender(tx_hash):
+def has_swap_event(receipt):
+    """Confirms this transaction contains an actual Uniswap V2/V3 Swap event,
+    not just a WETH transfer that happens to pass through a DEX-adjacent
+    address (which also happens on liquidity add/remove -- those are NOT
+    purchases)."""
+    logs = receipt.get("logs", [])
+    for log in logs:
+        topic0 = (log.get("topics") or [""])[0]
+        if topic0 in (V2_SWAP_TOPIC, V3_SWAP_TOPIC):
+            return True
+    return False
+
+
+def find_bought_token_address(receipt, weth_address):
+    """Finds which ERC20 token the whale actually received in this tx, by
+    looking at every Transfer log in the receipt (in order) and taking the
+    LAST one that isn't WETH. This works regardless of whether the swap went
+    straight to a pool or was routed through an aggregator/router contract --
+    the final leg of any swap is always a Transfer of the output token, so
+    this is far more reliable than assuming WETH's recipient IS the pool."""
+    logs = receipt.get("logs", [])
+    bought_address = None
+    for log in logs:
+        topics = log.get("topics") or []
+        if not topics or topics[0] != TRANSFER_TOPIC:
+            continue
+        addr = (log.get("address") or "").lower()
+        if addr == weth_address:
+            continue
+        bought_address = addr
+    return bought_address
+
+
+_token_pair_cache = {}
+
+
+def check_dex_token(token_address):
+    """Looks up DexScreener pairs by the TOKEN's contract address (not a pool
+    address). This is robust to any routing path since we already know the
+    exact token from find_bought_token_address."""
+    if token_address in _token_pair_cache:
+        return _token_pair_cache[token_address]
+    result = None
     try:
         r = requests.get(
-            "https://api.etherscan.io/v2/api",
-            params={
-                "chainid": 1,
-                "module": "proxy",
-                "action": "eth_getTransactionByHash",
-                "txhash": tx_hash,
-                "apikey": ETHERSCAN_KEY,
-            },
-            timeout=20,
+            f"https://api.dexscreener.com/latest/dex/tokens/{token_address}",
+            timeout=15,
         )
-        result = r.json().get("result") or {}
-        return (result.get("from") or "").lower()
+        data = r.json()
+        pairs = [p for p in (data.get("pairs") or []) if p.get("chainId") == "ethereum"]
+        if pairs:
+            pairs.sort(key=lambda p: (p.get("liquidity", {}) or {}).get("usd", 0) or 0, reverse=True)
+            result = pairs[0]
     except Exception as e:
-        print("Tx sender lookup error:", e)
-        return ""
+        print("DexScreener token lookup error:", e)
+    _token_pair_cache[token_address] = result
+    return result
+
+
+def resolve_token_info_from_pair(pair, token_address):
+    """DexScreener's priceUsd/priceNative are always relative to the pair's
+    BASE token. Figures out whether our token is the base or the quote side
+    of the returned pair and returns (token_info, price_usd) either way."""
+    base = pair.get("baseToken", {})
+    quote = pair.get("quoteToken", {})
+
+    if base.get("address", "").lower() == token_address:
+        return base, float(pair.get("priceUsd", 0) or 0)
+
+    if quote.get("address", "").lower() == token_address:
+        price_usd_base = float(pair.get("priceUsd", 0) or 0)
+        price_native = float(pair.get("priceNative", 0) or 0)
+        price = (price_usd_base / price_native) if price_native > 0 else 0.0
+        return quote, price
+
+    return {}, 0.0
 
 
 def get_latest_block():
@@ -280,68 +295,83 @@ def main():
                 continue
 
             if symbol == "WETH":
-                pair = check_dex_pair(to_address)
+                if usd_value < SINGLE_BUY_THRESHOLD_USD:
+                    continue
+
+                receipt = get_tx_receipt(tx_hash)
+                if not receipt or not has_swap_event(receipt):
+                    # Plain WETH transfer (deposit, wallet consolidation, etc.) --
+                    # not a purchase of anything, so there's no "which coin" to report.
+                    continue
+
+                bought_address = find_bought_token_address(receipt, WETH_ADDRESS)
+                if not bought_address:
+                    print(f"Skipped (swap detected but couldn't trace bought token): {tx_hash}")
+                    continue
+
+                whale = (receipt.get("from") or "").lower()
+                if not whale or whale in exchange_addresses:
+                    continue
+
+                pair = check_dex_token(bought_address)
                 if pair:
-                    if usd_value < SINGLE_BUY_THRESHOLD_USD:
-                        continue
-
-                    if not is_real_swap(tx_hash):
-                        print(f"Skipped (not a real swap, likely liquidity add/remove): {tx_hash}")
-                        continue
-
-                    bought, token_price = resolve_bought_token_and_price(pair)
-                    bought_address = bought.get("address", "").lower()
-                    bought_symbol = bought.get("symbol", "???")
-                    bought_name = bought.get("name", "Unknown")
+                    info, token_price = resolve_token_info_from_pair(pair, bought_address)
+                    bought_symbol = info.get("symbol", "???")
+                    bought_name = info.get("name", "Unknown")
                     dex_name = pair.get("dexId", "Unknown DEX")
                     mcap = pair.get("marketCap") or pair.get("fdv") or 0
                     liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
+                else:
+                    # Token so new DexScreener hasn't indexed it yet -- still
+                    # worth alerting on, just without market data.
+                    token_price = 0.0
+                    bought_symbol = "???"
+                    bought_name = "Bilinmiyor (DexScreener'da henüz yok)"
+                    dex_name = "Bilinmiyor"
+                    mcap = 0
+                    liquidity = 0
 
-                    whale = get_tx_sender(tx_hash)
-                    if not whale or whale in exchange_addresses:
-                        continue
+                received_amount = (usd_value / token_price) if token_price > 0 else 0
 
-                    received_amount = (usd_value / token_price) if token_price > 0 else 0
+                is_low_cap = mcap == 0 or mcap < LOW_CAP_THRESHOLD_USD
+                if is_low_cap:
+                    priority = "🔥"
+                    header = "ERKEN BALİNA - DÜŞÜK CAP"
+                elif usd_value >= LARGE_BUY_THRESHOLD_USD:
+                    priority = "🚨"
+                    header = "Yeni Balina Alımı"
+                else:
+                    priority = "🟢"
+                    header = "Yeni Balina Alımı"
 
-                    is_low_cap = 0 < mcap < LOW_CAP_THRESHOLD_USD
-                    if is_low_cap:
-                        priority = "🔥"
-                        header = "ERKEN BALİNA - DÜŞÜK CAP"
-                    elif usd_value >= LARGE_BUY_THRESHOLD_USD:
-                        priority = "🚨"
-                        header = "Yeni Balina Alımı"
-                    else:
-                        priority = "🟢"
-                        header = "Yeni Balina Alımı"
+                send_telegram(
+                    f"{priority} <b>{header}</b>\n\n"
+                    f"<pre>"
+                    f"Satın Alınan Coin: {bought_name} ({bought_symbol})\n"
+                    f"Kontrat: {bought_address}\n\n"
+                    f"Alınan: {received_amount:,.2f} {bought_symbol}\n"
+                    f"USD: ${usd_value:,.0f}\n\n"
+                    f"Fiyat: ${token_price:.8f}\n"
+                    f"Market Cap: ${mcap:,.0f}\n"
+                    f"Likidite: ${liquidity:,.0f}\n"
+                    f"DEX: {dex_name}"
+                    f"</pre>\n"
+                    f"Balina: {whale}\n"
+                    f"Tx: https://etherscan.io/tx/{tx_hash}\n"
+                    f"Grafik: https://dexscreener.com/ethereum/{bought_address}"
+                )
 
+                count, total_usd, tier_label = update_cluster(state, bought_address, whale, usd_value)
+                if tier_label:
                     send_telegram(
-                        f"{priority} <b>{header}</b>\n\n"
-                        f"<pre>"
-                        f"Satın Alınan Coin: {bought_name} ({bought_symbol})\n"
-                        f"Kontrat: {bought_address}\n\n"
-                        f"Alınan: {received_amount:,.2f} {bought_symbol}\n"
-                        f"USD: ${usd_value:,.0f}\n\n"
-                        f"Fiyat: ${token_price:.8f}\n"
-                        f"Market Cap: ${mcap:,.0f}\n"
-                        f"Likidite: ${liquidity:,.0f}\n"
-                        f"DEX: {dex_name}"
-                        f"</pre>\n"
-                        f"Balina: {whale}\n"
-                        f"Tx: https://etherscan.io/tx/{tx_hash}\n"
-                        f"Grafik: https://dexscreener.com/ethereum/{to_address}"
+                        f"{tier_label}\n\n"
+                        f"Coin: {bought_name} ({bought_symbol})\n"
+                        f"Kontrat: {bought_address}\n"
+                        f"Farklı Balina Sayısı: {count}\n"
+                        f"Toplam Alım: ${total_usd:,.0f}\n"
+                        f"Grafik: https://dexscreener.com/ethereum/{bought_address}"
                     )
-
-                    count, total_usd, tier_label = update_cluster(state, bought_address, whale, usd_value)
-                    if tier_label:
-                        send_telegram(
-                            f"{tier_label}\n\n"
-                            f"Coin: {bought_name} ({bought_symbol})\n"
-                            f"Kontrat: {bought_address}\n"
-                            f"Farklı Balina Sayısı: {count}\n"
-                            f"Toplam Alım: ${total_usd:,.0f}\n"
-                            f"Grafik: https://dexscreener.com/ethereum/{to_address}"
-                        )
-                    continue
+                continue
 
             if from_address in exchange_addresses or to_address in exchange_addresses:
                 print(f"Skipped (exchange, static list): {tx_hash}")
