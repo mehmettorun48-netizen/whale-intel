@@ -118,7 +118,12 @@ def get_tx_receipt(tx_hash):
             },
             timeout=20,
         )
-        result = r.json().get("result") or {}
+        data = r.json()
+        raw_result = data.get("result")
+        if isinstance(raw_result, dict):
+            result = raw_result
+        else:
+            print(f"Receipt fetch returned non-dict result for {tx_hash}: {raw_result}")
     except Exception as e:
         print("Receipt fetch error:", e)
     _receipt_cache[tx_hash] = result
