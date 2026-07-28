@@ -114,6 +114,30 @@ def check_dex_pair(address):
     return result
 
 
+def resolve_bought_token_and_price(pair):
+    """DexScreener's priceUsd/priceNative are always relative to the pair's
+    BASE token -- if the base token happens to be WETH (not the token the
+    whale actually bought), using priceUsd directly gives WETH's price, not
+    the purchased token's. This converts correctly either way."""
+    base = pair.get("baseToken", {})
+    quote = pair.get("quoteToken", {})
+    base_is_weth = base.get("address", "").lower() == WETH_ADDRESS
+
+    price_usd_base = float(pair.get("priceUsd", 0) or 0)
+    price_native = float(pair.get("priceNative", 0) or 0)  # base priced in quote units
+
+    if base_is_weth:
+        bought = quote
+        # 1 base(WETH) = price_native quote-tokens, and 1 base(WETH) = price_usd_base USD
+        # => 1 quote-token = price_usd_base / price_native USD
+        bought_price_usd = (price_usd_base / price_native) if price_native > 0 else 0.0
+    else:
+        bought = base
+        bought_price_usd = price_usd_base
+
+    return bought, bought_price_usd
+
+
 def is_real_swap(tx_hash):
     """Confirms this transaction contains an actual Uniswap Swap event, not
     just a WETH transfer that happens to land in a pool address (which also
@@ -263,13 +287,10 @@ def main():
                         print(f"Skipped (not a real swap, likely liquidity add/remove): {tx_hash}")
                         continue
 
-                    base = pair.get("baseToken", {})
-                    quote = pair.get("quoteToken", {})
-                    bought = base if base.get("address", "").lower() != WETH_ADDRESS else quote
+                    bought, token_price = resolve_bought_token_and_price(pair)
                     bought_address = bought.get("address", "").lower()
                     bought_symbol = bought.get("symbol", "???")
                     bought_name = bought.get("name", "Unknown")
-                    token_price = float(pair.get("priceUsd", 0) or 0)
                     dex_name = pair.get("dexId", "Unknown DEX")
                     mcap = pair.get("marketCap") or pair.get("fdv") or 0
                     liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
@@ -286,9 +307,9 @@ def main():
                         f"Satın Alınan Coin: {bought_name} ({bought_symbol})\n"
                         f"Kontrat: {bought_address}\n\n"
                         f"Harcanan: {amount:,.4f} WETH\n"
-                        f"Alınan: {received_amount:,.0f} {bought_symbol}\n"
+                        f"Alınan: {received_amount:,.2f} {bought_symbol}\n"
                         f"USD: ${usd_value:,.0f}\n\n"
-                        f"Fiyat: ${token_price:.10f}\n"
+                        f"Fiyat: ${token_price:.6f}\n"
                         f"Market Cap: ${mcap:,.0f}\n"
                         f"Likidite: ${liquidity:,.0f}\n"
                         f"DEX: {dex_name}\n\n"
