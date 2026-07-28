@@ -1,11 +1,11 @@
 {
   "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25626677,
+    "last_block": 25628025,
     "accumulation": {
       "0x0000000aa232009084bd71a5797d089aa4edfad4": {
-        "total_usd": 4308.17845533198,
-        "since": 1785185794,
-        "count": 6
+        "total_usd": 0.0,
+        "since": 1785202097,
+        "count": 0
       },
       "0xd315a9c38ec871068fec378e4ce78af528c76293": {
         "total_usd": 495.34267751729107,
@@ -13,19 +13,19 @@
         "count": 1
       },
       "0x0889e9327b98d7d1be3c301a4585ff3330502c9a": {
-        "total_usd": 2965.166704615497,
-        "since": 1785185826,
-        "count": 8
+        "total_usd": 2635.305467380904,
+        "since": 1785202076,
+        "count": 15
       },
       "0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5": {
-        "total_usd": 1954.5249249939607,
+        "total_usd": 4591.195289259138,
         "since": 1785185794,
-        "count": 12
+        "count": 24
       },
       "0x67336cec42645f55059eff241cb02ea5cc52ff86": {
-        "total_usd": 25.098028956,
+        "total_usd": 49.8054952998624,
         "since": 1785185794,
-        "count": 1
+        "count": 3
       },
       "0x00000000ae2193c4ac6521146b1adafe9b43361d": {
         "total_usd": 5.7188427788052,
@@ -33,9 +33,9 @@
         "count": 1
       },
       "0x8f10b468b06c6fd214b65f87778827f7d113f996": {
-        "total_usd": 1806.8912665373414,
-        "since": 1785185794,
-        "count": 9
+        "total_usd": 1395.4770072106285,
+        "since": 1785202104,
+        "count": 5
       },
       "0x2e69797d37e888d62974a1ffa20816a5f55f898d": {
         "total_usd": 5.7188427788052,
@@ -48,19 +48,19 @@
         "count": 1
       },
       "0x28b1dc1a5e3699a428bc51d234dfab7c9cb2a183": {
-        "total_usd": 4308.661355734651,
-        "since": 1785185795,
-        "count": 22
+        "total_usd": 4598.770103555735,
+        "since": 1785202061,
+        "count": 16
       },
       "0x5703b683c7f928b721ca95da988d73a3299d4757": {
-        "total_usd": 4200.324773863824,
-        "since": 1785185795,
-        "count": 11
+        "total_usd": 0.0,
+        "since": 1785202099,
+        "count": 0
       },
       "0x1dc89ab25ab5d8714fcf9ee4bd9c9a58debeb4d8": {
-        "total_usd": 98.1935909348232,
+        "total_usd": 199.95939656035554,
         "since": 1785185795,
-        "count": 1
+        "count": 2
       },
       "0x9a47f3289794e9bbc6a3c571f6d96ad4e7baed16": {
         "total_usd": 95.37313105728953,
@@ -83,19 +83,19 @@
         "count": 1
       },
       "0x111111125421ca6dc452d289314280a0f8842a65": {
-        "total_usd": 463.7871519382274,
-        "since": 1785185795,
-        "count": 6
-      },
-      "0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
-        "total_usd": 1897.3573790338855,
-        "since": 1785185815,
-        "count": 3
-      },
-      "0x4c82d1fbfe28c977cbb58d8c7ff8fcf9f70a2cca": {
-        "total_usd": 2130.0212841264,
+        "total_usd": 862.8900706602207,
         "since": 1785185795,
         "count": 11
+      },
+      "0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
+        "total_usd": 3274.7875239309083,
+        "since": 1785185815,
+        "count": 10
+      },
+      "0x4c82d1fbfe28c977cbb58d8c7ff8fcf9f70a2cca": {
+        "total_usd": 4203.1599490137105,
+        "since": 1785185795,
+        "count": 18
       },
       "0x1cf33d6535e1aa8c5774788b6fc7f54bf4f1ce36": {
         "total_usd": 21.5517800304,
@@ -103,14 +103,14 @@
         "count": 1
       },
       "0xbbbbbbb520d69a9775e85b458c58c648259fad5f": {
-        "total_usd": 125.96506884336112,
+        "total_usd": 150.6725351872235,
         "since": 1785185795,
-        "count": 1
+        "count": 3
       },
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
-        "total_usd": 106.38275750916307,
+        "total_usd": 116.30199714692927,
         "since": 1785185795,
-        "count": 4
+        "count": 5
       },
       "0xc435b22e07d4e5bc75b0adf10ead3241e5292cf9": {
         "total_usd": 8.126241718123442,
@@ -118,9 +118,9 @@
         "count": 1
       },
       "0x278d858f05b94576c1e6f73285886876ff6ef8d2": {
-        "total_usd": 252.23850417212472,
+        "total_usd": 1015.7803834014154,
         "since": 1785185796,
-        "count": 9
+        "count": 20
       },
       "0x42e213a3ad048e899b89ea8cb11d21bc97b84748": {
         "total_usd": 24.64687204219736,
@@ -128,14 +128,14 @@
         "count": 2
       },
       "0x00000f91109c4d0007e90000d9facad5298a0cac": {
-        "total_usd": 2.2926561908168788,
+        "total_usd": 2.4356328608861086,
         "since": 1785185797,
-        "count": 5
+        "count": 7
       },
       "0x8b773f0487b6388902c3448a7a43e27a6d71b7eb": {
-        "total_usd": 100.4908549124133,
+        "total_usd": 2322.161476269736,
         "since": 1785185797,
-        "count": 3
+        "count": 20
       },
       "0x62b107f3327667ee30e153a024e4000a454496a6": {
         "total_usd": 9.718200000000001,
@@ -148,19 +148,19 @@
         "count": 1
       },
       "0x22ecf2bed494976503a8087add30e134c30fbd98": {
-        "total_usd": 784.3866600451997,
+        "total_usd": 2786.020468440173,
         "since": 1785185797,
-        "count": 6
+        "count": 12
       },
       "0x6747bcaf9bd5a5f0758cbe08903490e45ddfacb5": {
-        "total_usd": 177.21450654956462,
+        "total_usd": 1769.3073267013056,
         "since": 1785185797,
-        "count": 7
+        "count": 15
       },
       "0x7a250d5630b4cf539739df2c5dacb4c659f2488d": {
-        "total_usd": 2580.810481685781,
-        "since": 1785185797,
-        "count": 103
+        "total_usd": 1180.2756905631263,
+        "since": 1785202082,
+        "count": 43
       },
       "0x447a03c131c0a97a8b8d548e3cd81aec4ce05d73": {
         "total_usd": 157.62421453708842,
@@ -168,9 +168,9 @@
         "count": 3
       },
       "0x09ad820aac5779683b481c4674208a4e1b024afa": {
-        "total_usd": 287.28574244329286,
+        "total_usd": 1582.0692303963351,
         "since": 1785185797,
-        "count": 4
+        "count": 11
       },
       "0xe42af7eb5ebbbf11d52c0f8e9f2f348acba689ae": {
         "total_usd": 22.604449469498324,
@@ -188,14 +188,14 @@
         "count": 1
       },
       "0x5979458912f80b96d30d4220af8e2e4925a33320": {
-        "total_usd": 505.3464,
+        "total_usd": 517.5815629082708,
         "since": 1785185798,
-        "count": 1
+        "count": 2
       },
       "0x585d44727129b9c69791b10238ca605932938b4f": {
-        "total_usd": 505.3464,
+        "total_usd": 517.5815629082708,
         "since": 1785185798,
-        "count": 1
+        "count": 2
       },
       "0x3d90f66b534dd8482b181e24655a9e8265316be9": {
         "total_usd": 119.49253600262807,
@@ -208,14 +208,14 @@
         "count": 5
       },
       "0xe0523b85fad2015c0b6ae78e8c71ece5edbe5a67": {
-        "total_usd": 2.0569465385857195,
+        "total_usd": 14.339251394305784,
         "since": 1785185798,
-        "count": 1
+        "count": 2
       },
       "0xeff6cb8b614999d130e537751ee99724d01aa167": {
-        "total_usd": 1144.65601246733,
+        "total_usd": 1553.4115329289339,
         "since": 1785185798,
-        "count": 7
+        "count": 10
       },
       "0x024617bd31fa2298d5def5412d0386838a855191": {
         "total_usd": 75.71546292180322,
@@ -223,9 +223,9 @@
         "count": 1
       },
       "0x66a9893cc07d91d95644aedd05d03f95e1dba8af": {
-        "total_usd": 1325.470266719198,
+        "total_usd": 3472.4502375391403,
         "since": 1785185798,
-        "count": 8
+        "count": 16
       },
       "0x0011f92de175b593658b0d55d862d6f5d0166ae6": {
         "total_usd": 28.765872,
@@ -233,9 +233,9 @@
         "count": 2
       },
       "0x0000a26b00c1f0df003000390027140000faa719": {
-        "total_usd": 2.9310091200000006,
+        "total_usd": 14.986639419999998,
         "since": 1785185798,
-        "count": 9
+        "count": 28
       },
       "0x8fb9d1842efdc6567881a1c39b4f812708d2ceec": {
         "total_usd": 0.97182,
@@ -248,9 +248,9 @@
         "count": 1
       },
       "0xe592427a0aece92de3edee1f18e0157c05861564": {
-        "total_usd": 712.8577374741809,
+        "total_usd": 1640.41460699769,
         "since": 1785185799,
-        "count": 3
+        "count": 5
       },
       "0x140022b7000081000001094700609300d2187dab": {
         "total_usd": 5.014338334482499,
@@ -258,14 +258,14 @@
         "count": 4
       },
       "0x4313c378cc91ea583c91387b9216e2c03096b27f": {
-        "total_usd": 380.7090893410009,
+        "total_usd": 1305.0397791401365,
         "since": 1785185799,
-        "count": 4
+        "count": 12
       },
       "0x111116053f09d34a7eae8102887004445176ca11": {
-        "total_usd": 2882.3542809228525,
+        "total_usd": 4018.991756957619,
         "since": 1785185799,
-        "count": 9
+        "count": 18
       },
       "0x90cbe4bdd538d6e9b379bff5fe72c3d67a521de5": {
         "total_usd": 0.7628181359475742,
@@ -278,14 +278,14 @@
         "count": 4
       },
       "0x2c242c8da2c5b25191bb6d2d88b8703446d28fc6": {
-        "total_usd": 47.87765507764982,
+        "total_usd": 161.7200433860953,
         "since": 1785185799,
-        "count": 3
+        "count": 6
       },
       "0x06cff7088619c7178f5e14f0b119458d08d2f5ef": {
-        "total_usd": 314.7970432980891,
+        "total_usd": 384.72044851101424,
         "since": 1785185799,
-        "count": 3
+        "count": 7
       },
       "0xace0fabed501e819ecc15e67c7ed3a67c2f67e91": {
         "total_usd": 4583.056850172616,
@@ -293,9 +293,9 @@
         "count": 5
       },
       "0x009a8dbad7000f0000009b002d050058ca881b57": {
-        "total_usd": 18.723967939598698,
+        "total_usd": 46.98426932882103,
         "since": 1785185800,
-        "count": 3
+        "count": 4
       },
       "0x0000000037d7000478a758e323642ae8ce910137": {
         "total_usd": 2918.5019209297357,
@@ -318,9 +318,9 @@
         "count": 2
       },
       "0xb1b2d032aa2f52347fbcfd08e5c3cc55216e8404": {
-        "total_usd": 1626.4142599838956,
+        "total_usd": 1993.777063075307,
         "since": 1785185800,
-        "count": 3
+        "count": 4
       },
       "0x33b41fe18d3a39046ad672f8a0c8c415454f629c": {
         "total_usd": 21.5517800304,
@@ -333,9 +333,9 @@
         "count": 4
       },
       "0x000000000004444c5dc75cb358380d2e3de08a90": {
-        "total_usd": 1624.4531272323518,
+        "total_usd": 2458.5764293994125,
         "since": 1785185818,
-        "count": 1
+        "count": 8
       },
       "0x4a5b6cea4a51a1261782fcb53f4ab58c4383168f": {
         "total_usd": 9.637092059975055,
@@ -348,9 +348,9 @@
         "count": 1
       },
       "0x4cd00e387622c35bddb9b4c962c136462338bc31": {
-        "total_usd": 38.872800000000005,
+        "total_usd": 121.75369768338015,
         "since": 1785185801,
-        "count": 1
+        "count": 3
       },
       "0xbee3211ab312a8d065c4fef0247448e17a8da000": {
         "total_usd": 21.47456157727802,
@@ -363,9 +363,9 @@
         "count": 3
       },
       "0x51c72848c68a965f66fa7a88855f9f7784502a7f": {
-        "total_usd": 3646.980024097923,
-        "since": 1785185801,
-        "count": 5
+        "total_usd": 1671.114683137993,
+        "since": 1785202080,
+        "count": 3
       },
       "0x65f3443e12982a7180c46a20671ff07f7035629f": {
         "total_usd": 20.9673168825685,
@@ -383,14 +383,14 @@
         "count": 1
       },
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
-        "total_usd": 310.6390858441122,
+        "total_usd": 539.2059068417334,
         "since": 1785185801,
-        "count": 4
+        "count": 8
       },
       "0x81463b0f960f247f704377661ec81c1fd65b5128": {
-        "total_usd": 25.332048348438455,
+        "total_usd": 46.21428842262037,
         "since": 1785185802,
-        "count": 3
+        "count": 6
       },
       "0x05aa8120ea1485cb23768bbe7cfd8e27eee1f00f": {
         "total_usd": 14.771664000000001,
@@ -398,9 +398,9 @@
         "count": 2
       },
       "0x111f686ff7e5361e87d632376a82d894a33fdcd4": {
-        "total_usd": 1913.510849795021,
+        "total_usd": 2531.996976080394,
         "since": 1785185802,
-        "count": 5
+        "count": 6
       },
       "0x17123b7b59968df59a89da9bef12728ede7006cd": {
         "total_usd": 685.4123195369712,
@@ -418,9 +418,9 @@
         "count": 1
       },
       "0x6745024462abf2c049f54b381c4ad4a8c8d999c4": {
-        "total_usd": 0.15014041837535821,
+        "total_usd": 2.4142501825264358,
         "since": 1785185802,
-        "count": 1
+        "count": 3
       },
       "0x20f6ee51340adeed01a59b0e65cb3703f3dc860c": {
         "total_usd": 1081.7393967978096,
@@ -428,9 +428,9 @@
         "count": 2
       },
       "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae": {
-        "total_usd": 1081.7393967978096,
+        "total_usd": 1090.0575279685634,
         "since": 1785185802,
-        "count": 2
+        "count": 4
       },
       "0xb4a1daf8b1914cbe82181ed919f53cfa8638a370": {
         "total_usd": 332.8473776156712,
@@ -438,9 +438,9 @@
         "count": 2
       },
       "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45": {
-        "total_usd": 606.9784203090043,
+        "total_usd": 607.1100103503181,
         "since": 1785185803,
-        "count": 5
+        "count": 8
       },
       "0x5470c5a6fce7447afd2c9be3a0f25e362c093661": {
         "total_usd": 26.82690187111489,
@@ -448,14 +448,14 @@
         "count": 1
       },
       "0xbdb3ba9ffe392549e1f8658dd2630c141fdf47b6": {
-        "total_usd": 4708.719202809125,
-        "since": 1785185824,
-        "count": 6
+        "total_usd": 162.6467686718351,
+        "since": 1785202114,
+        "count": 1
       },
       "0x0eb8d76a3895938870f70aa77a58214f27ef9aa9": {
-        "total_usd": 19.60575285382069,
+        "total_usd": 56.54891785382069,
         "since": 1785185803,
-        "count": 1
+        "count": 2
       },
       "0x1b6257cae4192e62b629efca21771be3d759183d": {
         "total_usd": 19.60575285382069,
@@ -468,24 +468,24 @@
         "count": 4
       },
       "0xba12222222228d8ba445958a75a0704d566bf2c8": {
-        "total_usd": 1002.7136802107308,
+        "total_usd": 1450.2505874742114,
+        "since": 1785185803,
+        "count": 4
+      },
+      "0x3e07be15370d8b12d80a159a7ef14b9e51869497": {
+        "total_usd": 1918.2261744549746,
         "since": 1785185803,
         "count": 3
       },
-      "0x3e07be15370d8b12d80a159a7ef14b9e51869497": {
-        "total_usd": 786.9093135972175,
-        "since": 1785185803,
-        "count": 1
-      },
       "0x529863940bf6065d8c122a550c2ff37c1cfefa16": {
-        "total_usd": 786.9093135972175,
+        "total_usd": 1918.2261744549746,
         "since": 1785185803,
-        "count": 1
+        "count": 3
       },
       "0xa5f91e598668040055dc861a7316e677a5b730b0": {
-        "total_usd": 234.15327022250162,
+        "total_usd": 430.60563199630553,
         "since": 1785185804,
-        "count": 4
+        "count": 7
       },
       "0x6487986a78b126538746937fbd25516971129b3a": {
         "total_usd": 203.0652075298178,
@@ -493,24 +493,24 @@
         "count": 6
       },
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
-        "total_usd": 68.1906458262053,
+        "total_usd": 567.6898695066236,
         "since": 1785185804,
-        "count": 2
+        "count": 3
       },
       "0x649cbf4fd4efb3cca89cbb9982114bcf22fad9ff": {
-        "total_usd": 20.44355073978449,
+        "total_usd": 1943.953313406846,
         "since": 1785185805,
-        "count": 2
+        "count": 3
       },
       "0x10d8b8daa26d307489803e10477de69c0492b610": {
-        "total_usd": 20.44355073978449,
+        "total_usd": 1943.953313406846,
         "since": 1785185805,
-        "count": 2
+        "count": 3
       },
       "0x2a6ba200fdb7986b9122672151237edb8934b7d2": {
-        "total_usd": 59.58412644851411,
+        "total_usd": 117.98756292464164,
         "since": 1785185806,
-        "count": 1
+        "count": 3
       },
       "0x7f86bf177dd4f3494b841a37e810a34dd56c829b": {
         "total_usd": 87.65080825590121,
@@ -528,14 +528,14 @@
         "count": 1
       },
       "0xf9280799c85d376e0425f6fb38e4a674e8bedb56": {
-        "total_usd": 29.245887721815414,
+        "total_usd": 1531.2589616149287,
         "since": 1785185806,
-        "count": 2
+        "count": 14
       },
       "0x20011fa1a83bba9c8357f852ec667d8439a7da4a": {
-        "total_usd": 756.7090440044692,
+        "total_usd": 2108.1963744295917,
         "since": 1785185806,
-        "count": 2
+        "count": 5
       },
       "0x0489cb47898d10d7b66d10838012a13b44602123": {
         "total_usd": 2.675270954821718,
@@ -558,14 +558,14 @@
         "count": 1
       },
       "0x9303d901bbe63310ae5adbb2f3b6d78f82776e7d": {
-        "total_usd": 82.9351188,
+        "total_usd": 398.39607817999996,
         "since": 1785185808,
-        "count": 1
+        "count": 2
       },
       "0xe3195053f15aae88bb69c7ece0f4922e3e5a7b27": {
-        "total_usd": 82.63579824,
+        "total_usd": 394.91683962,
         "since": 1785185808,
-        "count": 1
+        "count": 2
       },
       "0x52dd0805cd46889c684a03a77638a05495bcf862": {
         "total_usd": 104.77521585701015,
@@ -578,14 +578,14 @@
         "count": 1
       },
       "0x27ad186bb115a2b41fb64553efd4ba5a74b83b08": {
-        "total_usd": 1338.3286635065992,
+        "total_usd": 2641.213675189901,
         "since": 1785185809,
-        "count": 3
+        "count": 6
       },
       "0x082738d007001080a00099a000004f3006152085": {
-        "total_usd": 52.613056794953785,
+        "total_usd": 2505.060088420653,
         "since": 1785185809,
-        "count": 2
+        "count": 6
       },
       "0x4de4fccc14eab1d69890a49471a9d57b96dd725f": {
         "total_usd": 3.4410372012249737,
@@ -608,14 +608,14 @@
         "count": 1
       },
       "0xe2536231fc1512babc8c856ad7499830a936bdd9": {
-        "total_usd": 5.714961081381999,
+        "total_usd": 188.02737671776407,
         "since": 1785185809,
-        "count": 2
+        "count": 6
       },
       "0x93c30e6e09f698cfea99b09b5166ed90cfaedd17": {
-        "total_usd": 0.0,
+        "total_usd": 75.74239019006981,
         "since": 1785185816,
-        "count": 0
+        "count": 1
       },
       "0x2fa31d2ac017869998f9574bac76094a8110cf7c": {
         "total_usd": 1.5692661864403894,
@@ -633,9 +633,9 @@
         "count": 1
       },
       "0xe60fae7817aeee84f378cde1ea2587795694347e": {
-        "total_usd": 0.3905831953679886,
+        "total_usd": 0.4492230745530852,
         "since": 1785185810,
-        "count": 3
+        "count": 5
       },
       "0x37e945ed26b17a631d7df3382c2808cc1c7f07ed": {
         "total_usd": 0.31419164384514636,
@@ -653,9 +653,9 @@
         "count": 1
       },
       "0xa0f1c3ad83e07d97b5e7030e177718be175275ea": {
-        "total_usd": 0.7340598382870894,
+        "total_usd": 155.7129777391089,
         "since": 1785185811,
-        "count": 1
+        "count": 7
       },
       "0x62a0b4f7f0bd797692ef39ce6905608b9a39b8d3": {
         "total_usd": 2263.3109340084893,
@@ -668,9 +668,9 @@
         "count": 2
       },
       "0x1103fc560de8b710983e7f3ec09d587f3f848566": {
-        "total_usd": 164.5640678449481,
+        "total_usd": 234.28554469623228,
         "since": 1785185811,
-        "count": 1
+        "count": 2
       },
       "0x3482a2f4cea83a1c3381882e716486042c135683": {
         "total_usd": 9.329471999999999,
@@ -688,14 +688,14 @@
         "count": 1
       },
       "0x163f3103de041d25464e2c8a4f8f3187ec1856e0": {
-        "total_usd": 17.085509820952865,
+        "total_usd": 1024.218055844744,
         "since": 1785185811,
-        "count": 4
+        "count": 8
       },
       "0xbc1d9760bd6ca468ca9fb5ff2cfbeac35d86c973": {
-        "total_usd": 129.21064140736948,
+        "total_usd": 2446.8335192930413,
         "since": 1785185811,
-        "count": 1
+        "count": 7
       },
       "0x2f495ccad3a513795fb76bcaa899fea3f1e98165": {
         "total_usd": 19.630764000000003,
@@ -703,14 +703,14 @@
         "count": 2
       },
       "0x7e7978f593bf372f78837d2d97e99ed0258a579f": {
-        "total_usd": 4.045103568,
+        "total_usd": 13.045861466999998,
         "since": 1785185811,
-        "count": 2
+        "count": 5
       },
       "0x0f7ae28de1c8532170ad4ee566b5801485c13a0e": {
-        "total_usd": 96.97488802519926,
+        "total_usd": 375.84883819151605,
         "since": 1785185811,
-        "count": 1
+        "count": 2
       },
       "0x5a0d85166a20f9cd27be2cb293e4d10188f0c97d": {
         "total_usd": 43.911866666666675,
@@ -733,9 +733,9 @@
         "count": 1
       },
       "0xa8f8296f4053fd65e89b245d6c7f983a70234c8b": {
-        "total_usd": 173.19833277478034,
+        "total_usd": 188.28139039889072,
         "since": 1785185816,
-        "count": 2
+        "count": 3
       },
       "0x8dd9433e6f86a035bb318a6f74ad2d3ac6731861": {
         "total_usd": 0.08659916638738842,
@@ -753,14 +753,14 @@
         "count": 2
       },
       "0x01989c93890aed05a63d179b03424997075b6acf": {
-        "total_usd": 4141.34127134302,
-        "since": 1785185818,
-        "count": 3
+        "total_usd": 480.3802885213879,
+        "since": 1785202083,
+        "count": 1
       },
       "0xc10ee9031f2a0b84766a86b55a8d90f357910fb4": {
-        "total_usd": 8.123103873685892,
+        "total_usd": 2822.889722777218,
         "since": 1785185819,
-        "count": 1
+        "count": 3
       },
       "0xf5c299316699131d29adcb7ef87af8e97bbc7ead": {
         "total_usd": 58.929534118250125,
@@ -768,9 +768,9 @@
         "count": 1
       },
       "0x4babacf0cac16610059c53206d1ffd0049f3f412": {
-        "total_usd": 0.06354694615692105,
+        "total_usd": 0.12735302697465467,
         "since": 1785185821,
-        "count": 1
+        "count": 2
       },
       "0x70e60fbfe09caaad444d6c489ef865bfaabbefc8": {
         "total_usd": 6.8278186031461,
@@ -778,9 +778,9 @@
         "count": 1
       },
       "0x84cab37995229530d9e6e5cff2f8f4ebe4517d66": {
-        "total_usd": 317.09831701495335,
+        "total_usd": 318.97344570917807,
         "since": 1785185822,
-        "count": 4
+        "count": 6
       },
       "0x913814782144864e523c3fdb78e3ca25d2c2aeca": {
         "total_usd": 0.5047141675991258,
@@ -798,14 +798,14 @@
         "count": 1
       },
       "0x80b4a27276d0c9cce34bf984877c5c9ed5982a9f": {
-        "total_usd": 245.80355342497703,
+        "total_usd": 447.74868765688046,
         "since": 1785185823,
-        "count": 1
+        "count": 2
       },
       "0x40a1fe393a7f566f27df6ace18e6773be844dafc": {
-        "total_usd": 2.9398179484560867,
+        "total_usd": 42.29502237512662,
         "since": 1785185824,
-        "count": 1
+        "count": 3
       },
       "0xdc467fde986a8883e39822b275bdad1295532608": {
         "total_usd": 738.8404822097721,
@@ -818,14 +818,14 @@
         "count": 1
       },
       "0xb704fcb4c43bdc030de7ec5e0d5264b99aa3af36": {
-        "total_usd": 1501.4175003400737,
+        "total_usd": 2741.885755303176,
         "since": 1785185825,
-        "count": 2
+        "count": 7
       },
       "0xd7ca08ec1aee9cce8a8eda9365343ef197674e1a": {
-        "total_usd": 252.84863288958144,
+        "total_usd": 281.74879841660334,
         "since": 1785185825,
-        "count": 2
+        "count": 4
       },
       "0x4937758e82c4a2780a43847aaa98c4eaac5da671": {
         "total_usd": 1944.6992514810906,
@@ -843,9 +843,9 @@
         "count": 1
       },
       "0x1715a3e4a142d8b698131108995174f37aeba10d": {
-        "total_usd": 330.41880000000003,
+        "total_usd": 606.1363960000001,
         "since": 1785185826,
-        "count": 1
+        "count": 2
       },
       "0xf1d1aba8bd488c0f0b1ea4d2085b243091f9d410": {
         "total_usd": 0.21918690645635885,
@@ -918,9 +918,9 @@
         "count": 1
       },
       "0x0000830df56616d58976a12d19d283b40e25beef": {
-        "total_usd": 291.21394258078794,
+        "total_usd": 307.5582221127888,
         "since": 1785185829,
-        "count": 5
+        "count": 6
       },
       "0x8d6ce71ab8c98299c1956247ca9aaec080dd2df3": {
         "total_usd": 524.0335723081337,
@@ -1003,13 +1003,493 @@
         "count": 1
       },
       "0xa40672a7e8e659e868de0be06a60ffd23e549c66": {
-        "total_usd": 20.764557640766327,
+        "total_usd": 130.69601234681383,
         "since": 1785185833,
-        "count": 1
+        "count": 4
       },
       "0x948306c220ac325fa9392a6e601042a3cd0b480d": {
         "total_usd": 0.5546836232470896,
         "since": 1785185833,
+        "count": 1
+      },
+      "0x00000000fd3a7b3fa5bcfa843c648714b11e089b": {
+        "total_usd": 881.404713619135,
+        "since": 1785202045,
+        "count": 2
+      },
+      "0xfd9c2b42ee399ede0496d4cd0b2d6ecf9fbf3089": {
+        "total_usd": 870.0588213479562,
+        "since": 1785202046,
+        "count": 1
+      },
+      "0x6cac73084c78f0fe59249168c5aeaebc8556c885": {
+        "total_usd": 48.821094,
+        "since": 1785202046,
+        "count": 1
+      },
+      "0xb340984df722d87b0cc6a3215516f0077f402f87": {
+        "total_usd": 2.19694923,
+        "since": 1785202047,
+        "count": 1
+      },
+      "0xa9c9c11a459fc6b9ce3cfb917ec9e48e07661a14": {
+        "total_usd": 0.24410547,
+        "since": 1785202047,
+        "count": 1
+      },
+      "0xe3d41d19564922c9952f692c5dd0563030f5f2ef": {
+        "total_usd": 342.96732993121316,
+        "since": 1785202049,
+        "count": 1
+      },
+      "0x76f30e3f75437fb862b8d2c4d80a671bceba5b1a": {
+        "total_usd": 1.5275818723239374,
+        "since": 1785202049,
+        "count": 1
+      },
+      "0x905184c521129d4f201964a493d1bbd644cbd3e3": {
+        "total_usd": 24.707466343862396,
+        "since": 1785202052,
+        "count": 2
+      },
+      "0xb7131fc8cdc43060a6210257f537dba5fcae6aed": {
+        "total_usd": 97.54306227564484,
+        "since": 1785202054,
+        "count": 3
+      },
+      "0x19c15f85e57fc0c780527fa9a57bad7630948099": {
+        "total_usd": 21.69826399999999,
+        "since": 1785202054,
+        "count": 20
+      },
+      "0x5f18b95705a965cef99be8c3bfe80539b90ff181": {
+        "total_usd": 0.093527,
+        "since": 1785202054,
+        "count": 1
+      },
+      "0x2d9e6fce5a79e364a4403f816f503d4722874f23": {
+        "total_usd": 6.58617134,
+        "since": 1785202055,
+        "count": 2
+      },
+      "0x5523985926aa12ba58dc5ad00ddca99678d7227e": {
+        "total_usd": 0.467635,
+        "since": 1785202055,
+        "count": 1
+      },
+      "0xf621fb08bbe51af70e7e0f4ea63496894166ff7f": {
+        "total_usd": 51.028761231618304,
+        "since": 1785202055,
+        "count": 1
+      },
+      "0x5ad095de83693ba063941f2f2c5a0df02383b651": {
+        "total_usd": 51.028761231618304,
+        "since": 1785202055,
+        "count": 1
+      },
+      "0x05e436af41dce96ca73ac8619ec335249972470b": {
+        "total_usd": 126.92447664514619,
+        "since": 1785202055,
+        "count": 1
+      },
+      "0x6dad8c31ffd65310a3135080cf70e23f2fca52a2": {
+        "total_usd": 3.85798875,
+        "since": 1785202058,
+        "count": 1
+      },
+      "0x25ea4fb8496d24b66bb1ea45a0be9be0bd06476d": {
+        "total_usd": 65.58580875,
+        "since": 1785202058,
+        "count": 1
+      },
+      "0x5df06eca314840130b5b9eb9a1fed69a33977aa5": {
+        "total_usd": 205.7594,
+        "since": 1785202058,
+        "count": 1
+      },
+      "0xdd1cc03979f26ca959009e026685d9aa86eb6ce9": {
+        "total_usd": 205.57175819637575,
+        "since": 1785202059,
+        "count": 2
+      },
+      "0x2afd0d67c3bbda1599dc279c2cd4c94df3ea031c": {
+        "total_usd": 1.21491573,
+        "since": 1785202060,
+        "count": 1
+      },
+      "0x52f7f4578e5757f816ed2e682565a625c77f41e4": {
+        "total_usd": 78.96952245,
+        "since": 1785202060,
+        "count": 1
+      },
+      "0xab1848e418297a75fcf94cf370e5418e359ea22a": {
+        "total_usd": 462.95865,
+        "since": 1785202062,
+        "count": 1
+      },
+      "0x8cc5c24a1666d3214340050315b82b2b6b0d9027": {
+        "total_usd": 3623.9173539304174,
+        "since": 1785202063,
+        "count": 8
+      },
+      "0xb92fe925dc43a0ecde6c8b1a2709c170ec4fff4f": {
+        "total_usd": 57.835877392259164,
+        "since": 1785202064,
+        "count": 2
+      },
+      "0x68a43bb5df9968ee01937a12f12504563ccf62a4": {
+        "total_usd": 128.50609799999998,
+        "since": 1785202065,
+        "count": 2
+      },
+      "0xdaa1d1a423304e417ecd43a920e84ae9eef726a5": {
+        "total_usd": 129.06726,
+        "since": 1785202067,
+        "count": 1
+      },
+      "0x7bb428a8fb511ef411294d319d5421d43921bb16": {
+        "total_usd": 6.4533629999999995,
+        "since": 1785202067,
+        "count": 1
+      },
+      "0xb2dc2da9684dfef77cfa5c6bb07e733023715292": {
+        "total_usd": 561.6035142517094,
+        "since": 1785202069,
+        "count": 1
+      },
+      "0xae0562f6349e1b574a75248bd53848a3039751aa": {
+        "total_usd": 55.847886633588296,
+        "since": 1785202070,
+        "count": 2
+      },
+      "0xf42bcfd3dd5fcdd984d24fd2787383195c7f2b51": {
+        "total_usd": 122.56830037700063,
+        "since": 1785202070,
+        "count": 1
+      },
+      "0x0a8accba63f42e743a31f33c44b87be0c83fe230": {
+        "total_usd": 467.6224735090176,
+        "since": 1785202070,
+        "count": 1
+      },
+      "0xf1026607ec90d0ee8ed527adfd40b940f6c936f7": {
+        "total_usd": 6.172782,
+        "since": 1785202076,
+        "count": 1
+      },
+      "0xd226997439ecfbeff8e110c8c78c8a7eefd19f89": {
+        "total_usd": 56.69799174231401,
+        "since": 1785202076,
+        "count": 1
+      },
+      "0xcbc35d5c850a94bf4866b768a72fa688db07dde6": {
+        "total_usd": 503.2092862443573,
+        "since": 1785202076,
+        "count": 1
+      },
+      "0xbadff4a5f67a00beb24e131a740702c054322d3c": {
+        "total_usd": 65.094792,
+        "since": 1785202078,
+        "count": 20
+      },
+      "0x8554050fe105f40f9da57456155b4e5abf5ecbd5": {
+        "total_usd": 1.6647805999999998,
+        "since": 1785202078,
+        "count": 1
+      },
+      "0x3e8282bd1bfabd23249701e978e9db3df3d7073a": {
+        "total_usd": 937.3730334015183,
+        "since": 1785202079,
+        "count": 4
+      },
+      "0x92eae2d4f34f17eb32bf390af5019a37d375418e": {
+        "total_usd": 447.5369072634806,
+        "since": 1785202079,
+        "count": 1
+      },
+      "0xa2d5a384bf6d3b526fd1447fd22a810e7c951bc1": {
+        "total_usd": 13.402083441794279,
+        "since": 1785202079,
+        "count": 1
+      },
+      "0x9195196785b07bf781f4f48eeb60a1891ba9b4bc": {
+        "total_usd": 79.03862017429307,
+        "since": 1785202081,
+        "count": 1
+      },
+      "0xbdb939c9cd180e400027a64a3ea6660f80817fa6": {
+        "total_usd": 80.68314137661402,
+        "since": 1785202086,
+        "count": 1
+      },
+      "0xde7259893af7cdbc9fd806c6ba61d22d581d5667": {
+        "total_usd": 0.004462212219482825,
+        "since": 1785202087,
+        "count": 1
+      },
+      "0x04ce218ead72401702dd5f3e56cedb7d2d477777": {
+        "total_usd": 136.05185636,
+        "since": 1785202090,
+        "count": 1
+      },
+      "0x0000000000b12b7895f5eeb5ca60c1edcb5a4e08": {
+        "total_usd": 136.05185636,
+        "since": 1785202091,
+        "count": 1
+      },
+      "0x1f2f10d1c40777ae1da742455c65828ff36df387": {
+        "total_usd": 553.148775684743,
+        "since": 1785202092,
+        "count": 3
+      },
+      "0xcca852bc40e560adc3b1cc58ca5b55638ce826c9": {
+        "total_usd": 561.1619999999999,
+        "since": 1785202092,
+        "count": 1
+      },
+      "0x01da3c30afb696c5370fb30ebd98bf3532a1a609": {
+        "total_usd": 8.791538000000001,
+        "since": 1785202093,
+        "count": 1
+      },
+      "0xfc76f3492905e7753d1a102d1b1ed46588100b80": {
+        "total_usd": 0.8791538,
+        "since": 1785202093,
+        "count": 1
+      },
+      "0x4ecef7bd1ed0c9f64a3a5c1a785a3bb39dc5df6a": {
+        "total_usd": 13.671057600088723,
+        "since": 1785202093,
+        "count": 1
+      },
+      "0xec4e4476ec988698c86ba6c5f7a070e4f6006172": {
+        "total_usd": 92.55280766942276,
+        "since": 1785202093,
+        "count": 1
+      },
+      "0x80466c64868e1ab14a1ddf27a676c3fcbe638fe5": {
+        "total_usd": 7.432076826871297,
+        "since": 1785202096,
+        "count": 1
+      },
+      "0x2c0552e5dcb79b064fd23e358a86810bc5994244": {
+        "total_usd": 201.72106865317605,
+        "since": 1785202096,
+        "count": 1
+      },
+      "0x75cf59a923a2649b84fa569bb97ea9694b6f26e4": {
+        "total_usd": 10.72235723800187,
+        "since": 1785202096,
+        "count": 2
+      },
+      "0xf5e1ff97b8ed24032a861eaef122643452268a39": {
+        "total_usd": 21.460760874015403,
+        "since": 1785202096,
+        "count": 1
+      },
+      "0xdffc608090264c78e6bd1a43c7ea46f8e4f029d0": {
+        "total_usd": 162.175818,
+        "since": 1785202097,
+        "count": 3
+      },
+      "0xf2e006cd31994a450cf6e3c0e95eef15864788a2": {
+        "total_usd": 31.411068450820117,
+        "since": 1785202098,
+        "count": 1
+      },
+      "0x216c6cbebef0653bcad3672c3dfe89b0add0945b": {
+        "total_usd": 498.50481918501487,
+        "since": 1785202098,
+        "count": 1
+      },
+      "0x503972ee3a62480f66e7a1bd485dd5f7da754bec": {
+        "total_usd": 3.239043448532289,
+        "since": 1785202098,
+        "count": 1
+      },
+      "0xbbc9f1c3ab6bb5ebfe284c1843ebf3a7abc4aadd": {
+        "total_usd": 1.8518345999999999,
+        "since": 1785202099,
+        "count": 1
+      },
+      "0x5ee6773d4719652f2224e2e5e2bedc310d207acc": {
+        "total_usd": 1.3673473992695762,
+        "since": 1785202100,
+        "count": 1
+      },
+      "0x60943cb06b76a24431659165c81a03c16f1c325c": {
+        "total_usd": 21.19955431186326,
+        "since": 1785202101,
+        "count": 1
+      },
+      "0x5896ab7476250818a4dc323be29b284109d621c2": {
+        "total_usd": 21.19955431186326,
+        "since": 1785202101,
+        "count": 1
+      },
+      "0x7b7e5945f8d6d0b68ad14c077ae7c1980750d0af": {
+        "total_usd": 134.94336509057965,
+        "since": 1785202101,
+        "count": 1
+      },
+      "0x71d5dcd76fb9ca8fe92b4952f13eaad149a955e0": {
+        "total_usd": 103.4136637930891,
+        "since": 1785202102,
+        "count": 1
+      },
+      "0xa787d5ef282acd64cc40bd5f857385092263ac53": {
+        "total_usd": 103.28699684143066,
+        "since": 1785202102,
+        "count": 1
+      },
+      "0xad6cea45f98444a922a2b4fe96b8c90f0862d2f4": {
+        "total_usd": 9.51898471150267,
+        "since": 1785202102,
+        "count": 1
+      },
+      "0x252a2e671e9ee49b9174d3529f5816e7ab1b5044": {
+        "total_usd": 0.5424566,
+        "since": 1785202102,
+        "count": 1
+      },
+      "0xbae30f064b2e96644f900a9f6c7a5cdc11247344": {
+        "total_usd": 5.561468350335546,
+        "since": 1785202103,
+        "count": 1
+      },
+      "0x3dbe35cf2aa10d4d54a3ad390b3c72607e7c74f7": {
+        "total_usd": 278.156703743216,
+        "since": 1785202103,
+        "count": 1
+      },
+      "0x6d59ba94c3793a821dee36bd2873a9cf3a85ef26": {
+        "total_usd": 92.59173,
+        "since": 1785202103,
+        "count": 1
+      },
+      "0xc0de2807cad1b02b9e0bbf886592cdb79150bcd0": {
+        "total_usd": 16.86310803777319,
+        "since": 1785202103,
+        "count": 1
+      },
+      "0xae1d7ed78c65cc05a11d832de7f799ff77c8121f": {
+        "total_usd": 9.165646,
+        "since": 1785202104,
+        "count": 5
+      },
+      "0xac767d532e555190741bb1aafccbac5f52a5872d": {
+        "total_usd": 41.001017392259165,
+        "since": 1785202104,
+        "count": 1
+      },
+      "0xda892c989d07a18b5dd3f392d949f00df15c5736": {
+        "total_usd": 151.77757911438408,
+        "since": 1785202105,
+        "count": 1
+      },
+      "0xd7185c486dd88eb9f3573b878a1469485644091f": {
+        "total_usd": 79.15852308338015,
+        "since": 1785202105,
+        "count": 1
+      },
+      "0x74de5d4fcbf63e00296fd95d33236b9794016631": {
+        "total_usd": 1110.8358934921732,
+        "since": 1785202106,
+        "count": 1
+      },
+      "0xf326e4de8f66a0bdc0970b79e0924e33c79f1915": {
+        "total_usd": 9.719814068056515,
+        "since": 1785202106,
+        "count": 1
+      },
+      "0xc4d50263c1e89b65b63c830ff93fadc957064fa4": {
+        "total_usd": 84.88543998308901,
+        "since": 1785202106,
+        "count": 1
+      },
+      "0xbcfb1aeafc1dbae35db5d998defc3ec2212e3c23": {
+        "total_usd": 1.1410293999999999,
+        "since": 1785202106,
+        "count": 1
+      },
+      "0x45e9b04942176a513b22acc1ced75c34d2fd9215": {
+        "total_usd": 3469.6888117895774,
+        "since": 1785202107,
+        "count": 3
+      },
+      "0x18428a1ee4dc771f40b68d4f496b9dc653351a13": {
+        "total_usd": 1158.1752219089149,
+        "since": 1785202108,
+        "count": 3
+      },
+      "0xbdfa9c5f270c23ca659bf01f11317891dd8a026a": {
+        "total_usd": 4213.527055640823,
+        "since": 1785202108,
+        "count": 3
+      },
+      "0x099484399038aaccc3267baa168da639f6d19401": {
+        "total_usd": 10.729092514247267,
+        "since": 1785202108,
+        "count": 2
+      },
+      "0x3c26a02d1ccccb9079062ad07d0240cb975bdc2e": {
+        "total_usd": 18.639296590176276,
+        "since": 1785202108,
+        "count": 1
+      },
+      "0xfe263102682933297cb65dc813e5193249769251": {
+        "total_usd": 816.6538244545524,
+        "since": 1785202110,
+        "count": 1
+      },
+      "0x364e94a1bf09fc6498e979e7715bb13fa6e9f807": {
+        "total_usd": 576.3792957325966,
+        "since": 1785202113,
+        "count": 2
+      },
+      "0x8bb510a3860e0ad2a0f2794a90cbf14b1b85a2f0": {
+        "total_usd": 572.4120156495218,
+        "since": 1785202113,
+        "count": 1
+      },
+      "0xc165c9a4db89aa72b23f66b96731a960084a1fe2": {
+        "total_usd": 63.62551106147744,
+        "since": 1785202114,
+        "count": 1
+      },
+      "0xd5adabc8f98a485c8efa50599afbe926b3e6dd49": {
+        "total_usd": 52.0699339374173,
+        "since": 1785202114,
+        "count": 1
+      },
+      "0x49ff149d649769033d43783e7456f626862cd160": {
+        "total_usd": 2.37053779725303,
+        "since": 1785202114,
+        "count": 1
+      },
+      "0x9f5d88257e94fe2eaccfb771c69f9dd951b00c7b": {
+        "total_usd": 75.82795242013063,
+        "since": 1785202115,
+        "count": 1
+      },
+      "0x045d21b97747686c4b4f8d70e6feeadcb3f6d345": {
+        "total_usd": 47.980727018930374,
+        "since": 1785202117,
+        "count": 1
+      },
+      "0xe0e3b888069a4b1e44066b45e9b544b96673777e": {
+        "total_usd": 18.7054,
+        "since": 1785202117,
+        "count": 1
+      },
+      "0xdef1be4d80a990847f8c7a1e15e824ff2749c0de": {
+        "total_usd": 16.426411589950664,
+        "since": 1785202117,
+        "count": 1
+      },
+      "0x164dc5333938299b6db62f73b63f8270ff3892c2": {
+        "total_usd": 0.08213205794975206,
+        "since": 1785202117,
         "count": 1
       }
     }
@@ -1059,7 +1539,7 @@
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25626677,
+    "last_block": 25628025,
     "accumulation": {
       "0x488874f296df889b8299e698f269e1e1f0e2189f": {
         "total_usd": 17.386390833,
@@ -1127,9 +1607,9 @@
         "count": 1
       },
       "0x643fc69c0a34b31df16acf9d92c2b8865adc72e5": {
-        "total_usd": 1.722e-07,
+        "total_usd": 0.00487784972843904,
         "since": 1785185834,
-        "count": 1
+        "count": 4
       },
       "0x24574ed1c47ed3d31f24099594f94871535818d4": {
         "total_usd": 6.027e-07,
@@ -1147,9 +1627,9 @@
         "count": 1
       },
       "0x49482fea722c6d1e32c32a9cda9038d619b3b885": {
-        "total_usd": 4.3049999999999994e-07,
+        "total_usd": 0.004410030629046478,
         "since": 1785185834,
-        "count": 1
+        "count": 2
       },
       "0x8c41099bc4be138628569c9f919865400bb2c3bf": {
         "total_usd": 6.888e-07,
@@ -1177,9 +1657,9 @@
         "count": 2
       },
       "0x140022b7000081000001094700609300d2187dab": {
-        "total_usd": 11.944610629437344,
+        "total_usd": 12.32070563790986,
         "since": 1785185834,
-        "count": 3
+        "count": 4
       },
       "0x418d3dfca5099923cd57e0bf9ed1e9994f515152": {
         "total_usd": 1.9205728047755113,
@@ -1207,9 +1687,9 @@
         "count": 1
       },
       "0xeff6cb8b614999d130e537751ee99724d01aa167": {
-        "total_usd": 226.4114586509821,
+        "total_usd": 534.3793212310298,
         "since": 1785185834,
-        "count": 1
+        "count": 2
       },
       "0xc6182681952e61653865d55c1799a8b9bc6c7175": {
         "total_usd": 25.509019199999997,
@@ -1227,23 +1707,23 @@
         "count": 1
       },
       "0x5d4f3c6fa16908609bac31ff148bd002aa6b8c83": {
-        "total_usd": 20.767120109413696,
-        "since": 1785185849,
-        "count": 2
+        "total_usd": 4040.304471298118,
+        "since": 1785202227,
+        "count": 7
       },
       "0xdd3d72c53ff982ff59853da71158bf1538b3ceee": {
-        "total_usd": 9.9786842589,
+        "total_usd": 481.30423967649995,
         "since": 1785185835,
-        "count": 1
+        "count": 3
       },
       "0x40a1fe393a7f566f27df6ace18e6773be844dafc": {
-        "total_usd": 15.262184522028024,
+        "total_usd": 32.50340387167703,
         "since": 1785185836,
-        "count": 2
+        "count": 6
       },
       "0x000000000004444c5dc75cb358380d2e3de08a90": {
-        "total_usd": 2500.469227092504,
-        "since": 1785185836,
+        "total_usd": 3848.6535561757632,
+        "since": 1785202202,
         "count": 11
       },
       "0xf71c9cff7f13ca0940d6e09461dbfaf20c0f6fee": {
@@ -1252,9 +1732,9 @@
         "count": 1
       },
       "0x0639556f03714a74a5feeaf5736a4a64ff70d206": {
-        "total_usd": 96.83016178709998,
+        "total_usd": 397.5482417871,
         "since": 1785185836,
-        "count": 1
+        "count": 2
       },
       "0x7e13876b92f1a62c599c231f783f682e96b91761": {
         "total_usd": 378.73668,
@@ -1267,24 +1747,24 @@
         "count": 1
       },
       "0xbdb3ba9ffe392549e1f8658dd2630c141fdf47b6": {
-        "total_usd": 957.0288591390723,
-        "since": 1785185836,
-        "count": 5
+        "total_usd": 0.0,
+        "since": 1785202211,
+        "count": 0
       },
       "0xb2170202b050f0549b9d9733f8258bc917346f98": {
-        "total_usd": 606.0952473386999,
+        "total_usd": 947.1799246955,
         "since": 1785185836,
-        "count": 3
+        "count": 4
       },
       "0xa6cc3c2531fdaa6ae1a3ca84c2855806728693e8": {
-        "total_usd": 976.7894844882011,
-        "since": 1785185836,
-        "count": 13
+        "total_usd": 1301.4796817074093,
+        "since": 1785202135,
+        "count": 7
       },
       "0x3a09c40f8f7b93c8c7e09a5422e56dfe7c7d2794": {
-        "total_usd": 6.001381375499999,
+        "total_usd": 39.442167871500004,
         "since": 1785185836,
-        "count": 1
+        "count": 3
       },
       "0x5635340ec811f4588c3ba67eb5f84a640f77362d": {
         "total_usd": 1.0748710704111557,
@@ -1317,9 +1797,9 @@
         "count": 1
       },
       "0xc40d16476380e4037e6b1a2594caf6a6cc8da967": {
-        "total_usd": 3.014005649666641,
+        "total_usd": 25.756938536307587,
         "since": 1785185836,
-        "count": 2
+        "count": 4
       },
       "0x38484d56d00217000cc83085e009a7cfb4af8d27": {
         "total_usd": 1317.1491909471,
@@ -1337,19 +1817,19 @@
         "count": 2
       },
       "0x905184c521129d4f201964a493d1bbd644cbd3e3": {
-        "total_usd": 30.209508160707458,
+        "total_usd": 56.119589864061524,
         "since": 1785185837,
-        "count": 4
+        "count": 10
       },
       "0xbc1d9760bd6ca468ca9fb5ff2cfbeac35d86c973": {
-        "total_usd": 19.966104119203273,
+        "total_usd": 57.574233486066795,
         "since": 1785185837,
-        "count": 3
+        "count": 9
       },
       "0x28028cb848361930d2dc1f502439050a6ee5e4c2": {
-        "total_usd": 204.3120380378772,
+        "total_usd": 2211.5976432504435,
         "since": 1785185837,
-        "count": 7
+        "count": 27
       },
       "0x007d10406a8fca1827f26ddacff8109dd6bbb979": {
         "total_usd": 47.285346219299996,
@@ -1367,9 +1847,9 @@
         "count": 1
       },
       "0xbf90664017218ac7d9db5ae0c84873628e9ae1ae": {
-        "total_usd": 3239.317093294799,
-        "since": 1785185837,
-        "count": 10
+        "total_usd": 4981.780143724801,
+        "since": 1785202151,
+        "count": 12
       },
       "0xf4c3a159130fcc1af3f88457d3d7b68f3ae055b0": {
         "total_usd": 198.07218899999998,
@@ -1377,9 +1857,9 @@
         "count": 1
       },
       "0xe5a2623246b052bd037d381dfe835642ad8ddf88": {
-        "total_usd": 730.5068399999999,
+        "total_usd": 750.7244399999998,
         "since": 1785185837,
-        "count": 1
+        "count": 2
       },
       "0x4de4fccc14eab1d69890a49471a9d57b96dd725f": {
         "total_usd": 7.630684356838007,
@@ -1387,9 +1867,9 @@
         "count": 1
       },
       "0x79dd9327352bcf1dd16941899705e97b61f4decb": {
-        "total_usd": 1128.042176204711,
-        "since": 1785185837,
-        "count": 4
+        "total_usd": 444.9100805992297,
+        "since": 1785202156,
+        "count": 3
       },
       "0xfd250955ce777cfd672ef3163238175e360ba8c2": {
         "total_usd": 1.2590063148894624,
@@ -1397,9 +1877,9 @@
         "count": 1
       },
       "0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43": {
-        "total_usd": 2519.4741073721616,
-        "since": 1785185837,
-        "count": 3
+        "total_usd": 832.2375955712,
+        "since": 1785202218,
+        "count": 1
       },
       "0x49d2daa9b4180f4d3e65b843fce7af5b155555dd": {
         "total_usd": 1722.0,
@@ -1417,9 +1897,9 @@
         "count": 1
       },
       "0xddc796a66e8b83d0bccd97df33a6ccfba8fd60ea": {
-        "total_usd": 130.58420451448436,
+        "total_usd": 1794.5842045144843,
         "since": 1785185838,
-        "count": 1
+        "count": 2
       },
       "0xb802cfb943e3873c1377947624a1bd77970622e5": {
         "total_usd": 366.7926055059,
@@ -1442,9 +1922,9 @@
         "count": 1
       },
       "0x6fe39f2831caf58529779efdb73341aa64df50ab": {
-        "total_usd": 11.883825502499999,
+        "total_usd": 568.7258671025,
         "since": 1785185838,
-        "count": 1
+        "count": 2
       },
       "0x495506f729c730d209ff2611866b382d23b6fcee": {
         "total_usd": 300.8138930118,
@@ -1462,9 +1942,9 @@
         "count": 1
       },
       "0x1f2f10d1c40777ae1da742455c65828ff36df387": {
-        "total_usd": 1031.4954562033631,
+        "total_usd": 1582.0377643997938,
         "since": 1785185838,
-        "count": 2
+        "count": 4
       },
       "0x1373e57f764a7944bdd7a4bd5ca3007d496934da": {
         "total_usd": 20.886665494908954,
@@ -1477,19 +1957,19 @@
         "count": 1
       },
       "0xbccd3d859531756abeee260553deab2232ae0719": {
-        "total_usd": 12.036719073597455,
+        "total_usd": 39.889474158158905,
         "since": 1785185838,
-        "count": 1
+        "count": 2
       },
       "0xd237ccbda4606fd866f82f23417fe05e8e0345bc": {
-        "total_usd": 1423.060214841913,
+        "total_usd": 3087.060214841913,
         "since": 1785185838,
-        "count": 1
+        "count": 2
       },
       "0x610f5b68bd1eed68af649a3fd3dc2caa1ee4ae7e": {
-        "total_usd": 1423.060214841913,
+        "total_usd": 3087.060214841913,
         "since": 1785185838,
-        "count": 1
+        "count": 2
       },
       "0xe98becdd516095a2d2b541e9a750fa0bec5fb7f4": {
         "total_usd": 1423.060214841913,
@@ -1502,9 +1982,9 @@
         "count": 1
       },
       "0xba12222222228d8ba445958a75a0704d566bf2c8": {
-        "total_usd": 11.48244329649627,
+        "total_usd": 27.859897217085297,
         "since": 1785185838,
-        "count": 1
+        "count": 2
       },
       "0x99f1510fe23244e9dca5ffa6cb5ee82cdf1613c8": {
         "total_usd": 111.84389999999999,
@@ -1527,9 +2007,9 @@
         "count": 1
       },
       "0x0e16d4d4281c65f37da7481c57d5d4953d64c74d": {
-        "total_usd": 10.209058384721805,
+        "total_usd": 14.834649254740366,
         "since": 1785185838,
-        "count": 1
+        "count": 2
       },
       "0xe010fcda8894c16a8acfef7b37741a760faeddc4": {
         "total_usd": 10.209058384721805,
@@ -1597,9 +2077,9 @@
         "count": 1
       },
       "0x8b59be2fc6fccc2256cc4841843a13ce29da16bd": {
-        "total_usd": 3.5209847916572254,
+        "total_usd": 4.091764306263566,
         "since": 1785185838,
-        "count": 1
+        "count": 2
       },
       "0x874cb6fbfae84918683aedf67f22ee8fc87c9689": {
         "total_usd": 9.584549291752774,
@@ -1627,14 +2107,14 @@
         "count": 1
       },
       "0x0889e9327b98d7d1be3c301a4585ff3330502c9a": {
-        "total_usd": 314.34818807862996,
+        "total_usd": 3588.52035109416,
         "since": 1785185839,
-        "count": 2
+        "count": 7
       },
       "0xbee3211ab312a8d065c4fef0247448e17a8da000": {
-        "total_usd": 215.25,
+        "total_usd": 590.6616116027978,
         "since": 1785185839,
-        "count": 1
+        "count": 4
       },
       "0xf38521f130fccf29db1961597bc5d2b60f995f85": {
         "total_usd": 506.5057201665177,
@@ -1652,9 +2132,9 @@
         "count": 1
       },
       "0x51c72848c68a965f66fa7a88855f9f7784502a7f": {
-        "total_usd": 3255.933060511425,
-        "since": 1785185839,
-        "count": 4
+        "total_usd": 0.0,
+        "since": 1785202216,
+        "count": 0
       },
       "0x7eabe87e735036ac936b5b2c50b5b27ce3a0c0af": {
         "total_usd": 472.98173999999995,
@@ -1662,19 +2142,19 @@
         "count": 1
       },
       "0x278d858f05b94576c1e6f73285886876ff6ef8d2": {
-        "total_usd": 286.15645711771936,
-        "since": 1785185839,
-        "count": 1
+        "total_usd": 1758.7640906623942,
+        "since": 1785202205,
+        "count": 3
       },
       "0x00000000075d9aed2e32de0aec3d7fe316514e79": {
-        "total_usd": 3.38608816707e-09,
+        "total_usd": 4.19925215299e-09,
         "since": 1785185839,
-        "count": 1
+        "count": 2
       },
       "0xe0e0e08a6a4b9dc7bd67bcb7aade5cf48157d444": {
-        "total_usd": 3.38608816707e-09,
+        "total_usd": 4.19925215299e-09,
         "since": 1785185839,
-        "count": 1
+        "count": 2
       },
       "0xf5c4f3dc02c3fb9279495a8fef7b0741da956157": {
         "total_usd": 0.013384535859186388,
@@ -1722,9 +2202,9 @@
         "count": 1
       },
       "0xc36442b4a4522e871399cd717abdd847ab11fe88": {
-        "total_usd": 999.5656946461411,
+        "total_usd": 1005.8296989671073,
         "since": 1785185839,
-        "count": 1
+        "count": 2
       },
       "0x6278357d8863d52703160c892d3b37894bebe902": {
         "total_usd": 999.5657867705418,
@@ -1737,14 +2217,14 @@
         "count": 1
       },
       "0x93228d328c9c74c2bfe9f97638bbb5ef322f2bd5": {
-        "total_usd": 356.97296447819997,
+        "total_usd": 872.0810780398,
         "since": 1785185840,
-        "count": 2
+        "count": 4
       },
       "0x98f4888982f8f35c5745dec15da15c2c1e7391e5": {
-        "total_usd": 1691.3056813988999,
+        "total_usd": 2795.5021317221,
         "since": 1785185840,
-        "count": 1
+        "count": 3
       },
       "0x7a15b3684b30c1ddaaba54556a2d08c9857e3293": {
         "total_usd": 77.49,
@@ -1762,14 +2242,14 @@
         "count": 1
       },
       "0xe2536231fc1512babc8c856ad7499830a936bdd9": {
-        "total_usd": 25.82038417768405,
+        "total_usd": 29.396025996034343,
         "since": 1785185840,
-        "count": 1
+        "count": 2
       },
       "0x7b09fc3bdd9a1eb0059f0c9d391f5d684e0f9918": {
-        "total_usd": 1691.3056813988999,
+        "total_usd": 4725.4981239269,
         "since": 1785185841,
-        "count": 1
+        "count": 6
       },
       "0xf827caf87b10b9ef3d5ca6883bbb55d9c3bfe02b": {
         "total_usd": 826.56,
@@ -1777,14 +2257,14 @@
         "count": 1
       },
       "0x9dcc797817a1926e648f85e246488d1ff6c66f39": {
-        "total_usd": 1305.3016465587255,
+        "total_usd": 1305.3024785587254,
         "since": 1785185841,
-        "count": 4
+        "count": 5
       },
       "0x75cf59a923a2649b84fa569bb97ea9694b6f26e4": {
-        "total_usd": 12.728150087451409,
+        "total_usd": 59.60267455944562,
         "since": 1785185841,
-        "count": 2
+        "count": 6
       },
       "0xa023f08c70a23abc7edfc5b6b5e171d78dfc947e": {
         "total_usd": 172.2,
@@ -1862,9 +2342,9 @@
         "count": 2
       },
       "0x8f10b468b06c6fd214b65f87778827f7d113f996": {
-        "total_usd": 2907.4361360137773,
-        "since": 1785185842,
-        "count": 2
+        "total_usd": 1923.2321715938388,
+        "since": 1785202134,
+        "count": 4
       },
       "0x77ee6218dfa7bcbd0da6437348dec9f18a0ae7c8": {
         "total_usd": 26.313882,
@@ -1912,9 +2392,9 @@
         "count": 1
       },
       "0x3577b4504b8b8637a5757934a5ab90ca2ed1998e": {
-        "total_usd": 42.98407453678469,
+        "total_usd": 109.4854764637642,
         "since": 1785185843,
-        "count": 1
+        "count": 2
       },
       "0x225a38bc71102999dd13478bfabd7c4d53f2dc17": {
         "total_usd": 1550.1365242857003,
@@ -1957,9 +2437,9 @@
         "count": 1
       },
       "0x111111125421ca6dc452d289314280a0f8842a65": {
-        "total_usd": 60.29668903796004,
+        "total_usd": 99.32770377560146,
         "since": 1785185846,
-        "count": 1
+        "count": 2
       },
       "0x9025b8ff35ca44f7018c3a37fe0f69e63dbb0743": {
         "total_usd": 60.29668903796004,
@@ -2007,9 +2487,9 @@
         "count": 1
       },
       "0xa5f43b0ebaefbed5b1f1bfc809af15254ea1e9c4": {
-        "total_usd": 118.42289402996641,
+        "total_usd": 611.4942482948613,
         "since": 1785185849,
-        "count": 1
+        "count": 5
       },
       "0x8d2fa5a1a8ec7f78d145d06f563a02470698fd38": {
         "total_usd": 95.11046513429999,
@@ -2062,9 +2542,9 @@
         "count": 1
       },
       "0xe4dbe3e9296f82ac9b323c688f6118a995ed292c": {
-        "total_usd": 8.61,
+        "total_usd": 998.7016480000001,
         "since": 1785185850,
-        "count": 1
+        "count": 2
       },
       "0x36abb3a93c4fde6633acd38a24caeb69707501cc": {
         "total_usd": 0.00017220013989543498,
@@ -2142,9 +2622,9 @@
         "count": 1
       },
       "0x18159a3e094e102610ffdae3528f7782a0ef9691": {
-        "total_usd": 8.23116,
+        "total_usd": 2345.3848131199998,
         "since": 1785185851,
-        "count": 1
+        "count": 2
       },
       "0xbdd6d43ea5259d4e61d516e8e19dc588f9c795a6": {
         "total_usd": 8.2901385,
@@ -2182,9 +2662,9 @@
         "count": 1
       },
       "0x74de5d4fcbf63e00296fd95d33236b9794016631": {
-        "total_usd": 234.126803555836,
+        "total_usd": 267.9995306622083,
         "since": 1785185851,
-        "count": 2
+        "count": 4
       },
       "0xad08b335670502181e28d914b159893fddd7c299": {
         "total_usd": 234.126803555836,
@@ -2192,9 +2672,9 @@
         "count": 2
       },
       "0x81463b0f960f247f704377661ec81c1fd65b5128": {
-        "total_usd": 12.104228890427548,
+        "total_usd": 44.118094191712196,
         "since": 1785185851,
-        "count": 1
+        "count": 3
       },
       "0x732adc8e4ce4e8a50418b360c5e7abb7594fc4c6": {
         "total_usd": 64.26941465489999,
@@ -2207,9 +2687,9 @@
         "count": 1
       },
       "0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974": {
-        "total_usd": 21.5462682333173,
+        "total_usd": 494.8791664661205,
         "since": 1785185851,
-        "count": 1
+        "count": 4
       },
       "0x12c08d759b6aaecdbaae6999ca80189c5946d357": {
         "total_usd": 0.00025338369,
@@ -2217,9 +2697,9 @@
         "count": 1
       },
       "0x9a9681cd10be13e0c019d777bbc513177715cb24": {
-        "total_usd": 135.3449131671,
+        "total_usd": 1401.8151095767,
         "since": 1785185851,
-        "count": 1
+        "count": 2
       },
       "0x950bc44481fff19e252a593838b42f176039c5eb": {
         "total_usd": 0.000861,
@@ -2232,9 +2712,9 @@
         "count": 1
       },
       "0x0d2347f527f5fadff8e8586be7465ba8412a6098": {
-        "total_usd": 1.1026575587999998,
+        "total_usd": 2.1584900196,
         "since": 1785185851,
-        "count": 1
+        "count": 2
       },
       "0xc26725e5a97f3569ac7a9baebd172b60dc86b1df": {
         "total_usd": 89.542278,
@@ -2245,11 +2725,1331 @@
         "total_usd": 0.000861,
         "since": 1785185851,
         "count": 1
+      },
+      "0x9be5b8a7314552fa47feb1355cd5b4adc7bb7516": {
+        "total_usd": 1101.8962430111999,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0xd2fd413cad47ce8e2b7315abbe1a4f6ba5d73b71": {
+        "total_usd": 25.19726284904023,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0xe7000c1dc912d17952daf6f2f75f8c09993a8198": {
+        "total_usd": 980.9180160000001,
+        "since": 1785202119,
+        "count": 2
+      },
+      "0x6b2e36b8002fd43f112457bc574997bcde1d26ce": {
+        "total_usd": 49.261793151999996,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0xd9d6895a644fddb2856f10ec4ea11e08ef166ddc": {
+        "total_usd": 1101.8962430111999,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x09f5753ae85d1ec8ad567241d98da3120124d6a5": {
+        "total_usd": 376.2937355713643,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x06fd4ba7973a0d39a91734bbc35bc2bcaa99e3b0": {
+        "total_usd": 0.0,
+        "since": 1785202155,
+        "count": 0
+      },
+      "0xa71db52ef26446c07c9f9b849db957e772215d4f": {
+        "total_usd": 3.575641818350291,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x187d9adcbe6a896bb750510fce1fc5e85dce7107": {
+        "total_usd": 26.132504113393818,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0xf2f9d03290ed7f1da679b84c9ee07dad5edc2333": {
+        "total_usd": 1247.0016,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x60d1c063964d16531aa4d833b67ac8c583494c1d": {
+        "total_usd": 91.59761436800001,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x4274f907d6e781bf6b3dd11fa9a05304345f308a": {
+        "total_usd": 695.8952716352,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x1a075937371de444b790276ce5a189742d790672": {
+        "total_usd": 280.07000320000003,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x4673cce1ba0e785e6ca7837f87a2094a64619ba9": {
+        "total_usd": 43.9307613888,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x42ba2a27a90a98d8ed56a588041a6fce0d6bf9ed": {
+        "total_usd": 0.0008320000000000001,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x851d3815a6d52928aa06e4316a35995a67d0f671": {
+        "total_usd": 291.2,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x66e092fd00c4e4eb5bd20f5392c1902d738ae7bc": {
+        "total_usd": 0.9633493376000001,
+        "since": 1785202119,
+        "count": 1
+      },
+      "0x502aa935336f756a7f37a31ab44bc83c9f70de27": {
+        "total_usd": 241.5795586527294,
+        "since": 1785202122,
+        "count": 1
+      },
+      "0x711bda46841e71eac1bbc93b591939d897688d20": {
+        "total_usd": 38.822213414400004,
+        "since": 1785202123,
+        "count": 1
+      },
+      "0x1dafb39f128222377bd286abfdcc695b3216d937": {
+        "total_usd": 1010.2101984000001,
+        "since": 1785202123,
+        "count": 2
+      },
+      "0x0ac4766c19f75194fb818001c8abd644360c5bce": {
+        "total_usd": 93.013212864,
+        "since": 1785202123,
+        "count": 1
+      },
+      "0xe8736af1926e9d8f5a6602fbbb0893b26436d710": {
+        "total_usd": 11.679992563604662,
+        "since": 1785202124,
+        "count": 1
+      },
+      "0x0cb893fa19e489e0795ecfb22998c56e90e24860": {
+        "total_usd": 16.224,
+        "since": 1785202124,
+        "count": 2
+      },
+      "0x4b742ad5ca91969e82aefb80072ae59121a3d72a": {
+        "total_usd": 0.20370800169093783,
+        "since": 1785202124,
+        "count": 2
+      },
+      "0xc0cf00079741ab9db6aceb5f7fe2f69c243c1aae": {
+        "total_usd": 188.79641615280272,
+        "since": 1785202125,
+        "count": 2
+      },
+      "0x184c0f428c4b35e311ba88822424215219bd0950": {
+        "total_usd": 292.3767457728,
+        "since": 1785202125,
+        "count": 1
+      },
+      "0xed24655c612c35d651e9f2c8ef5733c100ea7f07": {
+        "total_usd": 503.471353632,
+        "since": 1785202125,
+        "count": 2
+      },
+      "0x2f49615a6fed8395bc064adc00f24dd3feb906c4": {
+        "total_usd": 5.619328,
+        "since": 1785202125,
+        "count": 1
+      },
+      "0x324f4927b8129315dbb61f7dca1dbfe85f3ba26f": {
+        "total_usd": 89.9067598208,
+        "since": 1785202125,
+        "count": 1
+      },
+      "0xf8cd17784f425120de2f0d65756d8a707c13d040": {
+        "total_usd": 10.816,
+        "since": 1785202125,
+        "count": 1
+      },
+      "0xe8e8e330f5c182faaf51127ae01bff9c582572fe": {
+        "total_usd": 232.74738897280002,
+        "since": 1785202126,
+        "count": 1
+      },
+      "0x93c30e6e09f698cfea99b09b5166ed90cfaedd17": {
+        "total_usd": 508.7685435331206,
+        "since": 1785202127,
+        "count": 2
+      },
+      "0xe0053ccc33e2f123d5bb24806dd14ace60226b85": {
+        "total_usd": 508.7685435331206,
+        "since": 1785202127,
+        "count": 2
+      },
+      "0x0a1bc1d399b2b0d1f3bac0d454923257dde46f55": {
+        "total_usd": 9.74443884444046,
+        "since": 1785202127,
+        "count": 1
+      },
+      "0x930ff1ba4142bb1bd57751bf746f4671f1b10f20": {
+        "total_usd": 2496.0,
+        "since": 1785202128,
+        "count": 1
+      },
+      "0xdb92e6eddfbe56ea158b32de3e4b8947216cc437": {
+        "total_usd": 2496.000523649154,
+        "since": 1785202128,
+        "count": 1
+      },
+      "0x22ca9d1591afec3f4530b428603c4a2d3aeda1ca": {
+        "total_usd": 0.004409600129046478,
+        "since": 1785202128,
+        "count": 1
+      },
+      "0x8e101ce0cd87c816dcfd4d02f7e21983901def94": {
+        "total_usd": 2243.8803568064,
+        "since": 1785202128,
+        "count": 2
+      },
+      "0x11111605ef067242653c980b8f6f1ffe50305afe": {
+        "total_usd": 2810.411069251086,
+        "since": 1785202128,
+        "count": 11
+      },
+      "0x14243ea6bb3d64c8d54a1f47b077e23394d6528a": {
+        "total_usd": 459.75727678939336,
+        "since": 1785202128,
+        "count": 5
+      },
+      "0x5797f722b1fee36e3d2c3481d938d1372bcd99a7": {
+        "total_usd": 5.619328,
+        "since": 1785202128,
+        "count": 1
+      },
+      "0xd5e7c0bd70e8e725ac57b2d18e33bcade7542bda": {
+        "total_usd": 28.168319712000002,
+        "since": 1785202129,
+        "count": 1
+      },
+      "0x0d4c1d34ba11b1044d777a83fd56620a3740c546": {
+        "total_usd": 836.3759477632001,
+        "since": 1785202129,
+        "count": 1
+      },
+      "0x657092696655d9fb0df2fc4c5f647557986f782f": {
+        "total_usd": 9.203978910726885,
+        "since": 1785202129,
+        "count": 1
+      },
+      "0x69cd0db5b6e76b4b4dc89658e61c7ae662dee48b": {
+        "total_usd": 145.05364144566934,
+        "since": 1785202129,
+        "count": 1
+      },
+      "0x3317d2ddae4883bd61e69aae72d26be68abf8791": {
+        "total_usd": 1449.4773519163762,
+        "since": 1785202129,
+        "count": 1
+      },
+      "0xb7e082a8affb8a313a20bbeff173f1ba06b70007": {
+        "total_usd": 94.9582959104,
+        "since": 1785202129,
+        "count": 1
+      },
+      "0xb25e1e20f8b0b1c09746534ccb4739f3ef6a9613": {
+        "total_usd": 0.00487767752843904,
+        "since": 1785202130,
+        "count": 3
+      },
+      "0x341e843fd4d18e0b63429a3b2c99512fe3b73001": {
+        "total_usd": 142.1824790464,
+        "since": 1785202131,
+        "count": 1
+      },
+      "0x48264389d93e88e609e266c092d2a926aa4d81a2": {
+        "total_usd": 0.9674073344,
+        "since": 1785202131,
+        "count": 1
+      },
+      "0x8a3cbe35fb450c3415bc07a077c5f1414d7f0421": {
+        "total_usd": 20.8,
+        "since": 1785202131,
+        "count": 1
+      },
+      "0xc64c19d4859bb1a4a8687d353e521d15ec2260ee": {
+        "total_usd": 16.858400000000003,
+        "since": 1785202131,
+        "count": 1
+      },
+      "0x6633b18b3a7c267f885f06434d84275abb824d48": {
+        "total_usd": 416.61763578240004,
+        "since": 1785202131,
+        "count": 1
+      },
+      "0xac5a2c404ebba22a869998089ac7893ff4e1f0a7": {
+        "total_usd": 4691.397280517882,
+        "since": 1785202196,
+        "count": 6
+      },
+      "0xfad57d2039c21811c8f2b5d5b65308aa99d31559": {
+        "total_usd": 3085.7779655902004,
+        "since": 1785202185,
+        "count": 7
+      },
+      "0xd5d4b0b0cf1052733831a6f85c686ac91b1a922f": {
+        "total_usd": 0.00036381696,
+        "since": 1785202133,
+        "count": 1
+      },
+      "0xfe04c284a9725c141cf6de85d7e8452af1b48ab7": {
+        "total_usd": 13.164333424764743,
+        "since": 1785202133,
+        "count": 1
+      },
+      "0xc0e18f97faa18307a0e9556e7e59b6bbc11de5f0": {
+        "total_usd": 0.0026485806717720063,
+        "since": 1785202133,
+        "count": 1
+      },
+      "0x00acd70270bd80c75ee70e5aac25e82364c4764e": {
+        "total_usd": 0.0006621451679430016,
+        "since": 1785202133,
+        "count": 1
+      },
+      "0x84cbb4dcbf8b17c6851314afd6f2deb260d8bff8": {
+        "total_usd": 0.0001441996359232,
+        "since": 1785202133,
+        "count": 1
+      },
+      "0x21551728d74c08aff093ef88c7768718ff07dbc5": {
+        "total_usd": 0.000173077482620224,
+        "since": 1785202133,
+        "count": 2
+      },
+      "0x64f5f625df295b201a33ee6819eee89c15e7f70d": {
+        "total_usd": 8.698505088000001e-05,
+        "since": 1785202133,
+        "count": 1
+      },
+      "0xbefe57c3a030d72e9825cf58546c8a91f7f1d41c": {
+        "total_usd": 33.3528698048,
+        "since": 1785202133,
+        "count": 2
+      },
+      "0xf15fd4dc6a1d3c0aa8bbab46db6400f53a49f737": {
+        "total_usd": 12.014150717482694,
+        "since": 1785202133,
+        "count": 1
+      },
+      "0x7f604d597c15b2e2f60dc645844f68b1d781b752": {
+        "total_usd": 1663.45088,
+        "since": 1785202133,
+        "count": 1
+      },
+      "0xb0b5dffd34a2886a722cb81295ab46454c817ab7": {
+        "total_usd": 33.3528698048,
+        "since": 1785202133,
+        "count": 2
+      },
+      "0x770013891b3397a9f27a37dd32c3f1961f9e24fa": {
+        "total_usd": 1361.4170752,
+        "since": 1785202137,
+        "count": 1
+      },
+      "0x3de739b5c328d6be04286893ccc5369e04ffa2ed": {
+        "total_usd": 0.00455903417212672,
+        "since": 1785202137,
+        "count": 1
+      },
+      "0x434aaa7c02874e614149ad572a05cffd007145ac": {
+        "total_usd": 0.00455903417212672,
+        "since": 1785202137,
+        "count": 1
+      },
+      "0xce6ca4ee780b00f7cae0d11d66ac1bff9492e704": {
+        "total_usd": 16.64,
+        "since": 1785202137,
+        "count": 1
+      },
+      "0xc904685f6c92f003f24d32804ab9d2d5f3ef52c4": {
+        "total_usd": 0.6734488334449623,
+        "since": 1785202137,
+        "count": 1
+      },
+      "0xb2dce51785d492ff654fb062fbce6bcaf9f068b5": {
+        "total_usd": 33.2468859008,
+        "since": 1785202138,
+        "count": 1
+      },
+      "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae": {
+        "total_usd": 993.8304769773924,
+        "since": 1785202138,
+        "count": 3
+      },
+      "0xc06ebbefd94032b85424d51906e2a335efae264b": {
+        "total_usd": 0.4885052603035849,
+        "since": 1785202138,
+        "count": 3
+      },
+      "0x5aafc1f252d544f744d17a4e734afd6efc47ede4": {
+        "total_usd": 1.1954527264576,
+        "since": 1785202138,
+        "count": 1
+      },
+      "0x09ad820aac5779683b481c4674208a4e1b024afa": {
+        "total_usd": 124.578757809792,
+        "since": 1785202138,
+        "count": 1
+      },
+      "0xcbf6f3ba33eb315565cbd78573a20e251d10ffe3": {
+        "total_usd": 124.80000000000001,
+        "since": 1785202138,
+        "count": 1
+      },
+      "0xc5e5aaf67a554032b074067357021ca34f9b00dd": {
+        "total_usd": 56.17844894723246,
+        "since": 1785202139,
+        "count": 1
+      },
+      "0xaf19362d98decdaefb7fad3618dc2eee55127d72": {
+        "total_usd": 0.0005226624,
+        "since": 1785202140,
+        "count": 1
+      },
+      "0x18d1e07c066ca5d3242b584b40a962988597cd85": {
+        "total_usd": 247.49021376777756,
+        "since": 1785202140,
+        "count": 2
+      },
+      "0x2d999c97756e1fb86a18ecd652f0a20bd0c85922": {
+        "total_usd": 0.6488953784473047,
+        "since": 1785202140,
+        "count": 1
+      },
+      "0x2cfadef48331bd4a25acfaa50f09c3169ee2a238": {
+        "total_usd": 1706.0851166775826,
+        "since": 1785202140,
+        "count": 2
+      },
+      "0x651641299c7ec0aa44ad7ed9b7e12702fed2022f": {
+        "total_usd": 1990.1329479489643,
+        "since": 1785202140,
+        "count": 5
+      },
+      "0x4e6d4bcebba9cec15ac23487cf81a416d2fbb8a7": {
+        "total_usd": 0.5303921792,
+        "since": 1785202141,
+        "count": 1
+      },
+      "0x122138abeee4e3a39b3e2fa57656f7cc7398e990": {
+        "total_usd": 1287.7534750912,
+        "since": 1785202141,
+        "count": 1
+      },
+      "0x6d517d250a4b8e0dbf0495ac6d5596a7738f2c91": {
+        "total_usd": 1229.5052099165407,
+        "since": 1785202141,
+        "count": 1
+      },
+      "0x9194fbb0363c5dc78bc918f888a5b87781bb9d00": {
+        "total_usd": 5.958374125586944,
+        "since": 1785202141,
+        "count": 1
+      },
+      "0x626af713239e82ae2d49604899dff6a8c3281765": {
+        "total_usd": 1872.5462661568001,
+        "since": 1785202142,
+        "count": 1
+      },
+      "0x0d752f75fd9190920da21e68bcd6796d0f14d6b6": {
+        "total_usd": 2834.4257448,
+        "since": 1785202143,
+        "count": 2
+      },
+      "0x8a939151c476a9ca3966fb87e0572a08fcdd14db": {
+        "total_usd": 0.37609500845033916,
+        "since": 1785202143,
+        "count": 1
+      },
+      "0x8259ca230b5fcefc9d1769802d8c8a4e4cadc9e9": {
+        "total_usd": 1.921578428761794,
+        "since": 1785202143,
+        "count": 1
+      },
+      "0xb922082098c6e331057ced637cccc6d9d206089a": {
+        "total_usd": 171.0214272,
+        "since": 1785202143,
+        "count": 1
+      },
+      "0xdd80a403c3ba1000b3dc6bac4c028b74948c7bb6": {
+        "total_usd": 395.94569936114846,
+        "since": 1785202143,
+        "count": 1
+      },
+      "0xf36c9fc3c2abe4132019444aff914fc8dc9785a9": {
+        "total_usd": 18.136173405889913,
+        "since": 1785202143,
+        "count": 2
+      },
+      "0xbce1789f03105eb62a2db0b8cef35620cbd6b585": {
+        "total_usd": 402.2634696704,
+        "since": 1785202144,
+        "count": 1
+      },
+      "0x5254068fc747d2399cd8fcc6ceed216d9ec4c175": {
+        "total_usd": 199.68,
+        "since": 1785202144,
+        "count": 1
+      },
+      "0x62a4b7c18b579700c4c447f218b5175e96846e63": {
+        "total_usd": 6.2041640128,
+        "since": 1785202144,
+        "count": 1
+      },
+      "0xd9a3cad448d05e1942ca6b748a50fe1045cc1b71": {
+        "total_usd": 133.12,
+        "since": 1785202144,
+        "count": 1
+      },
+      "0xba1333333333a1ba1108e8412f11850a5c319ba9": {
+        "total_usd": 2.41948933489436,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xa372684269304cb293e796a7372b56cae8cb2b81": {
+        "total_usd": 64.0278651584,
+        "since": 1785202145,
+        "count": 3
+      },
+      "0x17357a642303034f8b53b6903a87a8b691c8d902": {
+        "total_usd": 11.019867539200002,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xf3b6b3cafe1db06b628520aae252e096afbdf038": {
+        "total_usd": 48.428405122235155,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xf0860b771d5aacc42aa79f7f935f5cef49abac18": {
+        "total_usd": 233.4356536512,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xa014892d9ea2bca3b21d4234830d0ec5e088643e": {
+        "total_usd": 165.4848,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x870b30ff98e051d2444a292f68634d99e5dadd43": {
+        "total_usd": 259.6078948736,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x3754d8cc37908381d35e6c8e9c76c119412d6294": {
+        "total_usd": 7.6854206208,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xca3d6a94759cb675f0ac10a76fc0da6ee6bf6e7b": {
+        "total_usd": 2.6936442382410295,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x9542178cf4c7e73e543b6dd1d8cb10299956c423": {
+        "total_usd": 1303.1386464512002,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xdfe332084606c103714ae298d94fde7bf23755d0": {
+        "total_usd": 192.27006864,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x42bf4ab540bd713d5c3cf2d413f3ef04c9002585": {
+        "total_usd": 0.0035413860340352,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x0c0ea1b013e3af95ccf862d21028675be9d4207f": {
+        "total_usd": 0.0053505712766272005,
+        "since": 1785202145,
+        "count": 2
+      },
+      "0xac326955e3f64691b4066778cf33f38418a8639e": {
+        "total_usd": 0.0016640000000000001,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xf685eddd53914cc3eb1d5745e3a16cd65a20fc3b": {
+        "total_usd": 0.0016640000000000001,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x97b74a89344a624f7cbcf64a4331b3a1c752c2ca": {
+        "total_usd": 1664.0,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x5e8c8a7243651db1384c0ddfdbe39761e8e7e51a": {
+        "total_usd": 133.12,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xaaef84c3ac04163b063f38519d6a757b276bb185": {
+        "total_usd": 653.1967361088001,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x6747bcaf9bd5a5f0758cbe08903490e45ddfacb5": {
+        "total_usd": 883.1680000000001,
+        "since": 1785202145,
+        "count": 2
+      },
+      "0x059ff12b18e628af46c5ab83e0318a6f22c6ea4e": {
+        "total_usd": 58.24,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0xdcf18a6599c6c7de40dc18b58440d0081362090a": {
+        "total_usd": 0.17472000000000001,
+        "since": 1785202145,
+        "count": 1
+      },
+      "0x22ecf2bed494976503a8087add30e134c30fbd98": {
+        "total_usd": 1356.1599999999999,
+        "since": 1785202145,
+        "count": 2
+      },
+      "0x163f3103de041d25464e2c8a4f8f3187ec1856e0": {
+        "total_usd": 1605.76,
+        "since": 1785202145,
+        "count": 3
+      },
+      "0xcd461b73d5fc8ea1d69a600f44618bdfac98364d": {
+        "total_usd": 4.62559087001856,
+        "since": 1785202146,
+        "count": 1
+      },
+      "0xcb31f3f4ad262ba4bcf1198c9d1ac3854bff8c23": {
+        "total_usd": 91.4998101056,
+        "since": 1785202146,
+        "count": 1
+      },
+      "0x220e56936703f84ce0b81b9559bd0aa3f016d905": {
+        "total_usd": 1542.9563685120002,
+        "since": 1785202146,
+        "count": 1
+      },
+      "0x0d7c774a62c8020477803fe2d65162e9adebe88b": {
+        "total_usd": 0.0018091852425920001,
+        "since": 1785202147,
+        "count": 1
+      },
+      "0x71927529167fde40ebd4d2acdabfc88afd340f35": {
+        "total_usd": 48.40187769669646,
+        "since": 1785202147,
+        "count": 1
+      },
+      "0xdeb4ab9497d8d063017174da854a830300b6df12": {
+        "total_usd": 932.5200768,
+        "since": 1785202147,
+        "count": 1
+      },
+      "0xc44bef82ed987c4a3bc60659652002285e9a8f12": {
+        "total_usd": 37.386717472,
+        "since": 1785202147,
+        "count": 1
+      },
+      "0xd62d8c8503a6198b2097158fb818b7d6b9027c48": {
+        "total_usd": 158.08,
+        "since": 1785202147,
+        "count": 1
+      },
+      "0x2fb074fa59c9294c71246825c1c9a0c7782d41a4": {
+        "total_usd": 150.2561107008,
+        "since": 1785202147,
+        "count": 2
+      },
+      "0xc10ee9031f2a0b84766a86b55a8d90f357910fb4": {
+        "total_usd": 348.99329754917306,
+        "since": 1785202150,
+        "count": 1
+      },
+      "0x6eb1ad384780393294577a3d828a31b0657cc21b": {
+        "total_usd": 203.14411520000002,
+        "since": 1785202150,
+        "count": 1
+      },
+      "0x28cc933fecf280e720299b1258e8680355d8841f": {
+        "total_usd": 1287.7534750912,
+        "since": 1785202150,
+        "count": 1
+      },
+      "0xc562256f0342dc8e2b5a79e324e8edf23a90d1b8": {
+        "total_usd": 168.55123584,
+        "since": 1785202150,
+        "count": 1
+      },
+      "0xae0562f6349e1b574a75248bd53848a3039751aa": {
+        "total_usd": 371.1560179926878,
+        "since": 1785202150,
+        "count": 3
+      },
+      "0x54aec8967f9d1ee972f22c93437382129a5d185b": {
+        "total_usd": 48.001537699694296,
+        "since": 1785202150,
+        "count": 1
+      },
+      "0xd6a61d5fc946431495b7a8eb6faefe3bd5bc0301": {
+        "total_usd": 171.64093346180087,
+        "since": 1785202150,
+        "count": 1
+      },
+      "0x0ff28daa81734a863ec37786f86f55b9e328e862": {
+        "total_usd": 94.24364096327096,
+        "since": 1785202150,
+        "count": 2
+      },
+      "0x80aecfdd25d40dd97093b8a9fae6324446372650": {
+        "total_usd": 54.08,
+        "since": 1785202150,
+        "count": 1
+      },
+      "0xc2c2b32c7bbb3fa1ac55f8eb841444c4acd04352": {
+        "total_usd": 108.16,
+        "since": 1785202151,
+        "count": 1
+      },
+      "0xa856139af24e63cc24d888728cd5eef574601374": {
+        "total_usd": 9.231900287164594,
+        "since": 1785202151,
+        "count": 2
+      },
+      "0x824622adec5b00a48f5c2aff1029ca6e376ff1a6": {
+        "total_usd": 300.71808,
+        "since": 1785202151,
+        "count": 1
+      },
+      "0xb0d8cf2436ee7a1303dcda2342611d256efa5c3a": {
+        "total_usd": 197.78103072000002,
+        "since": 1785202151,
+        "count": 1
+      },
+      "0xfab1df6e89269d8c0b4a7160d080a96965a9ab7c": {
+        "total_usd": 91.79456,
+        "since": 1785202152,
+        "count": 1
+      },
+      "0x6165920911e7cf235eb7f1878bf1e651cfacbd30": {
+        "total_usd": 1957.39344736,
+        "since": 1785202152,
+        "count": 1
+      },
+      "0xd3eb8a769b33d24d96e344d7781bf428489075b5": {
+        "total_usd": 123.0968072256,
+        "since": 1785202152,
+        "count": 1
+      },
+      "0xd41970d34d8fb64f541ca1712b7bc550663e69f2": {
+        "total_usd": 993.0186427427044,
+        "since": 1785202152,
+        "count": 1
+      },
+      "0x33facaa01d1e3d158eef524ba31ddeac9d93d463": {
+        "total_usd": 13.909239968000001,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0x99aaa3caf5fa3ed7377b63c5a8f8e354c22f830d": {
+        "total_usd": 112.1214770624,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0x80cacf44a6d036d8366a60f448bb622b46307ecf": {
+        "total_usd": 0.0008320000000000001,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0x5d629fa1a6878bc33f77edbf2b89906fd93ba41f": {
+        "total_usd": 0.004752155616866112,
+        "since": 1785202153,
+        "count": 4
+      },
+      "0x6fbc7dbc6be9ede5fe1dfee1b856bfdf876e1336": {
+        "total_usd": 429.3500857152,
+        "since": 1785202153,
+        "count": 2
+      },
+      "0xafc466934d86b93e6d2c0cb1193bd663311e0f30": {
+        "total_usd": 993.0186427427044,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0x35312eb7c5d690fb9b3114072c96821f3dab0eb7": {
+        "total_usd": 39.031014737641414,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0x0084fc8b20d35a586d7cbbd021c2900efc23e95e": {
+        "total_usd": 0.008243219602176,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0x4a110e4bc24856c3f31a20a5458b32ec01b8425a": {
+        "total_usd": 0.008243219602176,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0x80ca34c47ecaf5abad24150a21d3365b34497ecf": {
+        "total_usd": 0.00015130799864544002,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0x9108855c9ebd2c01a7393c7b041c4b7edc1933c1": {
+        "total_usd": 2080.0,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0xa515435d03ad5bcb8248c874d14e31a7f15365bc": {
+        "total_usd": 1577.4721199407004,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0xa4d9d7068d84bbdf2e3caf1bbf2e1135bcd41984": {
+        "total_usd": 6.7184,
+        "since": 1785202153,
+        "count": 1
+      },
+      "0xf325b1e27adb694cc90c8004cdd3a8f04ad84bc5": {
+        "total_usd": 83.155072,
+        "since": 1785202154,
+        "count": 1
+      },
+      "0x86dc4f0a7477f5a82c119a3f102ed5d8e7d709df": {
+        "total_usd": 66.56,
+        "since": 1785202154,
+        "count": 1
+      },
+      "0x80ca9d7ee42621f9145f6b37201de90b30697ecf": {
+        "total_usd": 0.0018667407699200001,
+        "since": 1785202154,
+        "count": 1
+      },
+      "0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
+        "total_usd": 99.99670415652463,
+        "since": 1785202155,
+        "count": 3
+      },
+      "0x9cc66daa49c54050c2b392bd5228e7d24514a274": {
+        "total_usd": 8.724442899184687,
+        "since": 1785202155,
+        "count": 1
+      },
+      "0x7f0881f9f2d94fa5ac5fe4646ee79b370ec6053c": {
+        "total_usd": 130.1350336,
+        "since": 1785202155,
+        "count": 1
+      },
+      "0xe1a278646781e3d1add82316634603c3fcf59a94": {
+        "total_usd": 581.4676712832,
+        "since": 1785202155,
+        "count": 1
+      },
+      "0xffcab376083af852ab55b4413bb0e9dc61d060b6": {
+        "total_usd": 237.83123403520003,
+        "since": 1785202156,
+        "count": 1
+      },
+      "0x50d3865a63d52c0a54e4679949647ea752107390": {
+        "total_usd": 213.36317016277962,
+        "since": 1785202156,
+        "count": 1
+      },
+      "0x061347ca5f45e41cb4f7ffbc77c21073cff51dd6": {
+        "total_usd": 213.36317016277962,
+        "since": 1785202156,
+        "count": 1
+      },
+      "0x67336cec42645f55059eff241cb02ea5cc52ff86": {
+        "total_usd": 8.724442899184687,
+        "since": 1785202156,
+        "count": 1
+      },
+      "0xa40672a7e8e659e868de0be06a60ffd23e549c66": {
+        "total_usd": 286.67585893002337,
+        "since": 1785202157,
+        "count": 2
+      },
+      "0x3b0c2ae677dd23d06cd46ebaf639b5b689cd1e67": {
+        "total_usd": 42.7072450688,
+        "since": 1785202157,
+        "count": 1
+      },
+      "0x01989c93890aed05a63d179b03424997075b6acf": {
+        "total_usd": 2722.533354974366,
+        "since": 1785202166,
+        "count": 1
+      },
+      "0xfb7a0b32899ebc3c7fcea1e61912063b64a90b15": {
+        "total_usd": 227.18592,
+        "since": 1785202157,
+        "count": 1
+      },
+      "0x92164cd938aff4d97ea2111dc24720dc77bdf226": {
+        "total_usd": 131.53253787008543,
+        "since": 1785202157,
+        "count": 2
+      },
+      "0x600e9fdf0f01ed3429285cf58928dd4dcc73fc85": {
+        "total_usd": 471.2688446336,
+        "since": 1785202157,
+        "count": 1
+      },
+      "0xad6a0a96dfea2d32516515d4d0d6f26c78511f49": {
+        "total_usd": 332.42431206400005,
+        "since": 1785202157,
+        "count": 2
+      },
+      "0xb685760ebd368a891f27ae547391f4e2a289895b": {
+        "total_usd": 21.2461611648,
+        "since": 1785202157,
+        "count": 1
+      },
+      "0xd90ef87c5f7d6efcb225609811e1d48290156882": {
+        "total_usd": 100.55857344,
+        "since": 1785202158,
+        "count": 1
+      },
+      "0x6d4fd456edeca58cf53a8b586cd50754547dbdb2": {
+        "total_usd": 24.341583205665415,
+        "since": 1785202158,
+        "count": 3
+      },
+      "0xfa01161ed2c6829b7866344ca98196c2728e5807": {
+        "total_usd": 0.000427213437515904,
+        "since": 1785202158,
+        "count": 1
+      },
+      "0x32c9fd3acf163daf31033bbea490f3c8aa7067bf": {
+        "total_usd": 164.50162152320001,
+        "since": 1785202160,
+        "count": 1
+      },
+      "0x737b4c7f5a4d6de985b94395dedff20e322060b0": {
+        "total_usd": 124.6336,
+        "since": 1785202161,
+        "count": 1
+      },
+      "0x28ff7528ad3478c534e1c5bcdd1d26d16d18c6f2": {
+        "total_usd": 648.96,
+        "since": 1785202161,
+        "count": 1
+      },
+      "0x31d0ffb01dfbbfab3bcbb5ec13d48e4b4298cff9": {
+        "total_usd": 23.442792876769932,
+        "since": 1785202161,
+        "count": 1
+      },
+      "0x6487986a78b126538746937fbd25516971129b3a": {
+        "total_usd": 241.28,
+        "since": 1785202161,
+        "count": 1
+      },
+      "0xa5b7eb968974a5e9f3d2264fc293216d15471d3f": {
+        "total_usd": 82.51561903919324,
+        "since": 1785202162,
+        "count": 1
+      },
+      "0xbc761ee2bb6ea585d2c400751b1670d46b4a3417": {
+        "total_usd": 1144.1922402112225,
+        "since": 1785202163,
+        "count": 1
+      },
+      "0x187fbaf1a6029733903b8ac455d4eaea8fb42386": {
+        "total_usd": 0.0008320000000000001,
+        "since": 1785202163,
+        "count": 1
+      },
+      "0x38e4d30ee938a4423e81fe0d504da8c8170be4dd": {
+        "total_usd": 0.0008320000000000001,
+        "since": 1785202163,
+        "count": 1
+      },
+      "0x863257732e892ebce52afc43022ecc5c26b5b10b": {
+        "total_usd": 69.05600000000001,
+        "since": 1785202163,
+        "count": 1
+      },
+      "0x2b5786df14b3cd43f182322c184fdadeb3c6943f": {
+        "total_usd": 8.7622268032,
+        "since": 1785202165,
+        "count": 1
+      },
+      "0x11b9b81da41f1ef256fb54683ba89602a1cc6338": {
+        "total_usd": 455.310750752,
+        "since": 1785202165,
+        "count": 1
+      },
+      "0xd1c206d073c0c87d5954142c2cf560fe59b77057": {
+        "total_usd": 980.1077186690607,
+        "since": 1785202167,
+        "count": 2
+      },
+      "0xabe4967d1fa2eab5cb160fcf22589adfeb821094": {
+        "total_usd": 86.80526534510756,
+        "since": 1785202169,
+        "count": 1
+      },
+      "0x36331e299247e5d0d3261e1d9852f6e0cffee95c": {
+        "total_usd": 142.31262504976075,
+        "since": 1785202175,
+        "count": 1
+      },
+      "0x082738d007001080a00099a000004f3006152085": {
+        "total_usd": 540.8000000000001,
+        "since": 1785202178,
+        "count": 1
+      },
+      "0x66a9893cc07d91d95644aedd05d03f95e1dba8af": {
+        "total_usd": 286.81927099750146,
+        "since": 1785202178,
+        "count": 2
+      },
+      "0x8bb81f4d4b91cc237971df36b7a3aa900c95089e": {
+        "total_usd": 47.0056718976,
+        "since": 1785202179,
+        "count": 1
+      },
+      "0xbeed2aa4b52a8790a052a5d05331e36010801682": {
+        "total_usd": 669.3232,
+        "since": 1785202179,
+        "count": 1
+      },
+      "0x32e99b31311929d3bc2ffa38a42fb6072d054317": {
+        "total_usd": 124.2869086784,
+        "since": 1785202180,
+        "count": 1
+      },
+      "0x3c024e5456f959fcc834ed7f64df9667085d3907": {
+        "total_usd": 6.222827520000001,
+        "since": 1785202182,
+        "count": 1
+      },
+      "0x40769f269bac144394e7fa37eaba7d0328f90cd2": {
+        "total_usd": 28.39577582711386,
+        "since": 1785202183,
+        "count": 1
+      },
+      "0x44453d221d616e2e4922ae64429006455decc0a3": {
+        "total_usd": 527.879331616,
+        "since": 1785202183,
+        "count": 1
+      },
+      "0x983c9a1bcf0eb980a232d1b17bffd6bbf68fe4ce": {
+        "total_usd": 72.70104973111268,
+        "since": 1785202183,
+        "count": 2
+      },
+      "0x9c12012bab9a3a4bff35971fe3ab7fa433bf9995": {
+        "total_usd": 2707.224128640316,
+        "since": 1785202184,
+        "count": 1
+      },
+      "0x342c3aff9a8f33c35c74003503e7b95cb47db99f": {
+        "total_usd": 6.264004320966216,
+        "since": 1785202184,
+        "count": 1
+      },
+      "0xcd6b980029e6e6e0733ac8ec3e02be9410d09799": {
+        "total_usd": 0.06808817749375361,
+        "since": 1785202185,
+        "count": 1
+      },
+      "0xbfd9a3b20ffcb0f4ac06884dee5dae484915f5c9": {
+        "total_usd": 27.167182820007696,
+        "since": 1785202185,
+        "count": 1
+      },
+      "0x93c9fcfcd3e3a48b4fa7b42c9389658021f28fe3": {
+        "total_usd": 28.15527936,
+        "since": 1785202188,
+        "count": 1
+      },
+      "0x99b8811b78b5e203778dc8b56404d73056248a06": {
+        "total_usd": 41.6,
+        "since": 1785202188,
+        "count": 1
+      },
+      "0x82ddbb4f20ee3feda070704b4a944976e56061ad": {
+        "total_usd": 2521.5350784,
+        "since": 1785202188,
+        "count": 2
+      },
+      "0xbae90b13893ac6e32152c3e3c407b55b1bc0a546": {
+        "total_usd": 444.36038400000007,
+        "since": 1785202190,
+        "count": 1
+      },
+      "0x51bfaeb0c43be6e2a17d7e8ee5ea0f3e52ea6097": {
+        "total_usd": 0.44991684845740526,
+        "since": 1785202191,
+        "count": 1
+      },
+      "0x9d996bdd1f65c835ee92cd0b94e15d886ef14d63": {
+        "total_usd": 10.373835385544657,
+        "since": 1785202191,
+        "count": 1
+      },
+      "0x5c7b89eb8d2ba2c990266f911d2b7a93d43b0576": {
+        "total_usd": 433.93883794559997,
+        "since": 1785202193,
+        "count": 1
+      },
+      "0xf3dd734a1abc39c4fc7dcb3f09c6738d274fab36": {
+        "total_usd": 257.603841105725,
+        "since": 1785202195,
+        "count": 1
+      },
+      "0xfed2399b20011af1fc985d5354f12cbc57ed48f9": {
+        "total_usd": 1817.1046400832,
+        "since": 1785202196,
+        "count": 1
+      },
+      "0x153b4c29e692faf10255fe435e290e9cfb2351b5": {
+        "total_usd": 30.13485822552197,
+        "since": 1785202199,
+        "count": 1
+      },
+      "0x6467e807db1e71b9ef04e0e3afb962e4b0900b2b": {
+        "total_usd": 29.445759994459397,
+        "since": 1785202200,
+        "count": 1
+      },
+      "0x2e69797d37e888d62974a1ffa20816a5f55f898d": {
+        "total_usd": 2471.846202359523,
+        "since": 1785202203,
+        "count": 1
+      },
+      "0xb180647d5ad76abeb6be0d363f6e182bd8df46d1": {
+        "total_usd": 2462.17088,
+        "since": 1785202205,
+        "count": 1
+      },
+      "0x025a1443b04cf77f0e0521a2931a3d4bb733c3b8": {
+        "total_usd": 174.56786048,
+        "since": 1785202205,
+        "count": 1
+      },
+      "0x03166d8356eb5b6a48826020720062d328d057a9": {
+        "total_usd": 79.5801154304,
+        "since": 1785202208,
+        "count": 1
+      },
+      "0x6ccb5b45bc1acaf0d50d22e9e666c3c3d1edbcf0": {
+        "total_usd": 133.52232000430593,
+        "since": 1785202209,
+        "count": 1
+      },
+      "0x30d8f4508b27d730ef26cee36f33b06a5549317d": {
+        "total_usd": 0.00016811392,
+        "since": 1785202210,
+        "count": 1
+      },
+      "0xc26694c38b9bc11dcea6acd321b24ca802e07bd6": {
+        "total_usd": 138.8608,
+        "since": 1785202211,
+        "count": 1
+      },
+      "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
+        "total_usd": 125.14419419995336,
+        "since": 1785202213,
+        "count": 1
+      },
+      "0x5cdad1bdbe84091bba342395f801da647d7ac096": {
+        "total_usd": 1634.4928704000001,
+        "since": 1785202213,
+        "count": 1
+      },
+      "0x747bbebe062875cc7c77313d21509f38a6ffb2c6": {
+        "total_usd": 152.34422967362715,
+        "since": 1785202213,
+        "count": 2
+      },
+      "0x273e668959e6b7630d32b172568c7671c0ae0c24": {
+        "total_usd": 76.14634482231813,
+        "since": 1785202213,
+        "count": 1
+      },
+      "0xd380ee93ca3cead58aaa19683069c576b56ae824": {
+        "total_usd": 8.483072,
+        "since": 1785202213,
+        "count": 1
+      },
+      "0xf10095782a7e633eafe721543ddcff9d7629d864": {
+        "total_usd": 1.958375034259753,
+        "since": 1785202214,
+        "count": 2
+      },
+      "0x4d5a5f3d5e38f4ce8571e9d03a0814313a85597c": {
+        "total_usd": 49.39184437203482,
+        "since": 1785202216,
+        "count": 1
+      },
+      "0xd2b56ef243b814346cdb3fb03e5aa4848961453c": {
+        "total_usd": 832.2375955712,
+        "since": 1785202217,
+        "count": 1
+      },
+      "0x6a765b912e91e42d8448a6ab26b42afa3f2234d1": {
+        "total_usd": 0.00018957106781490176,
+        "since": 1785202218,
+        "count": 1
+      },
+      "0xea3651f667189fe7000a0891cf0570709b171b3d": {
+        "total_usd": 912.5565166016,
+        "since": 1785202218,
+        "count": 1
+      },
+      "0xb8bcc2d54c3fef05975c8cbb7d7d06fb4ed6bfdf": {
+        "total_usd": 444.3425169817823,
+        "since": 1785202223,
+        "count": 2
+      },
+      "0x9b3d4fe4f2076607ad92cfe63870e33bf8b71078": {
+        "total_usd": 2522.7110582639716,
+        "since": 1785202223,
+        "count": 1
+      },
+      "0xfe9529b753b412941127fea1981e5ce0a85c101e": {
+        "total_usd": 2269.5403258943998,
+        "since": 1785202223,
+        "count": 1
+      },
+      "0xbf000000a1f768e94bf68257138c8fd34f7dfcdb": {
+        "total_usd": 2263.300955053843,
+        "since": 1785202223,
+        "count": 4
+      },
+      "0x649765821d9f64198c905ec0b2b037a4a52bc373": {
+        "total_usd": 3715.071141272539,
+        "since": 1785202223,
+        "count": 7
+      },
+      "0x5f5457685151b87cd029430a3f2508d528535e89": {
+        "total_usd": 0.9204114943488114,
+        "since": 1785202224,
+        "count": 4
+      },
+      "0x0000830df56616d58976a12d19d283b40e25beef": {
+        "total_usd": 1.677984271158208e-05,
+        "since": 1785202224,
+        "count": 1
+      },
+      "0x1631120327888751ff39bf605b2a4eefd903657b": {
+        "total_usd": 69.05332017115684,
+        "since": 1785202225,
+        "count": 1
+      },
+      "0xa5f15a29c650d2567191a3553e4512e752ca94de": {
+        "total_usd": 1494.1711988784373,
+        "since": 1785202225,
+        "count": 3
+      },
+      "0x12b4681e55f913d76d6e2ff9ec9333cea8829808": {
+        "total_usd": 18.6144357568,
+        "since": 1785202225,
+        "count": 1
+      },
+      "0xaf60387d75bbf8ef1e50df9e73365626b8e730f6": {
+        "total_usd": 0.00016953664000000002,
+        "since": 1785202225,
+        "count": 1
+      },
+      "0xaeb1cf3f85b0d45df070e5c82db4b09475f8a520": {
+        "total_usd": 1.0903373207119407,
+        "since": 1785202226,
+        "count": 1
+      },
+      "0x06cff7088619c7178f5e14f0b119458d08d2f5ef": {
+        "total_usd": 784.4298474384331,
+        "since": 1785202226,
+        "count": 1
+      },
+      "0xf6aba339ca1e3819798cfe090baefb31c070a90f": {
+        "total_usd": 54.208784032000004,
+        "since": 1785202228,
+        "count": 1
+      },
+      "0x8df51a9714ae6357a5b829cc8d677b43d7e8bd53": {
+        "total_usd": 233.50373826918909,
+        "since": 1785202228,
+        "count": 1
+      },
+      "0x0d5f1f43acec1cd1924e64312a523c27ad535278": {
+        "total_usd": 73.75377930264197,
+        "since": 1785202228,
+        "count": 2
+      },
+      "0x0e898b985e6a57f73d71531d60127ef69315287b": {
+        "total_usd": 2622.1985758592,
+        "since": 1785202229,
+        "count": 1
+      },
+      "0x0d534ef73255f323a47d8c6619d1a11a2dad257d": {
+        "total_usd": 465.60448726220955,
+        "since": 1785202229,
+        "count": 1
+      },
+      "0xc2a9bc33dfce6b7ce3b5d168473ed9c9d689bc19": {
+        "total_usd": 0.0001562729230136256,
+        "since": 1785202229,
+        "count": 1
+      },
+      "0x29651605b0b7e447fe60904a40951cc088c05537": {
+        "total_usd": 2.4562216040296647,
+        "since": 1785202229,
+        "count": 1
+      },
+      "0x224c8749563d3e6340553434e70f6a58fdc1fcc5": {
+        "total_usd": 2974.2428063295997,
+        "since": 1785202230,
+        "count": 1
+      },
+      "0x9f178e86e42ddf2379cb3d2acf9ed67a1ed2550a": {
+        "total_usd": 138.43453570426493,
+        "since": 1785202230,
+        "count": 2
+      },
+      "0x9d12ede363d4a67e10d4a63af26fa29b230008fc": {
+        "total_usd": 10.743449485355109,
+        "since": 1785202230,
+        "count": 1
+      },
+      "0xeb27a5e18185820bef6258e2b42446bb855172b9": {
+        "total_usd": 1664.0,
+        "since": 1785202230,
+        "count": 1
+      },
+      "0x66c4a3f62f7be4aa125549f18eef3ec2cb9065a5": {
+        "total_usd": 8.138705150687716,
+        "since": 1785202231,
+        "count": 1
+      },
+      "0x42e213a3ad048e899b89ea8cb11d21bc97b84748": {
+        "total_usd": 350.3018640963417,
+        "since": 1785202231,
+        "count": 1
       }
     }
   },
   "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25626677,
+    "last_block": 25628025,
     "accumulation": {
       "0xca4bc2199418b379400b3820ceb3c825b5552c6e": {
         "total_usd": 1819.886665946,
@@ -2257,9 +4057,9 @@
         "count": 2
       },
       "0xbdb3ba9ffe392549e1f8658dd2630c141fdf47b6": {
-        "total_usd": 2166.352774899794,
-        "since": 1785185852,
-        "count": 7
+        "total_usd": 4187.655772479579,
+        "since": 1785202283,
+        "count": 8
       },
       "0xa3c25352018bf486877865afc8e1461ef7554b27": {
         "total_usd": 641.6937089422208,
@@ -2267,9 +4067,9 @@
         "count": 1
       },
       "0x51c72848c68a965f66fa7a88855f9f7784502a7f": {
-        "total_usd": 0.0,
-        "since": 1785185860,
-        "count": 0
+        "total_usd": 1908.093846438481,
+        "since": 1785202331,
+        "count": 2
       },
       "0x43c48cdc7891f8adb5f93fcabb5fb0416a522ca2": {
         "total_usd": 0.011092542,
@@ -2287,19 +4087,19 @@
         "count": 1
       },
       "0x9b2662dc8b80b0fe79310ad316b943cb5bb15e8b": {
-        "total_usd": 14.233976721193422,
+        "total_usd": 29.202402316985445,
         "since": 1785185852,
-        "count": 2
+        "count": 5
       },
       "0x40a1fe393a7f566f27df6ace18e6773be844dafc": {
-        "total_usd": 1.007342068432162,
+        "total_usd": 6.150673870525867,
         "since": 1785185852,
-        "count": 1
+        "count": 5
       },
       "0x000000000004444c5dc75cb358380d2e3de08a90": {
-        "total_usd": 781.1234091712367,
-        "since": 1785185878,
-        "count": 3
+        "total_usd": 2744.0527750775427,
+        "since": 1785202326,
+        "count": 16
       },
       "0xaff2aade8c45149ce471d70e91888c7d85d0981b": {
         "total_usd": 114.0,
@@ -2312,9 +4112,9 @@
         "count": 1
       },
       "0x111116053f09d34a7eae8102887004445176ca11": {
-        "total_usd": 0.2945170647520738,
+        "total_usd": 3449.494587836714,
         "since": 1785185852,
-        "count": 1
+        "count": 6
       },
       "0xcd6b980029e6e6e0733ac8ec3e02be9410d09799": {
         "total_usd": 0.0007362926618801811,
@@ -2322,14 +4122,14 @@
         "count": 1
       },
       "0xd360131b77ead72f1f23fb185b4896fe01dc8cb5": {
-        "total_usd": 8.041821438151315,
+        "total_usd": 15.996868397496758,
         "since": 1785185852,
-        "count": 2
+        "count": 3
       },
       "0x59c38b6775ded821f010dbd30ecabdcf84e04756": {
-        "total_usd": 1089.7241093106716,
+        "total_usd": 4131.335550302043,
         "since": 1785185852,
-        "count": 4
+        "count": 15
       },
       "0x8073e78597f4d9d7fca70263ee0aadb82396fabc": {
         "total_usd": 0.5827145728528602,
@@ -2342,9 +4142,9 @@
         "count": 3
       },
       "0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801": {
-        "total_usd": 3604.1746437705388,
-        "since": 1785185854,
-        "count": 16
+        "total_usd": 2745.3914440656035,
+        "since": 1785202263,
+        "count": 5
       },
       "0x0ba9bf6ece534ef7d43ec50f6f08c899ddecebbe": {
         "total_usd": 623.0349931699999,
@@ -2372,9 +4172,9 @@
         "count": 3
       },
       "0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43": {
-        "total_usd": 791.512436928,
+        "total_usd": 2006.9101729112003,
         "since": 1785185855,
-        "count": 1
+        "count": 2
       },
       "0x910d13feff6468203df8c4da5a9aa1250abc1d04": {
         "total_usd": 16.72,
@@ -2402,9 +4202,9 @@
         "count": 1
       },
       "0x52146a769ac02bdb737cecd8712515da746ece7f": {
-        "total_usd": 0.6478275558273712,
+        "total_usd": 3.05455068938085,
         "since": 1785185856,
-        "count": 1
+        "count": 2
       },
       "0xb588780f33124d76e13923fb2df04b0117333d33": {
         "total_usd": 1.3906754949376638,
@@ -2422,24 +4222,24 @@
         "count": 3
       },
       "0xfaa318479b7755b2dbfdd34dc306cb28b420ad12": {
-        "total_usd": 507.5561767386541,
-        "since": 1785185870,
-        "count": 2
+        "total_usd": 3108.3589403531596,
+        "since": 1785202322,
+        "count": 12
       },
       "0x65fcb8ff4bd609ee317ce672c930d1d03147985a": {
-        "total_usd": 8.36,
+        "total_usd": 12.812,
         "since": 1785185858,
-        "count": 1
+        "count": 2
       },
       "0xb92fe925dc43a0ecde6c8b1a2709c170ec4fff4f": {
-        "total_usd": 196.1098480863592,
+        "total_usd": 203.42300012268015,
         "since": 1785185858,
-        "count": 1
+        "count": 2
       },
       "0x8f10b468b06c6fd214b65f87778827f7d113f996": {
-        "total_usd": 196.1098480863592,
+        "total_usd": 1896.8390890519963,
         "since": 1785185858,
-        "count": 1
+        "count": 5
       },
       "0xbee3211ab312a8d065c4fef0247448e17a8da000": {
         "total_usd": 196.1098480863592,
@@ -2447,9 +4247,9 @@
         "count": 1
       },
       "0x06fd4ba7973a0d39a91734bbc35bc2bcaa99e3b0": {
-        "total_usd": 0.0,
+        "total_usd": 1533.9737,
         "since": 1785185880,
-        "count": 0
+        "count": 1
       },
       "0xf05d974279a0dbaab0d85c394c3b91daa102fb53": {
         "total_usd": 3.8,
@@ -2457,14 +4257,14 @@
         "count": 1
       },
       "0x278d858f05b94576c1e6f73285886876ff6ef8d2": {
-        "total_usd": 67.92652425428693,
-        "since": 1785185859,
-        "count": 1
+        "total_usd": 1476.5318925925303,
+        "since": 1785202326,
+        "count": 8
       },
       "0xddce4e9298ceff5c4d381e3fefcc3c35a2bd29aa": {
-        "total_usd": 189.34222627,
+        "total_usd": 560.34222627,
         "since": 1785185860,
-        "count": 1
+        "count": 2
       },
       "0xf4f4a03fa2019374a8e6ecd72d988a9a963ef97e": {
         "total_usd": 99.01056092136157,
@@ -2472,9 +4272,9 @@
         "count": 1
       },
       "0x4d4e14fbdf6bb02b6e036f86f120f00abe41c791": {
-        "total_usd": 6.0463436093811245,
+        "total_usd": 30.403779987471925,
         "since": 1785185860,
-        "count": 1
+        "count": 2
       },
       "0xf827caf87b10b9ef3d5ca6883bbb55d9c3bfe02b": {
         "total_usd": 608.0,
@@ -2517,19 +4317,19 @@
         "count": 1
       },
       "0x111111125421ca6dc452d289314280a0f8842a65": {
-        "total_usd": 373.88506084637,
+        "total_usd": 1895.7143602830163,
         "since": 1785185860,
-        "count": 1
+        "count": 4
       },
       "0x163ab70e4e3acd0e608c7ad7dde18253e06906d7": {
-        "total_usd": 373.88506084637,
+        "total_usd": 563.2935079820274,
         "since": 1785185860,
-        "count": 1
+        "count": 2
       },
       "0xe2536231fc1512babc8c856ad7499830a936bdd9": {
-        "total_usd": 86.87337783490023,
+        "total_usd": 447.3477546465845,
         "since": 1785185860,
-        "count": 1
+        "count": 9
       },
       "0x9e62b99bd66504df778a23355bd1a9309d7fb3cd": {
         "total_usd": 0.00038,
@@ -2537,14 +4337,14 @@
         "count": 1
       },
       "0x11111605ef067242653c980b8f6f1ffe50305afe": {
-        "total_usd": 335.0775651083772,
-        "since": 1785185860,
-        "count": 3
+        "total_usd": 907.7721755652972,
+        "since": 1785202317,
+        "count": 7
       },
       "0x71aa44cbed2ca17077aee7c5087e86a53fc01f6e": {
-        "total_usd": 42.454232327703714,
+        "total_usd": 185.94877947425357,
         "since": 1785185860,
-        "count": 2
+        "count": 9
       },
       "0x260fe359002ed44cd3979cf35a623959f24b0408": {
         "total_usd": 584.35944,
@@ -2552,29 +4352,29 @@
         "count": 1
       },
       "0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
-        "total_usd": 2560.2914281887133,
-        "since": 1785185860,
+        "total_usd": 2504.3297805728675,
+        "since": 1785202280,
         "count": 4
       },
       "0x3470447f3cecffac709d3e783a307790b0208d60": {
-        "total_usd": 461.9732272868572,
-        "since": 1785185869,
-        "count": 1
-      },
-      "0x2375c58e51825ae3e3d0814b11dcdbc7ee3638f8": {
-        "total_usd": 4174.970794679732,
-        "since": 1785185861,
+        "total_usd": 2651.274035170196,
+        "since": 1785202327,
         "count": 2
       },
-      "0xe8d7bd744e7f4790c24d9b91d4a33fe2a6d7c768": {
-        "total_usd": 1633.1275746063193,
+      "0x2375c58e51825ae3e3d0814b11dcdbc7ee3638f8": {
+        "total_usd": 4730.6816453892125,
         "since": 1785185861,
-        "count": 1
+        "count": 3
+      },
+      "0xe8d7bd744e7f4790c24d9b91d4a33fe2a6d7c768": {
+        "total_usd": 0.0,
+        "since": 1785202285,
+        "count": 0
       },
       "0xe8e1f50392bd61d0f8f48e8e7af51d3b8a52090a": {
-        "total_usd": 0.0,
-        "since": 1785185870,
-        "count": 0
+        "total_usd": 3794.7006151690875,
+        "since": 1785202295,
+        "count": 2
       },
       "0xa28b0af96d216a8f6a77c61193bd5702dce413da": {
         "total_usd": 52.97814078719701,
@@ -2582,14 +4382,14 @@
         "count": 1
       },
       "0xd3d2e2692501a5c9ca623199d38826e513033a17": {
-        "total_usd": 3073.690683639295,
-        "since": 1785185861,
-        "count": 6
+        "total_usd": 1316.55642176321,
+        "since": 1785202256,
+        "count": 4
       },
       "0x65831fa22e3c5ba2314f39e0f163a9c020c590b4": {
-        "total_usd": 12.6956640559475,
+        "total_usd": 42.048823743573024,
         "since": 1785185861,
-        "count": 1
+        "count": 3
       },
       "0x9bde5c7b99a779c412f98a26b5efd239e255dec8": {
         "total_usd": 7.8602202,
@@ -2597,39 +4397,39 @@
         "count": 1
       },
       "0x2c242c8da2c5b25191bb6d2d88b8703446d28fc6": {
-        "total_usd": 14.04147248421213,
+        "total_usd": 33.16519916655382,
         "since": 1785185861,
-        "count": 1
+        "count": 2
       },
       "0xc407253720f3a3797d5d98cb7c6515950bd7866f": {
-        "total_usd": 14.04147248421213,
+        "total_usd": 70.11848227703717,
         "since": 1785185861,
-        "count": 1
+        "count": 4
       },
       "0x93c30e6e09f698cfea99b09b5166ed90cfaedd17": {
         "total_usd": 0.0,
-        "since": 1785185869,
+        "since": 1785202299,
         "count": 0
       },
       "0xbf90664017218ac7d9db5ae0c84873628e9ae1ae": {
-        "total_usd": 608.0,
+        "total_usd": 3703.802126647314,
         "since": 1785185861,
-        "count": 1
+        "count": 7
       },
       "0x8f0cb37cdff37e004e0088f563e5fe39e05ccc5b": {
-        "total_usd": 1063.3394947780105,
-        "since": 1785185863,
-        "count": 3
+        "total_usd": 0.0,
+        "since": 1785202299,
+        "count": 0
       },
       "0xed35bd3d709cb50f34113a4962607b2a0f93cd92": {
-        "total_usd": 387.5694399596152,
+        "total_usd": 1022.9469162873504,
         "since": 1785185863,
-        "count": 3
+        "count": 8
       },
       "0x9d406c4067a53f65de1a8a9273d55bfea5870a75": {
-        "total_usd": 81.05422080156472,
+        "total_usd": 151.02605921127838,
         "since": 1785185863,
-        "count": 3
+        "count": 6
       },
       "0xadcb3ab403bd38d4594c5514f08cb49368cc3373": {
         "total_usd": 826.15173,
@@ -2642,14 +4442,14 @@
         "count": 1
       },
       "0x81463b0f960f247f704377661ec81c1fd65b5128": {
-        "total_usd": 75.40802083123133,
+        "total_usd": 424.1640095045051,
         "since": 1785185863,
-        "count": 3
+        "count": 9
       },
       "0xbed340a301b4f07fa7b61ab9e0767faa172f530d": {
-        "total_usd": 50.43649348604474,
+        "total_usd": 108.48128879645581,
         "since": 1785185863,
-        "count": 2
+        "count": 5
       },
       "0x6a000f20005980200259b80c5102003040001068": {
         "total_usd": 1163.1482788024337,
@@ -2662,59 +4462,59 @@
         "count": 2
       },
       "0xfdff0b569f14af593d446e51b3e42f502124ac85": {
-        "total_usd": 1163.1159910967983,
+        "total_usd": 2684.9452905334447,
         "since": 1785185863,
-        "count": 2
+        "count": 3
       },
       "0xa3a7b6f88361f48403514059f1f16c8e78d60eec": {
-        "total_usd": 2138.2324271999996,
+        "total_usd": 3849.7932165999996,
         "since": 1785185864,
-        "count": 1
-      },
-      "0xa113ad3ff6e200f8a85bf6b57a6b31ede7ec4354": {
-        "total_usd": 2886.695796757474,
-        "since": 1785185867,
-        "count": 1
-      },
-      "0xd0fc8ba7e267f2bc56044a7715a489d851dc6d78": {
-        "total_usd": 70.73631907403559,
-        "since": 1785185867,
-        "count": 1
-      },
-      "0x9f178e86e42ddf2379cb3d2acf9ed67a1ed2550a": {
-        "total_usd": 74.8407510693983,
-        "since": 1785185867,
-        "count": 1
-      },
-      "0x5e91bf626857f69f746a0a1920b4309cc230a505": {
-        "total_usd": 53.441670241208755,
-        "since": 1785185867,
-        "count": 1
-      },
-      "0xdafd66636e2561b0284edde37e42d192f2844d40": {
-        "total_usd": 21.160798468507117,
-        "since": 1785185867,
-        "count": 1
-      },
-      "0x360b9726186c0f62cc719450685ce70280774dc8": {
-        "total_usd": 11.13166170911257,
-        "since": 1785185867,
-        "count": 1
-      },
-      "0xd0ba62e26f2cc939d5d5a7e3456212d0791fe4b2": {
-        "total_usd": 94.45630501907517,
-        "since": 1785185868,
-        "count": 1
-      },
-      "0x4ecef7bd1ed0c9f64a3a5c1a785a3bb39dc5df6a": {
-        "total_usd": 73.10231725558535,
-        "since": 1785185868,
         "count": 2
       },
-      "0x649765821d9f64198c905ec0b2b037a4a52bc373": {
-        "total_usd": 46.971943600772455,
+      "0xa113ad3ff6e200f8a85bf6b57a6b31ede7ec4354": {
+        "total_usd": 3648.9393140133475,
+        "since": 1785185867,
+        "count": 2
+      },
+      "0xd0fc8ba7e267f2bc56044a7715a489d851dc6d78": {
+        "total_usd": 759.1073837846405,
+        "since": 1785185867,
+        "count": 15
+      },
+      "0x9f178e86e42ddf2379cb3d2acf9ed67a1ed2550a": {
+        "total_usd": 390.6109941382601,
+        "since": 1785185867,
+        "count": 9
+      },
+      "0x5e91bf626857f69f746a0a1920b4309cc230a505": {
+        "total_usd": 450.7861275330242,
+        "since": 1785185867,
+        "count": 5
+      },
+      "0xdafd66636e2561b0284edde37e42d192f2844d40": {
+        "total_usd": 52.6549901667816,
+        "since": 1785185867,
+        "count": 3
+      },
+      "0x360b9726186c0f62cc719450685ce70280774dc8": {
+        "total_usd": 21.73839098823983,
+        "since": 1785185867,
+        "count": 2
+      },
+      "0xd0ba62e26f2cc939d5d5a7e3456212d0791fe4b2": {
+        "total_usd": 258.8232249910652,
         "since": 1785185868,
-        "count": 1
+        "count": 3
+      },
+      "0x4ecef7bd1ed0c9f64a3a5c1a785a3bb39dc5df6a": {
+        "total_usd": 116.84593235415144,
+        "since": 1785185868,
+        "count": 5
+      },
+      "0x649765821d9f64198c905ec0b2b037a4a52bc373": {
+        "total_usd": 199.4472268141028,
+        "since": 1785185868,
+        "count": 4
       },
       "0x15472352564754f6163a134632a9d7be1240d931": {
         "total_usd": 7.590145673032814,
@@ -2732,19 +4532,19 @@
         "count": 1
       },
       "0x905184c521129d4f201964a493d1bbd644cbd3e3": {
-        "total_usd": 11.432966133861068,
+        "total_usd": 36.511639079577556,
         "since": 1785185870,
-        "count": 1
+        "count": 3
       },
       "0x096703b14dbfe021eac4c66b82adf5522cc9c1b6": {
-        "total_usd": 127.96390268072447,
+        "total_usd": 402.6408320745816,
         "since": 1785185870,
-        "count": 2
+        "count": 5
       },
       "0x1494ca1f11d487c2bbe4543e90080aeba4ba3c2b": {
-        "total_usd": 52.068466669807904,
+        "total_usd": 68.1979266195959,
         "since": 1785185870,
-        "count": 1
+        "count": 2
       },
       "0x950bdd9af4e624bec1c70937bdf7560e8e09c5eb": {
         "total_usd": 0.0001898175437448,
@@ -2772,29 +4572,29 @@
         "count": 1
       },
       "0x1f2f10d1c40777ae1da742455c65828ff36df387": {
-        "total_usd": 8.999027669052538,
+        "total_usd": 161.16601755150208,
         "since": 1785185878,
-        "count": 1
+        "count": 7
       },
       "0x079ca3f710599739a22673c2856202f90d3a8806": {
-        "total_usd": 40.09782212980124,
+        "total_usd": 176.48840202328824,
+        "since": 1785185878,
+        "count": 7
+      },
+      "0xd132973eaebbd6d7ca7b88e9170f2cca058de430": {
+        "total_usd": 0.044891922341488734,
+        "since": 1785185878,
+        "count": 3
+      },
+      "0x26607ac599266b21d13c7acf7942c7701a8b699c": {
+        "total_usd": 41.78780609265412,
         "since": 1785185878,
         "count": 2
       },
-      "0xd132973eaebbd6d7ca7b88e9170f2cca058de430": {
-        "total_usd": 0.026130373654812886,
-        "since": 1785185878,
-        "count": 1
-      },
-      "0x26607ac599266b21d13c7acf7942c7701a8b699c": {
-        "total_usd": 26.10424328115807,
-        "since": 1785185878,
-        "count": 1
-      },
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
-        "total_usd": 31.098794529659237,
+        "total_usd": 52.044487059848436,
         "since": 1785185878,
-        "count": 1
+        "count": 2
       },
       "0x9642b23ed1e01df1092b92641051881a322f5d4e": {
         "total_usd": 1208.894,
@@ -2802,19 +4602,19 @@
         "count": 1
       },
       "0xe68041d6de0c4ca46caad72996140b383d44ac8f": {
-        "total_usd": 319.44175066477953,
+        "total_usd": 625.0421772617284,
         "since": 1785185878,
-        "count": 1
+        "count": 4
       },
       "0x188d12eb13a5eadd0867074ce8354b1ad6f4790b": {
-        "total_usd": 75.89543601091657,
+        "total_usd": 334.44290545498575,
         "since": 1785185879,
-        "count": 1
+        "count": 3
       },
       "0x75cf59a923a2649b84fa569bb97ea9694b6f26e4": {
-        "total_usd": 1.6329168938072518,
+        "total_usd": 15.338420495592445,
         "since": 1785185879,
-        "count": 1
+        "count": 3
       },
       "0xd815b2dfca16d2177f90e28855b2bd2f96fce923": {
         "total_usd": 262.2,
@@ -2824,6 +4624,736 @@
       "0xcfe762a367faaf39b905f4632252a21cfccf8dab": {
         "total_usd": 19.618926138044625,
         "since": 1785185881,
+        "count": 1
+      },
+      "0xbc1d9760bd6ca468ca9fb5ff2cfbeac35d86c973": {
+        "total_usd": 25.07867294571649,
+        "since": 1785202232,
+        "count": 2
+      },
+      "0x28b1dc1a5e3699a428bc51d234dfab7c9cb2a183": {
+        "total_usd": 4.181883607260424,
+        "since": 1785202232,
+        "count": 1
+      },
+      "0x22ecf2bed494976503a8087add30e134c30fbd98": {
+        "total_usd": 3.429144557953548,
+        "since": 1785202232,
+        "count": 1
+      },
+      "0xa808ee750c59566b32fefa225b28d12bf5b1ca53": {
+        "total_usd": 6.8367535052879,
+        "since": 1785202232,
+        "count": 2
+      },
+      "0x163f3103de041d25464e2c8a4f8f3187ec1856e0": {
+        "total_usd": 0.7527390493068763,
+        "since": 1785202232,
+        "count": 1
+      },
+      "0x66a9893cc07d91d95644aedd05d03f95e1dba8af": {
+        "total_usd": 1483.10971872,
+        "since": 1785202233,
+        "count": 1
+      },
+      "0xeaee5c9515e71f3f4574f926db1f7f354226198c": {
+        "total_usd": 76.1391553769,
+        "since": 1785202234,
+        "count": 4
+      },
+      "0x6d38f9e2c5eb21f81a9c2fe53dd012df87413f3b": {
+        "total_usd": 52.1255,
+        "since": 1785202234,
+        "count": 1
+      },
+      "0x0a15b638b313b8e3077e8e5d496e7be653a4d691": {
+        "total_usd": 17.815534324268917,
+        "since": 1785202234,
+        "count": 2
+      },
+      "0x9a6f8626f01edeeecbe4861855a1cefcc3598f6a": {
+        "total_usd": 8.317438863776657,
+        "since": 1785202234,
+        "count": 2
+      },
+      "0x0889e9327b98d7d1be3c301a4585ff3330502c9a": {
+        "total_usd": 1741.8051233817907,
+        "since": 1785202234,
+        "count": 5
+      },
+      "0xe07c687cecb3caf246ded3240d186181d5eae705": {
+        "total_usd": 513.5792541498506,
+        "since": 1785202234,
+        "count": 7
+      },
+      "0x66e092fd00c4e4eb5bd20f5392c1902d738ae7bc": {
+        "total_usd": 1.1076656878,
+        "since": 1785202237,
+        "count": 1
+      },
+      "0xf10095782a7e633eafe721543ddcff9d7629d864": {
+        "total_usd": 2.2037146469642463,
+        "since": 1785202237,
+        "count": 1
+      },
+      "0xc904685f6c92f003f24d32804ab9d2d5f3ef52c4": {
+        "total_usd": 2.4792301738757407,
+        "since": 1785202237,
+        "count": 2
+      },
+      "0xdc2dd2ebcf2b268a18d8a1834e7c02a958d72fd3": {
+        "total_usd": 10.5253071,
+        "since": 1785202237,
+        "count": 1
+      },
+      "0x3b260cf977df1ff8d87960064daee2ce491a1b91": {
+        "total_usd": 12.126674783125425,
+        "since": 1785202239,
+        "count": 1
+      },
+      "0x54f0860d6951b389a7656b6b3915d5bd2270ca0b": {
+        "total_usd": 12.411536995095341,
+        "since": 1785202239,
+        "count": 2
+      },
+      "0x9d7d2e2c67ef21a0d3ee5b309d417d0ff601392f": {
+        "total_usd": 6.998159554231394,
+        "since": 1785202239,
+        "count": 2
+      },
+      "0xccd8c402a4b91ab59a50d30dbbdb29f1faec411d": {
+        "total_usd": 6.057429657397934,
+        "since": 1785202239,
+        "count": 1
+      },
+      "0x00000000f3c6887fa69a9e4b5cf255d043ba7414": {
+        "total_usd": 28.9119051731133,
+        "since": 1785202239,
+        "count": 2
+      },
+      "0x9bf81cc31d0f1fa7ade83058509a4db154a182a2": {
+        "total_usd": 100.4809441895,
+        "since": 1785202241,
+        "count": 1
+      },
+      "0xacb5df98948c18f864f1d538514626b5372e646e": {
+        "total_usd": 120.3408026513,
+        "since": 1785202242,
+        "count": 1
+      },
+      "0x8d4fd401990ef8d2eb3d0b284cb6415a387519bd": {
+        "total_usd": 27.763836620748457,
+        "since": 1785202242,
+        "count": 3
+      },
+      "0x427468e1a1f2715d68c1cc2f5b54468aabd4be58": {
+        "total_usd": 18.8839,
+        "since": 1785202242,
+        "count": 1
+      },
+      "0x7cfc95bb4996b576a68dadbe7843984a1ffbf224": {
+        "total_usd": 36.77955058614772,
+        "since": 1785202244,
+        "count": 3
+      },
+      "0x7cd2c26d0d0777f06a9b1fcf394cb4b88d66a115": {
+        "total_usd": 9.531509492128821,
+        "since": 1785202244,
+        "count": 2
+      },
+      "0xcc4461636684868aab71037b29a11cc643e64500": {
+        "total_usd": 0.012477367139464995,
+        "since": 1785202245,
+        "count": 1
+      },
+      "0x97386862594f4cacea245e8dbfa6230ca696c37c": {
+        "total_usd": 12.464889772325527,
+        "since": 1785202245,
+        "count": 1
+      },
+      "0xe8736af1926e9d8f5a6602fbbb0893b26436d710": {
+        "total_usd": 1497.1252363453523,
+        "since": 1785202252,
+        "count": 3
+      },
+      "0x1d3d33cea3ef21b634efb14dbb911a2ed8710028": {
+        "total_usd": 38.110715776186936,
+        "since": 1785202252,
+        "count": 2
+      },
+      "0x6872b6630a3afcd3117191a8403c2002e13df7de": {
+        "total_usd": 328.57147577359706,
+        "since": 1785202252,
+        "count": 3
+      },
+      "0x140022b7000081000001094700609300d2187dab": {
+        "total_usd": 48.05099060226038,
+        "since": 1785202252,
+        "count": 4
+      },
+      "0x00acd70270bd80c75ee70e5aac25e82364c4764e": {
+        "total_usd": 726.7973125147,
+        "since": 1785202252,
+        "count": 1
+      },
+      "0xc8016bf0d424b157900898ef577cebbae5aad7ef": {
+        "total_usd": 353.1707046,
+        "since": 1785202252,
+        "count": 1
+      },
+      "0x21551728d74c08aff093ef88c7768718ff07dbc5": {
+        "total_usd": 3.71e-05,
+        "since": 1785202252,
+        "count": 1
+      },
+      "0x5ac13261c181a9c3938bfe1b649e65d10f98566b": {
+        "total_usd": 30.052265844162694,
+        "since": 1785202257,
+        "count": 5
+      },
+      "0xebfb684dd2b01e698ca6c14f10e4f289934a54d6": {
+        "total_usd": 51.37024727762739,
+        "since": 1785202257,
+        "count": 4
+      },
+      "0xd6993e525fadb23971a20bbb057af9841eae076f": {
+        "total_usd": 996.3943659465428,
+        "since": 1785202260,
+        "count": 9
+      },
+      "0xe5bf60f229dd09b2b0928df9bd83c1abbd0b0e6f": {
+        "total_usd": 11.247990738821645,
+        "since": 1785202260,
+        "count": 2
+      },
+      "0x84cab37995229530d9e6e5cff2f8f4ebe4517d66": {
+        "total_usd": 190.7648705816142,
+        "since": 1785202263,
+        "count": 1
+      },
+      "0x99c9fc46f92e8a1c0dec1b1747d010903e884be1": {
+        "total_usd": 190.7648705816142,
+        "since": 1785202263,
+        "count": 1
+      },
+      "0x1dddb4dabd3bf7f4e712c49856da8a7bacc99176": {
+        "total_usd": 17.358164429200002,
+        "since": 1785202263,
+        "count": 1
+      },
+      "0xa8b3957eaa05ba3d21298706aeb7c286b4e1ed90": {
+        "total_usd": 4.5667451627748274,
+        "since": 1785202263,
+        "count": 1
+      },
+      "0xa32c97c1fb789d046410632fad04a6a9d14719f1": {
+        "total_usd": 311.1004188243,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0xf2a4bd0500932bc1129285e48d7ad2d27af97e60": {
+        "total_usd": 1.8993239323920508,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0x6e71d13fabbce0ef1bea0ad910ecdd5eb3e1fd62": {
+        "total_usd": 782.32399,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0x74de5d4fcbf63e00296fd95d33236b9794016631": {
+        "total_usd": 117.8036671,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0xce79b081c0c924cb67848723ed3057234d10fc6b": {
+        "total_usd": 117.8036671,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0x016fd003eef102d19ee92a00e93667cd9849b290": {
+        "total_usd": 4.267339051894283,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0xa9b7c7f95d110bd9bfe3eeb430add0ff6f1e1431": {
+        "total_usd": 371.0,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0x2ccb3944c1adeb1c2b394169a9d13550876b9606": {
+        "total_usd": 0.13252921362065181,
+        "since": 1785202268,
+        "count": 2
+      },
+      "0xba12222222228d8ba445958a75a0704d566bf2c8": {
+        "total_usd": 0.3775582322558194,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0xd9a1622eb0535b3989551253eb9c48defa862111": {
+        "total_usd": 31.906,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0x1a9d699aee3a56ca49d0cc3b542ae3a37885a3e1": {
+        "total_usd": 684.69163,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0x36c0a1cdb4af2db71610e8612c74acd20540e3c1": {
+        "total_usd": 2.4660906741910242,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0xba6ee5e49bd8e13a93d9cf8b1537cc111bdcd0af": {
+        "total_usd": 1.2038208774478993,
+        "since": 1785202268,
+        "count": 1
+      },
+      "0x733572b1321c3c410be853d4455e5a0a7a5266c3": {
+        "total_usd": 1.681619395275599,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0xb2b9335791346e94245dcd316a9c9ed486e6dd7f": {
+        "total_usd": 3.0592243264931165,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x798934cdcfae18764ef4819274687df3fb24b99b": {
+        "total_usd": 5.472350603145464,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x6579d38b915fbdfa67420142e5eb4f13b0cda666": {
+        "total_usd": 1.892504038552218,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x76913cf50476bb10a03dffc22751f33fcf378975": {
+        "total_usd": 311.1004188243,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0xa233329e71b20ba676e48bbef775ddb811d7ba5b": {
+        "total_usd": 13.176157641869107,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x955244edc797a1c1b04134b600f819ac23c76081": {
+        "total_usd": 26.257101743457376,
+        "since": 1785202269,
+        "count": 2
+      },
+      "0x97b74a89344a624f7cbcf64a4331b3a1c752c2ca": {
+        "total_usd": 927.5,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0xcb3d2a42022741b06f9b38459e3dd1ee9a64d129": {
+        "total_usd": 0.15736178495896438,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x536f984b4046e052aa0d796237f6cdd8cc215eee": {
+        "total_usd": 0.07483001984187315,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x317a32850469481a5bbed718625f7a29bbcf6803": {
+        "total_usd": 1.705982272593346,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0xf00e80f0de9aea0b33aa229a4014572777e422ee": {
+        "total_usd": 24.05721875351583,
+        "since": 1785202269,
+        "count": 6
+      },
+      "0x0639556f03714a74a5feeaf5736a4a64ff70d206": {
+        "total_usd": 0.0,
+        "since": 1785202307,
+        "count": 0
+      },
+      "0x3810157e4692736995b6948b1000c638b7f523ed": {
+        "total_usd": 3.9311258314999997,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x220e56936703f84ce0b81b9559bd0aa3f016d905": {
+        "total_usd": 659.2949921726,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x09ad820aac5779683b481c4674208a4e1b024afa": {
+        "total_usd": 3.407608947334352,
+        "since": 1785202269,
+        "count": 1
+      },
+      "0x4eee75b49e32c2af599ce83c769ec84f747c1dda": {
+        "total_usd": 119.70428602648097,
+        "since": 1785202271,
+        "count": 1
+      },
+      "0x39d1d8fcc5e6eeaf567bce4e29b94fec956d3519": {
+        "total_usd": 1376.6910774182622,
+        "since": 1785202271,
+        "count": 1
+      },
+      "0x0ff28daa81734a863ec37786f86f55b9e328e862": {
+        "total_usd": 95.03800589880257,
+        "since": 1785202271,
+        "count": 2
+      },
+      "0x77253e7e781a74fc6fccb316969300695b7eae8e": {
+        "total_usd": 26.372552180118916,
+        "since": 1785202271,
+        "count": 2
+      },
+      "0x4c82d1fbfe28c977cbb58d8c7ff8fcf9f70a2cca": {
+        "total_usd": 94.95521981392228,
+        "since": 1785202271,
+        "count": 1
+      },
+      "0x52196e52679c8c75b05440616c5527596d7c4aae": {
+        "total_usd": 83.3807121119159,
+        "since": 1785202271,
+        "count": 4
+      },
+      "0x02566303a0e860ec66d3b79168459978b1b00c8e": {
+        "total_usd": 2.676275907661598,
+        "since": 1785202271,
+        "count": 2
+      },
+      "0xbe60e333689ad38a30b8decb67360db5dcdc40d0": {
+        "total_usd": 118.3354532318,
+        "since": 1785202271,
+        "count": 1
+      },
+      "0x80cacf44a6d036d8366a60f448bb622b46307ecf": {
+        "total_usd": 0.000371,
+        "since": 1785202272,
+        "count": 1
+      },
+      "0x2f441f2cebfb84465057f8797079f872f6cb72f8": {
+        "total_usd": 0.00037471,
+        "since": 1785202272,
+        "count": 2
+      },
+      "0x2fb17764a02cc3285eb4a1eea89efc2531949ce9": {
+        "total_usd": 1215.3977359832002,
+        "since": 1785202272,
+        "count": 1
+      },
+      "0x80ca9d7ee42621f9145f6b37201de90b30697ecf": {
+        "total_usd": 3.7099999999999996e-06,
+        "since": 1785202275,
+        "count": 1
+      },
+      "0x50d3865a63d52c0a54e4679949647ea752107390": {
+        "total_usd": 167.92830437755416,
+        "since": 1785202277,
+        "count": 3
+      },
+      "0x061347ca5f45e41cb4f7ffbc77c21073cff51dd6": {
+        "total_usd": 57.23532876024399,
+        "since": 1785202277,
+        "count": 1
+      },
+      "0x5958cca2f1a8360231f748e85c1f779ba832ddfb": {
+        "total_usd": 2.7871685436541975,
+        "since": 1785202278,
+        "count": 1
+      },
+      "0x896b6b09f2604f8da84ace6ae39c722f68e4e215": {
+        "total_usd": 248.79164161276577,
+        "since": 1785202279,
+        "count": 5
+      },
+      "0x8be0ede2088ed07d4eea53103de71e0375553034": {
+        "total_usd": 1291.7106149340716,
+        "since": 1785202279,
+        "count": 2
+      },
+      "0x30c96a91120281c289b98754b4c74cf077c9adfe": {
+        "total_usd": 3.7274583325000004,
+        "since": 1785202279,
+        "count": 1
+      },
+      "0xbc761ee2bb6ea585d2c400751b1670d46b4a3417": {
+        "total_usd": 173.17829526039748,
+        "since": 1785202279,
+        "count": 1
+      },
+      "0x3a5e8ed5faee281df14cfaa8c70fd7d183503a78": {
+        "total_usd": 303.89761213,
+        "since": 1785202279,
+        "count": 1
+      },
+      "0x617a2c5fcc92513d59f272aade12adede1160858": {
+        "total_usd": 2.865617847410392,
+        "since": 1785202280,
+        "count": 2
+      },
+      "0x863257732e892ebce52afc43022ecc5c26b5b10b": {
+        "total_usd": 22.259999999999998,
+        "since": 1785202281,
+        "count": 1
+      },
+      "0x6d517d250a4b8e0dbf0495ac6d5596a7738f2c91": {
+        "total_usd": 227.6549332597859,
+        "since": 1785202281,
+        "count": 1
+      },
+      "0xc3a754db4a9106f28bf754efe0daf61b716ce11d": {
+        "total_usd": 0.046483369100000005,
+        "since": 1785202281,
+        "count": 1
+      },
+      "0x01989c93890aed05a63d179b03424997075b6acf": {
+        "total_usd": 4514.147847437667,
+        "since": 1785202284,
+        "count": 2
+      },
+      "0xd1ee705d774d59541d3d395e72a16e48389df7c7": {
+        "total_usd": 25.947663559038787,
+        "since": 1785202285,
+        "count": 1
+      },
+      "0x8e101ce0cd87c816dcfd4d02f7e21983901def94": {
+        "total_usd": 2804.7621147,
+        "since": 1785202286,
+        "count": 2
+      },
+      "0xd1bfe63ec5b5506e86c38de81479d1ac9583b728": {
+        "total_usd": 53.2856283897,
+        "since": 1785202288,
+        "count": 1
+      },
+      "0x8d005417ccab1f22f39d49c4d58213242e2aa4ba": {
+        "total_usd": 759.7070323129,
+        "since": 1785202289,
+        "count": 1
+      },
+      "0xf228e505453ab81ec272912e6793226f9ad58138": {
+        "total_usd": 1440.6649914822985,
+        "since": 1785202292,
+        "count": 1
+      },
+      "0xc3d688b66703497daa19211eedff47f25384cdc3": {
+        "total_usd": 1440.6649914822985,
+        "since": 1785202294,
+        "count": 1
+      },
+      "0xda0b576d00be230e409514d15294cb69a3b77b5f": {
+        "total_usd": 0.17162682599999998,
+        "since": 1785202294,
+        "count": 1
+      },
+      "0xef1e726e6b78186efe68d2fb1cd77f1fd97949c0": {
+        "total_usd": 0.000371,
+        "since": 1785202295,
+        "count": 1
+      },
+      "0xca4bd5f231e22bfc242f0fff839cc13350342c6e": {
+        "total_usd": 0.000371,
+        "since": 1785202295,
+        "count": 1
+      },
+      "0x1a1b8e177397df9f737f27003ad16e754c32f909": {
+        "total_usd": 0.0004625653369426981,
+        "since": 1785202295,
+        "count": 2
+      },
+      "0xef1e228e63f34c1fbed39e9d47feb2895a0e49c0": {
+        "total_usd": 0.00037471,
+        "since": 1785202295,
+        "count": 2
+      },
+      "0x2defa77cdff78e550286b04cb219a85e6029765c": {
+        "total_usd": 55.5974909973,
+        "since": 1785202296,
+        "count": 1
+      },
+      "0x17123b7b59968df59a89da9bef12728ede7006cd": {
+        "total_usd": 14.444746956932411,
+        "since": 1785202296,
+        "count": 2
+      },
+      "0xd578024346533715274ea5d5617efd32693e92c4": {
+        "total_usd": 960.2498684008999,
+        "since": 1785202296,
+        "count": 1
+      },
+      "0x37447548f07f651392c2f9b13a00d1caadc49ba9": {
+        "total_usd": 2234.6443,
+        "since": 1785202296,
+        "count": 1
+      },
+      "0x032acd165a730baef1d886f44d48cdc4d8e4e9d3": {
+        "total_usd": 2037.3476130000001,
+        "since": 1785202296,
+        "count": 1
+      },
+      "0xf81b45b1663b7ea8716c74796d99bbe4ea26f488": {
+        "total_usd": 2234.6443,
+        "since": 1785202296,
+        "count": 1
+      },
+      "0x4b47d7291664beb43e03588e2698e10ba2cd21b3": {
+        "total_usd": 161.6067373532428,
+        "since": 1785202300,
+        "count": 1
+      },
+      "0xfed2399b20011af1fc985d5354f12cbc57ed48f9": {
+        "total_usd": 2583.7377985573,
+        "since": 1785202300,
+        "count": 1
+      },
+      "0x747bbebe062875cc7c77313d21509f38a6ffb2c6": {
+        "total_usd": 1.0817469939616906,
+        "since": 1785202304,
+        "count": 2
+      },
+      "0xfd0b31d2e955fa55e3fa641fe90e08b677188d35": {
+        "total_usd": 0.5408713743737814,
+        "since": 1785202304,
+        "count": 1
+      },
+      "0x9491cc197c563784146ab0cd37d602e646f5abfd": {
+        "total_usd": 169.30232550000002,
+        "since": 1785202305,
+        "count": 2
+      },
+      "0xd8305fba85347a596f7c1e165e5e871ff9981e0e": {
+        "total_usd": 169.3023255,
+        "since": 1785202310,
+        "count": 1
+      },
+      "0xf440139a62b2b939699c5b3e09f88e40464ab9bc": {
+        "total_usd": 146.7570185977,
+        "since": 1785202313,
+        "count": 1
+      },
+      "0x9dc81196e17bea1b30f432ffe6af3680608ff653": {
+        "total_usd": 44.17349713,
+        "since": 1785202313,
+        "count": 1
+      },
+      "0x7d0737c50bbd411ea6e9d19856ab3dd70c183d28": {
+        "total_usd": 140.53951945389997,
+        "since": 1785202319,
+        "count": 1
+      },
+      "0x79ad858cdff50ca6728d2531894001f221e805c7": {
+        "total_usd": 0.10684800053066353,
+        "since": 1785202321,
+        "count": 1
+      },
+      "0x1b6257cae4192e62b629efca21771be3d759183d": {
+        "total_usd": 7.313152036320971,
+        "since": 1785202321,
+        "count": 1
+      },
+      "0x18dc29ca1b75c9a07d4d8f82b5676a0b2b4725b4": {
+        "total_usd": 7.313152036320971,
+        "since": 1785202321,
+        "count": 1
+      },
+      "0x7f0adf9b833d8b0b4b84bdca7d59b62d19f74b4a": {
+        "total_usd": 9.5571630854,
+        "since": 1785202322,
+        "count": 1
+      },
+      "0xef01fdbb48a7400963d6eaf1a1efd555a5bf2a92": {
+        "total_usd": 1.959635178040779,
+        "since": 1785202322,
+        "count": 1
+      },
+      "0xf33e65eac4e97219c372fecee539fcd1f40f0138": {
+        "total_usd": 0.912418257272338,
+        "since": 1785202324,
+        "count": 1
+      },
+      "0x00000000000762339537bd0fd01e44f661bd8f67": {
+        "total_usd": 13.08094410158827,
+        "since": 1785202325,
+        "count": 1
+      },
+      "0xca43351b1f320ae5ee91b919e640991ffec52c6e": {
+        "total_usd": 3.7099999999999996e-06,
+        "since": 1785202325,
+        "count": 1
+      },
+      "0xb9391e439f7f64622732f04bb82c8fa5017264e6": {
+        "total_usd": 3.71,
+        "since": 1785202325,
+        "count": 1
+      },
+      "0x3e8282bd1bfabd23249701e978e9db3df3d7073a": {
+        "total_usd": 66.65778427212155,
+        "since": 1785202325,
+        "count": 1
+      },
+      "0x6cae8e577235eeb56bd7f5114802de80b3b3fbbb": {
+        "total_usd": 2.800879462021028,
+        "since": 1785202326,
+        "count": 1
+      },
+      "0x2e69797d37e888d62974a1ffa20816a5f55f898d": {
+        "total_usd": 2680.6016388259477,
+        "since": 1785202329,
+        "count": 1
+      },
+      "0xeff6cb8b614999d130e537751ee99724d01aa167": {
+        "total_usd": 252.04276315449732,
+        "since": 1785202330,
+        "count": 4
+      },
+      "0x23f8f1ab1cf30d05eca842a4b7dcfa5ecabfa3c5": {
+        "total_usd": 1.949238395074364,
+        "since": 1785202330,
+        "count": 1
+      },
+      "0x4de4fccc14eab1d69890a49471a9d57b96dd725f": {
+        "total_usd": 5.817768403438951,
+        "since": 1785202330,
+        "count": 1
+      },
+      "0xe6203a71dfa42aff76486098670b72f808c23cb9": {
+        "total_usd": 654.3041776313,
+        "since": 1785202330,
+        "count": 1
+      },
+      "0x6a62eaae29ae37818a09ff0059cfe0738d23cb56": {
+        "total_usd": 0.9964042986857404,
+        "since": 1785202331,
+        "count": 1
+      },
+      "0xbf000000a1f768e94bf68257138c8fd34f7dfcdb": {
+        "total_usd": 106.45774919332874,
+        "since": 1785202331,
+        "count": 1
+      },
+      "0x13f1dd3500b338a71f07692864b735184459ed3a": {
+        "total_usd": 690.46407836,
+        "since": 1785202331,
+        "count": 2
+      },
+      "0x3fb41aedc135f619b8ea7ecf7268f26595e29f6d": {
+        "total_usd": 1.9396933019752622,
+        "since": 1785202331,
+        "count": 1
+      },
+      "0x7a6d14c4645a185d4a2fab7af9f4570fe089f455": {
+        "total_usd": 35.7972252638,
+        "since": 1785202331,
+        "count": 1
+      },
+      "0x0f96b8321e877dc2d8bc7ae46ba436f4b9fa4399": {
+        "total_usd": 665.9821,
+        "since": 1785202331,
         "count": 1
       }
     }
