@@ -14,6 +14,13 @@ ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
 LOW_CAP_THRESHOLD_USD = 500_000  # market cap below this = "yeni/düşük cap coin"
 
+MAX_DISTINCT_TOKENS_PER_SWAP = 4  # more than this = likely a batch/aggregated
+# settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
+# not a single whale's swap, and not reliably attributable to one wallet.
+
+BATCH_CHECK_MIN_USD = 50  # below this, skip the extra receipt-fetch API call;
+# dust-level transfers aren't worth the API budget either way.
+
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
 CLUSTER_WINDOW_SECONDS = 24 * 3600
@@ -141,6 +148,23 @@ def has_swap_event(receipt):
         if topic0 in (V2_SWAP_TOPIC, V3_SWAP_TOPIC):
             return True
     return False
+
+
+def is_batch_settlement(receipt):
+    """Detects aggregated settlement transactions (e.g. CoW Protocol batch
+    auctions) that bundle many different users' trades into one tx. These
+    involve an unusually high number of distinct tokens moving at once and
+    can't be reliably attributed to a single whale's trade -- the "wallet"
+    involved is typically a shared router/settlement contract, not a person."""
+    logs = receipt.get("logs", [])
+    tokens = set()
+    for log in logs:
+        topics = log.get("topics") or []
+        if topics and topics[0] == TRANSFER_TOPIC:
+            addr = (log.get("address") or "").lower()
+            if addr:
+                tokens.add(addr)
+    return len(tokens) > MAX_DISTINCT_TOKENS_PER_SWAP
 
 
 def find_bought_token_address(receipt, weth_address):
@@ -295,18 +319,23 @@ def get_token_symbol_label(token_address):
     return token_address[:10] + "..."
 
 
-def describe_swap_counterparty(tx_hash, target_token_address, recipient_address):
-    """If this tx was an actual DEX swap, returns a Telegram-ready line
-    naming what the recipient paid to receive target_token_address.
-    Returns "" if it wasn't a swap or the counter-token couldn't be traced."""
+def analyze_swap(tx_hash, target_token_address, recipient_address):
+    """For a plain (non-WETH-triggered) tracked-token transfer, checks
+    whether it was part of a real DEX swap and, if so, whether it's a
+    single whale's trade or a batch/aggregated settlement bundling many
+    users together. Returns (should_skip, swap_note_line)."""
     receipt = get_tx_receipt(tx_hash)
     if not receipt or not has_swap_event(receipt):
-        return ""
+        return False, ""  # not a swap at all -- plain transfer, nothing to skip or note
+
+    if is_batch_settlement(receipt):
+        return True, ""  # can't attribute to one whale, skip alerting entirely
+
     paid_address = find_paid_token(receipt, target_token_address, recipient_address)
     if not paid_address:
-        return ""
+        return False, ""
     paid_symbol = get_token_symbol_label(paid_address)
-    return f"DEX'te Karşılığında Verilen: {paid_symbol}\n"
+    return False, f"DEX'te Karşılığında Verilen: {paid_symbol}\n"
 
 
 def main():
@@ -352,6 +381,10 @@ def main():
                 if not receipt or not has_swap_event(receipt):
                     # Plain WETH transfer (deposit, wallet consolidation, etc.) --
                     # not a purchase of anything, so there's no "which coin" to report.
+                    continue
+
+                if is_batch_settlement(receipt):
+                    print(f"Skipped (batch/aggregated settlement, not a single whale trade): {tx_hash}")
                     continue
 
                 bought_address = find_bought_token_address(receipt, WETH_ADDRESS)
@@ -427,8 +460,14 @@ def main():
                 print(f"Skipped (exchange, static list): {tx_hash}")
                 continue
 
+            should_skip, swap_note = (False, "")
+            if usd_value >= BATCH_CHECK_MIN_USD:
+                should_skip, swap_note = analyze_swap(tx_hash, contract, to_address)
+            if should_skip:
+                print(f"Skipped (batch/aggregated settlement, not a single whale trade): {tx_hash}")
+                continue
+
             if usd_value >= LARGE_BUY_THRESHOLD_USD:
-                swap_note = describe_swap_counterparty(tx_hash, contract, to_address)
                 send_telegram(
                     f"🚨 <b>Büyük Cüzdan Hareketi</b>\n"
                     f"Cüzdan: {to_address}\n"
@@ -439,7 +478,6 @@ def main():
                     f"Grafik: https://dexscreener.com/ethereum/{contract}"
                 )
             elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
-                swap_note = describe_swap_counterparty(tx_hash, contract, to_address)
                 send_telegram(
                     f"🟢 <b>Cüzdan Hareketi</b>\n"
                     f"Cüzdan: {to_address}\n"
@@ -459,7 +497,6 @@ def main():
                 acc["total_usd"] += usd_value
                 acc["count"] += 1
                 if acc["total_usd"] >= ACCUMULATION_THRESHOLD_USD:
-                    swap_note = describe_swap_counterparty(tx_hash, contract, to_address)
                     send_telegram(
                         f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
                         f"Cüzdan: {to_address}\n"
