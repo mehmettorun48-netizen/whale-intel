@@ -326,14 +326,14 @@ def analyze_swap(tx_hash, target_token_address, recipient_address):
     users together. Returns (should_skip, swap_note_line)."""
     receipt = get_tx_receipt(tx_hash)
     if not receipt or not has_swap_event(receipt):
-        return False, ""  # not a swap at all -- plain transfer, nothing to skip or note
+        return False, "ℹ️ DEX işlemi değil (direkt cüzdan transferi)\n"
 
     if is_batch_settlement(receipt):
         return True, ""  # can't attribute to one whale, skip alerting entirely
 
     paid_address = find_paid_token(receipt, target_token_address, recipient_address)
     if not paid_address:
-        return False, ""
+        return False, "⚠️ DEX swap'ı ama karşılığı tespit edilemedi\n"
     paid_symbol = get_token_symbol_label(paid_address)
     return False, f"DEX'te Karşılığında Verilen: {paid_symbol}\n"
 
