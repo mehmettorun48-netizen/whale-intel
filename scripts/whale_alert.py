@@ -7,7 +7,7 @@ ETHERSCAN_KEY = os.environ["ETHERSCAN_API_KEY"]
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
-SINGLE_BUY_THRESHOLD_USD = 3000
+SINGLE_BUY_THRESHOLD_USD = 1500
 LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
@@ -57,6 +57,12 @@ WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2".lower()
 
 V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
 V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
+CURVE_EXCHANGE_TOPIC = "0x8b3e96f2b889fa771c53c981b40daf005f63f637f1869f707052d15a3dd97140"
+# Covers Uniswap V2, Uniswap V3, and every fork that reuses their Swap event
+# signature (Sushiswap, etc.), plus Curve pools. Does NOT cover Balancer,
+# 0x/1inch's own settlement events, or other AMM designs with different
+# event signatures -- those would need their own verified topic hashes.
+SWAP_TOPICS = (V2_SWAP_TOPIC, V3_SWAP_TOPIC, CURVE_EXCHANGE_TOPIC)
 
 STATE_FILE = "data/state.json"
 TOKENS_FILE = "config/tokens.txt"
@@ -160,7 +166,7 @@ def has_swap_event(receipt):
     logs = receipt.get("logs", [])
     for log in logs:
         topic0 = (log.get("topics") or [""])[0]
-        if topic0 in (V2_SWAP_TOPIC, V3_SWAP_TOPIC):
+        if topic0 in SWAP_TOPICS:
             return True
     return False
 
