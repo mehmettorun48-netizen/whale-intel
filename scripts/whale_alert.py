@@ -18,9 +18,6 @@ MAX_DISTINCT_TOKENS_PER_SWAP = 4  # more than this = likely a batch/aggregated
 # settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
 # not a single whale's swap, and not reliably attributable to one wallet.
 
-BATCH_CHECK_MIN_USD = 50  # below this, skip the extra receipt-fetch API call;
-# dust-level transfers aren't worth the API budget either way.
-
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
 CLUSTER_WINDOW_SECONDS = 24 * 3600
@@ -321,12 +318,13 @@ def get_token_symbol_label(token_address):
 
 def analyze_swap(tx_hash, target_token_address, recipient_address):
     """For a plain (non-WETH-triggered) tracked-token transfer, checks
-    whether it was part of a real DEX swap and, if so, whether it's a
-    single whale's trade or a batch/aggregated settlement bundling many
-    users together. Returns (should_skip, swap_note_line)."""
+    whether it was part of a real DEX swap. Only real, single-whale swaps
+    should generate alerts -- plain transfers (deposits, withdrawals,
+    wallet-to-wallet, OTC, etc.) and batch/aggregated settlements are all
+    skipped since they aren't DEX purchases. Returns (should_skip, note)."""
     receipt = get_tx_receipt(tx_hash)
     if not receipt or not has_swap_event(receipt):
-        return False, "ℹ️ DEX işlemi değil (direkt cüzdan transferi)\n"
+        return True, ""  # not a swap at all -- nothing to alert on
 
     if is_batch_settlement(receipt):
         return True, ""  # can't attribute to one whale, skip alerting entirely
@@ -460,11 +458,9 @@ def main():
                 print(f"Skipped (exchange, static list): {tx_hash}")
                 continue
 
-            should_skip, swap_note = (False, "")
-            if usd_value >= BATCH_CHECK_MIN_USD:
-                should_skip, swap_note = analyze_swap(tx_hash, contract, to_address)
+            should_skip, swap_note = analyze_swap(tx_hash, contract, to_address)
             if should_skip:
-                print(f"Skipped (batch/aggregated settlement, not a single whale trade): {tx_hash}")
+                print(f"Skipped (not a real single-whale DEX swap): {tx_hash}")
                 continue
 
             if usd_value >= LARGE_BUY_THRESHOLD_USD:
