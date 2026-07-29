@@ -18,6 +18,31 @@ MAX_DISTINCT_TOKENS_PER_SWAP = 4  # more than this = likely a batch/aggregated
 # settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
 # not a single whale's swap, and not reliably attributable to one wallet.
 
+ETHERSCAN_MIN_INTERVAL = 0.4  # seconds between calls -- Etherscan's free tier
+# allows only ~3 requests/sec; without pacing, a busy run fires dozens of
+# receipt lookups back-to-back and most of them get rejected with a rate
+# limit error, which then looks like "no swap found" everywhere.
+_last_etherscan_call = 0.0
+
+ANALYZE_SWAP_MIN_USD = 100  # below this, skip the extra receipt-fetch call
+# for directly-tracked tokens (LINK, UNI, etc.) -- too small to be worth the
+# API budget or to meaningfully affect the accumulation total.
+
+
+def etherscan_call(params, timeout=20):
+    """Single choke point for every Etherscan API request, so we can pace
+    them and never blow past the rate limit."""
+    global _last_etherscan_call
+    elapsed = time.time() - _last_etherscan_call
+    if elapsed < ETHERSCAN_MIN_INTERVAL:
+        time.sleep(ETHERSCAN_MIN_INTERVAL - elapsed)
+    full_params = dict(params)
+    full_params.setdefault("chainid", 1)
+    full_params["apikey"] = ETHERSCAN_KEY
+    _last_etherscan_call = time.time()
+    r = requests.get("https://api.etherscan.io/v2/api", params=full_params, timeout=timeout)
+    return r.json()
+
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
 CLUSTER_WINDOW_SECONDS = 24 * 3600
@@ -111,18 +136,11 @@ def get_tx_receipt(tx_hash):
         return _receipt_cache[tx_hash]
     result = {}
     try:
-        r = requests.get(
-            "https://api.etherscan.io/v2/api",
-            params={
-                "chainid": 1,
-                "module": "proxy",
-                "action": "eth_getTransactionReceipt",
-                "txhash": tx_hash,
-                "apikey": ETHERSCAN_KEY,
-            },
-            timeout=20,
-        )
-        data = r.json()
+        data = etherscan_call({
+            "module": "proxy",
+            "action": "eth_getTransactionReceipt",
+            "txhash": tx_hash,
+        })
         raw_result = data.get("result")
         if isinstance(raw_result, dict):
             result = raw_result
@@ -230,28 +248,20 @@ def resolve_token_info_from_pair(pair, token_address):
 
 
 def get_latest_block():
-    r = requests.get(
-        "https://api.etherscan.io/v2/api",
-        params={"chainid": 1, "module": "proxy", "action": "eth_blockNumber", "apikey": ETHERSCAN_KEY},
-        timeout=20,
-    )
-    result = r.json().get("result", "0x0")
+    data = etherscan_call({"module": "proxy", "action": "eth_blockNumber"})
+    result = data.get("result", "0x0")
     return int(result, 16)
 
 
 def fetch_logs(address, topic0, from_block, to_block):
-    params = {
-        "chainid": 1,
+    data = etherscan_call({
         "module": "logs",
         "action": "getLogs",
         "address": address,
         "topic0": topic0,
         "fromBlock": from_block,
         "toBlock": to_block,
-        "apikey": ETHERSCAN_KEY,
-    }
-    r = requests.get("https://api.etherscan.io/v2/api", params=params, timeout=30)
-    data = r.json()
+    }, timeout=30)
     result = data.get("result", [])
     if not isinstance(result, list):
         print("getLogs unexpected response:", data.get("message"), data.get("result"))
@@ -456,6 +466,11 @@ def main():
 
             if from_address in exchange_addresses or to_address in exchange_addresses:
                 print(f"Skipped (exchange, static list): {tx_hash}")
+                continue
+
+            if usd_value < ANALYZE_SWAP_MIN_USD:
+                # Too small to be worth an extra Etherscan call; also too
+                # small to meaningfully skew the accumulation total.
                 continue
 
             should_skip, swap_note = analyze_swap(tx_hash, contract, to_address)
