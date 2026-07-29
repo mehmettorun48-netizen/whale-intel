@@ -1,6 +1,6 @@
 {
   "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25641336,
+    "last_block": 25641422,
     "accumulation": {
       "0x0000000aa232009084bd71a5797d089aa4edfad4": {
         "total_usd": 1878.1039192196863,
@@ -2549,7 +2549,7 @@
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25641336,
+    "last_block": 25641422,
     "accumulation": {
       "0x488874f296df889b8299e698f269e1e1f0e2189f": {
         "total_usd": 17.386390833,
@@ -11454,7 +11454,7 @@
     }
   },
   "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25641336,
+    "last_block": 25641422,
     "accumulation": {
       "0xca4bc2199418b379400b3820ceb3c825b5552c6e": {
         "total_usd": 4049.5051895548,
@@ -11517,9 +11517,9 @@
         "count": 2
       },
       "0x111116053f09d34a7eae8102887004445176ca11": {
-        "total_usd": 769.9318641055532,
+        "total_usd": 1437.5152126849061,
         "since": 1785320044,
-        "count": 7
+        "count": 8
       },
       "0xcd6b980029e6e6e0733ac8ec3e02be9410d09799": {
         "total_usd": 0.003264007700582787,
@@ -11627,9 +11627,9 @@
         "count": 3
       },
       "0xfaa318479b7755b2dbfdd34dc306cb28b420ad12": {
-        "total_usd": 4504.775309247491,
-        "since": 1785320043,
-        "count": 48
+        "total_usd": 0.0,
+        "since": 1785363510,
+        "count": 0
       },
       "0x65fcb8ff4bd609ee317ce672c930d1d03147985a": {
         "total_usd": 12.812,
