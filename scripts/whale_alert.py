@@ -264,6 +264,51 @@ def update_cluster(state, token_contract, whale_address, usd_value):
     return distinct_count, c["total_usd"], newly_crossed
 
 
+def find_paid_token(receipt, target_token_address, payer_address):
+    """Given a swap tx, finds what OTHER token `payer_address` sent out in
+    the same tx (i.e. what they paid to acquire target_token_address)."""
+    logs = receipt.get("logs", [])
+    for log in logs:
+        topics = log.get("topics") or []
+        if len(topics) < 3 or topics[0] != TRANSFER_TOPIC:
+            continue
+        addr = (log.get("address") or "").lower()
+        if addr == target_token_address:
+            continue
+        from_addr = topic_to_address(topics[1])
+        if from_addr == payer_address:
+            return addr
+    return None
+
+
+def get_token_symbol_label(token_address):
+    """Best-effort human-readable symbol for a token address, without
+    failing hard if DexScreener doesn't know it."""
+    if token_address == WETH_ADDRESS:
+        return "WETH"
+    pair = check_dex_token(token_address)
+    if pair:
+        info, _ = resolve_token_info_from_pair(pair, token_address)
+        symbol = info.get("symbol")
+        if symbol:
+            return symbol
+    return token_address[:10] + "..."
+
+
+def describe_swap_counterparty(tx_hash, target_token_address, recipient_address):
+    """If this tx was an actual DEX swap, returns a Telegram-ready line
+    naming what the recipient paid to receive target_token_address.
+    Returns "" if it wasn't a swap or the counter-token couldn't be traced."""
+    receipt = get_tx_receipt(tx_hash)
+    if not receipt or not has_swap_event(receipt):
+        return ""
+    paid_address = find_paid_token(receipt, target_token_address, recipient_address)
+    if not paid_address:
+        return ""
+    paid_symbol = get_token_symbol_label(paid_address)
+    return f"DEX'te Karşılığında Verilen: {paid_symbol}\n"
+
+
 def main():
     state = load_state()
     tokens = load_tokens()
@@ -383,20 +428,24 @@ def main():
                 continue
 
             if usd_value >= LARGE_BUY_THRESHOLD_USD:
+                swap_note = describe_swap_counterparty(tx_hash, contract, to_address)
                 send_telegram(
                     f"🚨 <b>Büyük Cüzdan Hareketi</b>\n"
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
+                    f"{swap_note}"
                     f"Tx: https://etherscan.io/tx/{tx_hash}\n"
                     f"Grafik: https://dexscreener.com/ethereum/{contract}"
                 )
             elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
+                swap_note = describe_swap_counterparty(tx_hash, contract, to_address)
                 send_telegram(
                     f"🟢 <b>Cüzdan Hareketi</b>\n"
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
+                    f"{swap_note}"
                     f"Tx: https://etherscan.io/tx/{tx_hash}\n"
                     f"Grafik: https://dexscreener.com/ethereum/{contract}"
                 )
@@ -410,11 +459,13 @@ def main():
                 acc["total_usd"] += usd_value
                 acc["count"] += 1
                 if acc["total_usd"] >= ACCUMULATION_THRESHOLD_USD:
+                    swap_note = describe_swap_counterparty(tx_hash, contract, to_address)
                     send_telegram(
                         f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
                         f"Cüzdan: {to_address}\n"
                         f"Coin: {symbol}\n"
                         f"Toplam: ${acc['total_usd']:,.0f} ({acc['count']} işlemde)\n"
+                        f"{swap_note}"
                         f"Son Tx: https://etherscan.io/tx/{tx_hash}\n"
                         f"Grafik: https://dexscreener.com/ethereum/{contract}"
                     )
