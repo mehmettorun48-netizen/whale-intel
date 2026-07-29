@@ -1,6 +1,6 @@
 {
   "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25640825,
+    "last_block": 25641336,
     "accumulation": {
       "0x0000000aa232009084bd71a5797d089aa4edfad4": {
         "total_usd": 1878.1039192196863,
@@ -2549,7 +2549,7 @@
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25640825,
+    "last_block": 25641336,
     "accumulation": {
       "0x488874f296df889b8299e698f269e1e1f0e2189f": {
         "total_usd": 17.386390833,
@@ -3447,9 +3447,9 @@
         "count": 1
       },
       "0x111111125421ca6dc452d289314280a0f8842a65": {
-        "total_usd": 240.4904617061933,
+        "total_usd": 1743.0628589275254,
         "since": 1785278566,
-        "count": 4
+        "count": 6
       },
       "0x9025b8ff35ca44f7018c3a37fe0f69e63dbb0743": {
         "total_usd": 60.29668903796004,
@@ -11454,7 +11454,7 @@
     }
   },
   "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25640825,
+    "last_block": 25641336,
     "accumulation": {
       "0xca4bc2199418b379400b3820ceb3c825b5552c6e": {
         "total_usd": 4049.5051895548,
@@ -12222,9 +12222,9 @@
         "count": 13
       },
       "0xd6993e525fadb23971a20bbb057af9841eae076f": {
-        "total_usd": 996.3943659465428,
-        "since": 1785202260,
-        "count": 9
+        "total_usd": 101.52038354454399,
+        "since": 1785362571,
+        "count": 1
       },
       "0xe5bf60f229dd09b2b0928df9bd83c1abbd0b0e6f": {
         "total_usd": 11.247990738821645,
@@ -13242,8 +13242,8 @@
         "count": 4
       },
       "0x950fd558f47e234a2fde23b7d61f7ccdbcb4a86f": {
-        "total_usd": 79.61324140018915,
-        "since": 1785226004,
+        "total_usd": 101.52038354454399,
+        "since": 1785362571,
         "count": 1
       },
       "0xf239ccf1594fc47f8c5f29c965f4c3a2d09f6581": {
@@ -15274,6 +15274,11 @@
       "0xfcb4c38480da04bf7818c62c51c6e61dbc107439": {
         "total_usd": 14.0745138,
         "since": 1785320182,
+        "count": 1
+      },
+      "0xc42b7df84bc61ab7461b78ed4e81c1284e139024": {
+        "total_usd": 788.5212818823599,
+        "since": 1785362675,
         "count": 1
       }
     }
