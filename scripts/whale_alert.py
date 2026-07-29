@@ -25,23 +25,8 @@ ETHERSCAN_MIN_INTERVAL = 0.4  # seconds between calls -- Etherscan's free tier
 _last_etherscan_call = 0.0
 
 ANALYZE_SWAP_MIN_USD = 100  # below this, skip the extra receipt-fetch call
-# for directly-tracked tokens (LINK, UNI, etc.) -- too small to be worth the
-# API budget or to meaningfully affect the accumulation total.
-
-
-def etherscan_call(params, timeout=20):
-    """Single choke point for every Etherscan API request, so we can pace
-    them and never blow past the rate limit."""
-    global _last_etherscan_call
-    elapsed = time.time() - _last_etherscan_call
-    if elapsed < ETHERSCAN_MIN_INTERVAL:
-        time.sleep(ETHERSCAN_MIN_INTERVAL - elapsed)
-    full_params = dict(params)
-    full_params.setdefault("chainid", 1)
-    full_params["apikey"] = ETHERSCAN_KEY
-    _last_etherscan_call = time.time()
-    r = requests.get("https://api.etherscan.io/v2/api", params=full_params, timeout=timeout)
-    return r.json()
+# for directly-tracked tokens -- too small to be worth the API budget or to
+# meaningfully affect the accumulation total.
 
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
@@ -53,22 +38,61 @@ CLUSTER_TIERS = [
 ]
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2".lower()
 
 V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
 V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
 CURVE_EXCHANGE_TOPIC = "0x8b3e96f2b889fa771c53c981b40daf005f63f637f1869f707052d15a3dd97140"
 # Covers Uniswap V2, Uniswap V3, and every fork that reuses their Swap event
-# signature (Sushiswap, etc.), plus Curve pools. Does NOT cover Balancer,
-# 0x/1inch's own settlement events, or other AMM designs with different
-# event signatures -- those would need their own verified topic hashes.
+# signature (Sushiswap, PancakeSwap V2/V3 on BSC, etc.), plus Curve pools.
+# Does NOT cover Balancer, 0x/1inch's own settlement events, or other AMM
+# designs with different event signatures -- those would need their own
+# verified topic hashes.
 SWAP_TOPICS = (V2_SWAP_TOPIC, V3_SWAP_TOPIC, CURVE_EXCHANGE_TOPIC)
+
+# Per-chain configuration. Adding a new EVM chain is just adding an entry
+# here (as long as Etherscan's v2 API and DexScreener both support it).
+CHAINS = {
+    "ethereum": {
+        "chain_id": 1,
+        "native_wrapped_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "native_wrapped_symbol": "WETH",
+        "dexscreener_id": "ethereum",
+        "coingecko_platform": "ethereum",
+        "explorer": "https://etherscan.io",
+    },
+    "bsc": {
+        "chain_id": 56,
+        "native_wrapped_address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+        "native_wrapped_symbol": "WBNB",
+        "dexscreener_id": "bsc",
+        "coingecko_platform": "binance-smart-chain",
+        "explorer": "https://bscscan.com",
+    },
+}
 
 STATE_FILE = "data/state.json"
 TOKENS_FILE = "config/tokens.txt"
 EXCHANGES_FILE = "config/exchanges.txt"
 
 _price_cache = {}
+_receipt_cache = {}
+_token_pair_cache = {}
+
+
+def etherscan_call(chain_id, params, timeout=20):
+    """Single choke point for every Etherscan API request, so we can pace
+    them and never blow past the rate limit (shared across all chains,
+    since it's the same account/key)."""
+    global _last_etherscan_call
+    elapsed = time.time() - _last_etherscan_call
+    if elapsed < ETHERSCAN_MIN_INTERVAL:
+        time.sleep(ETHERSCAN_MIN_INTERVAL - elapsed)
+    full_params = dict(params)
+    full_params["chainid"] = chain_id
+    full_params["apikey"] = ETHERSCAN_KEY
+    _last_etherscan_call = time.time()
+    r = requests.get("https://api.etherscan.io/v2/api", params=full_params, timeout=timeout)
+    return r.json()
 
 
 def load_state():
@@ -82,6 +106,8 @@ def save_state(state):
 
 
 def load_tokens():
+    """Format: chain,address,symbol,decimals -- e.g.
+    ethereum,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,WETH,18"""
     items = []
     with open(TOKENS_FILE, "r") as f:
         for line in f:
@@ -89,8 +115,11 @@ def load_tokens():
             if not line or line.startswith("#"):
                 continue
             parts = [p.strip() for p in line.split(",")]
-            address, symbol, decimals = parts[0], parts[1], int(parts[2])
-            items.append((address.lower(), symbol, decimals))
+            chain, address, symbol, decimals = parts[0].lower(), parts[1], parts[2], int(parts[3])
+            if chain not in CHAINS:
+                print(f"Skipping token on unknown chain '{chain}': {line}")
+                continue
+            items.append((chain, address.lower(), symbol, decimals))
     return items
 
 
@@ -113,13 +142,14 @@ def send_telegram(text):
         print("Telegram error:", resp.text)
 
 
-def get_token_price_usd(contract_address):
-    if contract_address in _price_cache:
-        return _price_cache[contract_address]
+def get_token_price_usd(coingecko_platform, contract_address):
+    cache_key = (coingecko_platform, contract_address)
+    if cache_key in _price_cache:
+        return _price_cache[cache_key]
     price = 0.0
     try:
         r = requests.get(
-            "https://api.coingecko.com/api/v3/simple/token_price/ethereum",
+            f"https://api.coingecko.com/api/v3/simple/token_price/{coingecko_platform}",
             params={"contract_addresses": contract_address, "vs_currencies": "usd"},
             timeout=15,
         )
@@ -127,22 +157,20 @@ def get_token_price_usd(contract_address):
         price = float(data.get(contract_address.lower(), {}).get("usd", 0) or 0)
     except Exception as e:
         print("Price fetch error:", e)
-    _price_cache[contract_address] = price
+    _price_cache[cache_key] = price
     return price
 
 
-_receipt_cache = {}
-
-
-def get_tx_receipt(tx_hash):
+def get_tx_receipt(chain_id, tx_hash):
     """Fetches (and caches) the full transaction receipt, including all logs
     and the tx sender. Used both to confirm a real swap happened and to find
     which token the whale actually ended up receiving."""
-    if tx_hash in _receipt_cache:
-        return _receipt_cache[tx_hash]
+    cache_key = (chain_id, tx_hash)
+    if cache_key in _receipt_cache:
+        return _receipt_cache[cache_key]
     result = {}
     try:
-        data = etherscan_call({
+        data = etherscan_call(chain_id, {
             "module": "proxy",
             "action": "eth_getTransactionReceipt",
             "txhash": tx_hash,
@@ -154,15 +182,14 @@ def get_tx_receipt(tx_hash):
             print(f"Receipt fetch returned non-dict result for {tx_hash}: {raw_result}")
     except Exception as e:
         print("Receipt fetch error:", e)
-    _receipt_cache[tx_hash] = result
+    _receipt_cache[cache_key] = result
     return result
 
 
 def has_swap_event(receipt):
-    """Confirms this transaction contains an actual Uniswap V2/V3 Swap event,
-    not just a WETH transfer that happens to pass through a DEX-adjacent
-    address (which also happens on liquidity add/remove -- those are NOT
-    purchases)."""
+    """Confirms this transaction contains an actual DEX Swap event, not just
+    a token transfer that happens to pass through a DEX-adjacent address
+    (which also happens on liquidity add/remove -- those are NOT purchases)."""
     logs = receipt.get("logs", [])
     for log in logs:
         topic0 = (log.get("topics") or [""])[0]
@@ -188,13 +215,13 @@ def is_batch_settlement(receipt):
     return len(tokens) > MAX_DISTINCT_TOKENS_PER_SWAP
 
 
-def find_bought_token_address(receipt, weth_address):
+def find_bought_token_address(receipt, native_wrapped_address):
     """Finds which ERC20 token the whale actually received in this tx, by
     looking at every Transfer log in the receipt (in order) and taking the
-    LAST one that isn't WETH. This works regardless of whether the swap went
-    straight to a pool or was routed through an aggregator/router contract --
-    the final leg of any swap is always a Transfer of the output token, so
-    this is far more reliable than assuming WETH's recipient IS the pool."""
+    LAST one that isn't the chain's wrapped native token. This works
+    regardless of whether the swap went straight to a pool or was routed
+    through an aggregator/router contract -- the final leg of any swap is
+    always a Transfer of the output token."""
     logs = receipt.get("logs", [])
     bought_address = None
     for log in logs:
@@ -202,21 +229,18 @@ def find_bought_token_address(receipt, weth_address):
         if not topics or topics[0] != TRANSFER_TOPIC:
             continue
         addr = (log.get("address") or "").lower()
-        if addr == weth_address:
+        if addr == native_wrapped_address:
             continue
         bought_address = addr
     return bought_address
 
 
-_token_pair_cache = {}
-
-
-def check_dex_token(token_address):
+def check_dex_token(dexscreener_id, token_address):
     """Looks up DexScreener pairs by the TOKEN's contract address (not a pool
-    address). This is robust to any routing path since we already know the
-    exact token from find_bought_token_address."""
-    if token_address in _token_pair_cache:
-        return _token_pair_cache[token_address]
+    address), filtered to the right chain."""
+    cache_key = (dexscreener_id, token_address)
+    if cache_key in _token_pair_cache:
+        return _token_pair_cache[cache_key]
     result = None
     try:
         r = requests.get(
@@ -224,13 +248,13 @@ def check_dex_token(token_address):
             timeout=15,
         )
         data = r.json()
-        pairs = [p for p in (data.get("pairs") or []) if p.get("chainId") == "ethereum"]
+        pairs = [p for p in (data.get("pairs") or []) if p.get("chainId") == dexscreener_id]
         if pairs:
             pairs.sort(key=lambda p: (p.get("liquidity", {}) or {}).get("usd", 0) or 0, reverse=True)
             result = pairs[0]
     except Exception as e:
         print("DexScreener token lookup error:", e)
-    _token_pair_cache[token_address] = result
+    _token_pair_cache[cache_key] = result
     return result
 
 
@@ -253,14 +277,14 @@ def resolve_token_info_from_pair(pair, token_address):
     return {}, 0.0
 
 
-def get_latest_block():
-    data = etherscan_call({"module": "proxy", "action": "eth_blockNumber"})
+def get_latest_block(chain_id):
+    data = etherscan_call(chain_id, {"module": "proxy", "action": "eth_blockNumber"})
     result = data.get("result", "0x0")
     return int(result, 16)
 
 
-def fetch_logs(address, topic0, from_block, to_block):
-    data = etherscan_call({
+def fetch_logs(chain_id, address, topic0, from_block, to_block):
+    data = etherscan_call(chain_id, {
         "module": "logs",
         "action": "getLogs",
         "address": address,
@@ -279,9 +303,9 @@ def topic_to_address(topic_hex):
     return "0x" + topic_hex[-40:]
 
 
-def update_cluster(state, token_contract, whale_address, usd_value):
+def update_cluster(state, cluster_key, whale_address, usd_value):
     clusters = state.setdefault("clusters", {})
-    c = clusters.setdefault(token_contract, {"whales": {}, "total_usd": 0.0, "last_tier": 0})
+    c = clusters.setdefault(cluster_key, {"whales": {}, "total_usd": 0.0, "last_tier": 0})
 
     now = int(time.time())
     c["whales"][whale_address] = now
@@ -318,12 +342,12 @@ def find_paid_token(receipt, target_token_address, payer_address):
     return None
 
 
-def get_token_symbol_label(token_address):
+def get_token_symbol_label(chain_cfg, token_address):
     """Best-effort human-readable symbol for a token address, without
     failing hard if DexScreener doesn't know it."""
-    if token_address == WETH_ADDRESS:
-        return "WETH"
-    pair = check_dex_token(token_address)
+    if token_address == chain_cfg["native_wrapped_address"]:
+        return chain_cfg["native_wrapped_symbol"]
+    pair = check_dex_token(chain_cfg["dexscreener_id"], token_address)
     if pair:
         info, _ = resolve_token_info_from_pair(pair, token_address)
         symbol = info.get("symbol")
@@ -332,23 +356,29 @@ def get_token_symbol_label(token_address):
     return token_address[:10] + "..."
 
 
-def analyze_swap(tx_hash, target_token_address, recipient_address):
-    """For a plain (non-WETH-triggered) tracked-token transfer, checks
-    whether it was part of a real DEX swap. Only real, single-whale swaps
-    should generate alerts -- plain transfers (deposits, withdrawals,
-    wallet-to-wallet, OTC, etc.) and batch/aggregated settlements are all
-    skipped since they aren't DEX purchases. Returns (should_skip, note)."""
-    receipt = get_tx_receipt(tx_hash)
+def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
+    """For a plain (non-native-wrapped-triggered) tracked-token transfer,
+    checks whether it was part of a real DEX swap AND whether the tracked
+    token actually ended up with the real trader (a BUY) rather than flowing
+    into a pool/router (a SELL of the tracked token -- not what we want to
+    alert on). Returns (should_skip, note)."""
+    receipt = get_tx_receipt(chain_cfg["chain_id"], tx_hash)
     if not receipt or not has_swap_event(receipt):
         return True, ""  # not a swap at all -- nothing to alert on
 
     if is_batch_settlement(receipt):
         return True, ""  # can't attribute to one whale, skip alerting entirely
 
+    whale = (receipt.get("from") or "").lower()
+    if not whale or recipient_address != whale:
+        # The tracked token went to a pool/router, not the actual trader --
+        # this is a SELL of the tracked token, not a buy. Not interesting.
+        return True, ""
+
     paid_address = find_paid_token(receipt, target_token_address, recipient_address)
     if not paid_address:
         return False, "⚠️ DEX swap'ı ama karşılığı tespit edilemedi\n"
-    paid_symbol = get_token_symbol_label(paid_address)
+    paid_symbol = get_token_symbol_label(chain_cfg, paid_address)
     return False, f"DEX'te Karşılığında Verilen: {paid_symbol}\n"
 
 
@@ -357,18 +387,27 @@ def main():
     tokens = load_tokens()
     exchange_addresses = load_exchanges()
 
-    latest_block = get_latest_block()
-    print(f"Latest block: {latest_block}, loaded {len(tokens)} tokens, {len(exchange_addresses)} exchange addresses")
+    chains_in_use = sorted({t[0] for t in tokens})
+    latest_blocks = {chain: get_latest_block(CHAINS[chain]["chain_id"]) for chain in chains_in_use}
+    print(f"Loaded {len(tokens)} tokens across chains {chains_in_use}, {len(exchange_addresses)} exchange addresses")
 
-    for contract, symbol, decimals in tokens:
-        tstate = state.setdefault(contract, {"last_block": None, "accumulation": {}})
+    for chain, contract, symbol, decimals in tokens:
+        chain_cfg = CHAINS[chain]
+        latest_block = latest_blocks[chain]
+        explorer = chain_cfg["explorer"]
+        dex_id = chain_cfg["dexscreener_id"]
+
+        state_key = f"{chain}:{contract}"
+        tstate = state.setdefault(state_key, {"last_block": None, "accumulation": {}})
         from_block = tstate["last_block"] + 1 if tstate["last_block"] else latest_block - FIRST_RUN_BLOCK_LOOKBACK
 
-        logs = fetch_logs(contract, TRANSFER_TOPIC, from_block, latest_block)
-        print(f"{symbol}: scanned blocks {from_block}-{latest_block}, found {len(logs)} transfer logs")
+        logs = fetch_logs(chain_cfg["chain_id"], contract, TRANSFER_TOPIC, from_block, latest_block)
+        print(f"[{chain}] {symbol}: scanned blocks {from_block}-{latest_block}, found {len(logs)} transfer logs")
 
-        price = get_token_price_usd(contract)
-        print(f"{symbol}: price=${price}")
+        price = get_token_price_usd(chain_cfg["coingecko_platform"], contract)
+        print(f"[{chain}] {symbol}: price=${price}")
+
+        is_native_wrapped = contract == chain_cfg["native_wrapped_address"]
 
         for log in logs:
             topics = log.get("topics", [])
@@ -387,21 +426,19 @@ def main():
             if usd_value <= 0:
                 continue
 
-            if symbol == "WETH":
+            if is_native_wrapped:
                 if usd_value < SINGLE_BUY_THRESHOLD_USD:
                     continue
 
-                receipt = get_tx_receipt(tx_hash)
+                receipt = get_tx_receipt(chain_cfg["chain_id"], tx_hash)
                 if not receipt or not has_swap_event(receipt):
-                    # Plain WETH transfer (deposit, wallet consolidation, etc.) --
-                    # not a purchase of anything, so there's no "which coin" to report.
                     continue
 
                 if is_batch_settlement(receipt):
                     print(f"Skipped (batch/aggregated settlement, not a single whale trade): {tx_hash}")
                     continue
 
-                bought_address = find_bought_token_address(receipt, WETH_ADDRESS)
+                bought_address = find_bought_token_address(receipt, chain_cfg["native_wrapped_address"])
                 if not bought_address:
                     print(f"Skipped (swap detected but couldn't trace bought token): {tx_hash}")
                     continue
@@ -410,7 +447,7 @@ def main():
                 if not whale or whale in exchange_addresses:
                     continue
 
-                pair = check_dex_token(bought_address)
+                pair = check_dex_token(dex_id, bought_address)
                 if pair:
                     info, token_price = resolve_token_info_from_pair(pair, bought_address)
                     bought_symbol = info.get("symbol", "???")
@@ -419,8 +456,6 @@ def main():
                     mcap = pair.get("marketCap") or pair.get("fdv") or 0
                     liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
                 else:
-                    # Token so new DexScreener hasn't indexed it yet -- still
-                    # worth alerting on, just without market data.
                     token_price = 0.0
                     bought_symbol = "???"
                     bought_name = "Bilinmiyor (DexScreener'da henüz yok)"
@@ -442,7 +477,7 @@ def main():
                     header = "Yeni Balina Alımı"
 
                 send_telegram(
-                    f"{priority} <b>{header}</b>\n\n"
+                    f"{priority} <b>{header}</b> [{chain.upper()}]\n\n"
                     f"<pre>"
                     f"Satın Alınan Coin: {bought_name} ({bought_symbol})\n"
                     f"Kontrat: {bought_address}\n\n"
@@ -454,19 +489,19 @@ def main():
                     f"DEX: {dex_name}"
                     f"</pre>\n"
                     f"Balina: {whale}\n"
-                    f"Tx: https://etherscan.io/tx/{tx_hash}\n"
-                    f"Grafik: https://dexscreener.com/ethereum/{bought_address}"
+                    f"Tx: {explorer}/tx/{tx_hash}\n"
+                    f"Grafik: https://dexscreener.com/{dex_id}/{bought_address}"
                 )
 
-                count, total_usd, tier_label = update_cluster(state, bought_address, whale, usd_value)
+                count, total_usd, tier_label = update_cluster(state, f"{chain}:{bought_address}", whale, usd_value)
                 if tier_label:
                     send_telegram(
-                        f"{tier_label}\n\n"
+                        f"{tier_label} [{chain.upper()}]\n\n"
                         f"Coin: {bought_name} ({bought_symbol})\n"
                         f"Kontrat: {bought_address}\n"
                         f"Farklı Balina Sayısı: {count}\n"
                         f"Toplam Alım: ${total_usd:,.0f}\n"
-                        f"Grafik: https://dexscreener.com/ethereum/{bought_address}"
+                        f"Grafik: https://dexscreener.com/{dex_id}/{bought_address}"
                     )
                 continue
 
@@ -475,34 +510,32 @@ def main():
                 continue
 
             if usd_value < ANALYZE_SWAP_MIN_USD:
-                # Too small to be worth an extra Etherscan call; also too
-                # small to meaningfully skew the accumulation total.
                 continue
 
-            should_skip, swap_note = analyze_swap(tx_hash, contract, to_address)
+            should_skip, swap_note = analyze_swap(chain_cfg, tx_hash, contract, to_address)
             if should_skip:
-                print(f"Skipped (not a real single-whale DEX swap): {tx_hash}")
+                print(f"Skipped (not a real single-whale DEX buy): {tx_hash}")
                 continue
 
             if usd_value >= LARGE_BUY_THRESHOLD_USD:
                 send_telegram(
-                    f"🚨 <b>Büyük Cüzdan Hareketi</b>\n"
+                    f"🚨 <b>Büyük Cüzdan Hareketi</b> [{chain.upper()}]\n"
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
                     f"{swap_note}"
-                    f"Tx: https://etherscan.io/tx/{tx_hash}\n"
-                    f"Grafik: https://dexscreener.com/ethereum/{contract}"
+                    f"Tx: {explorer}/tx/{tx_hash}\n"
+                    f"Grafik: https://dexscreener.com/{dex_id}/{contract}"
                 )
             elif usd_value >= SINGLE_BUY_THRESHOLD_USD:
                 send_telegram(
-                    f"🟢 <b>Cüzdan Hareketi</b>\n"
+                    f"🟢 <b>Cüzdan Hareketi</b> [{chain.upper()}]\n"
                     f"Cüzdan: {to_address}\n"
                     f"Coin: {symbol}\n"
                     f"Miktar: {amount:,.2f} (${usd_value:,.0f})\n"
                     f"{swap_note}"
-                    f"Tx: https://etherscan.io/tx/{tx_hash}\n"
-                    f"Grafik: https://dexscreener.com/ethereum/{contract}"
+                    f"Tx: {explorer}/tx/{tx_hash}\n"
+                    f"Grafik: https://dexscreener.com/{dex_id}/{contract}"
                 )
             else:
                 now = int(time.time())
@@ -515,13 +548,13 @@ def main():
                 acc["count"] += 1
                 if acc["total_usd"] >= ACCUMULATION_THRESHOLD_USD:
                     send_telegram(
-                        f"🟡 <b>Parça Parça Birikim Tespit Edildi</b>\n"
+                        f"🟡 <b>Parça Parça Birikim Tespit Edildi</b> [{chain.upper()}]\n"
                         f"Cüzdan: {to_address}\n"
                         f"Coin: {symbol}\n"
                         f"Toplam: ${acc['total_usd']:,.0f} ({acc['count']} işlemde)\n"
                         f"{swap_note}"
-                        f"Son Tx: https://etherscan.io/tx/{tx_hash}\n"
-                        f"Grafik: https://dexscreener.com/ethereum/{contract}"
+                        f"Son Tx: {explorer}/tx/{tx_hash}\n"
+                        f"Grafik: https://dexscreener.com/{dex_id}/{contract}"
                     )
                     acc["total_usd"] = 0.0
                     acc["since"] = now
