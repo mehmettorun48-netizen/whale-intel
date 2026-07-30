@@ -215,24 +215,87 @@ def is_batch_settlement(receipt):
     return len(tokens) > MAX_DISTINCT_TOKENS_PER_SWAP
 
 
-def find_bought_token_address(receipt, native_wrapped_address):
-    """Finds which ERC20 token the whale actually received in this tx, by
-    looking at every Transfer log in the receipt (in order) and taking the
-    LAST one that isn't the chain's wrapped native token. This works
-    regardless of whether the swap went straight to a pool or was routed
-    through an aggregator/router contract -- the final leg of any swap is
-    always a Transfer of the output token."""
+def find_bought_transfer(receipt, native_wrapped_address):
+    """Finds the LAST Transfer log in the receipt whose token isn't the
+    chain's wrapped native token. Returns (token_address, recipient, raw_amount).
+    This works regardless of whether the swap went straight to a pool or was
+    routed through an aggregator/router/solver -- the final leg of any swap
+    is always a Transfer of the output token to whoever actually receives it,
+    which is more reliable than assuming tx.from is the real trader (that's
+    false for CoW Protocol, 1inch Fusion, and other intent-based DEXes where
+    a solver -- not the user -- submits the transaction)."""
     logs = receipt.get("logs", [])
-    bought_address = None
+    bought_address, recipient, raw_amount = None, None, 0
     for log in logs:
         topics = log.get("topics") or []
-        if not topics or topics[0] != TRANSFER_TOPIC:
+        if not topics or topics[0] != TRANSFER_TOPIC or len(topics) < 3:
             continue
         addr = (log.get("address") or "").lower()
         if addr == native_wrapped_address:
             continue
         bought_address = addr
-    return bought_address
+        recipient = topic_to_address(topics[2])
+        try:
+            raw_amount = int(log.get("data", "0x0"), 16)
+        except ValueError:
+            raw_amount = 0
+    return bought_address, recipient, raw_amount
+
+
+_decimals_cache = {}
+
+
+def get_token_decimals(chain_id, token_address):
+    """Reads a token's decimals() directly from the contract via eth_call,
+    for tokens we discover dynamically (not pre-configured in tokens.txt)."""
+    cache_key = (chain_id, token_address)
+    if cache_key in _decimals_cache:
+        return _decimals_cache[cache_key]
+    decimals = 18
+    try:
+        data = etherscan_call(chain_id, {
+            "module": "proxy",
+            "action": "eth_call",
+            "to": token_address,
+            "data": "0x313ce567",
+            "tag": "latest",
+        })
+        result = data.get("result")
+        if isinstance(result, str) and result.startswith("0x") and result != "0x":
+            decimals = int(result, 16)
+    except Exception as e:
+        print("Decimals fetch error:", e)
+    _decimals_cache[cache_key] = decimals
+    return decimals
+
+
+_pool_address_cache = {}
+
+
+def get_dex_pool_addresses(dexscreener_id, token_address):
+    """Returns the set of known AMM pool/pair contract addresses for a token,
+    so we can tell a real trader apart from pool infrastructure. Needed
+    because a pool receiving a token (someone selling INTO it) looks
+    identical, at the single-Transfer-log level, to a whale receiving it."""
+    cache_key = (dexscreener_id, token_address)
+    if cache_key in _pool_address_cache:
+        return _pool_address_cache[cache_key]
+    result = set()
+    try:
+        r = requests.get(
+            f"https://api.dexscreener.com/latest/dex/tokens/{token_address}",
+            timeout=15,
+        )
+        data = r.json()
+        for p in (data.get("pairs") or []):
+            if p.get("chainId") == dexscreener_id:
+                addr = (p.get("pairAddress") or "").lower()
+                if addr:
+                    result.add(addr)
+    except Exception as e:
+        print("DexScreener pool-address lookup error:", e)
+    _pool_address_cache[cache_key] = result
+    return result
 
 
 def check_dex_token(dexscreener_id, token_address):
@@ -359,9 +422,11 @@ def get_token_symbol_label(chain_cfg, token_address):
 def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
     """For a plain (non-native-wrapped-triggered) tracked-token transfer,
     checks whether it was part of a real DEX swap AND whether the tracked
-    token actually ended up with the real trader (a BUY) rather than flowing
-    into a pool/router (a SELL of the tracked token -- not what we want to
-    alert on). Returns (should_skip, note)."""
+    token actually ended up with a real trader (a BUY) rather than flowing
+    into a pool (a SELL of the tracked token -- not what we want to alert
+    on). Uses known pool addresses rather than tx.from, since tx.from is a
+    solver/relayer -- not the actual trader -- on intent-based DEXes like
+    CoW Protocol or 1inch Fusion. Returns (should_skip, note)."""
     receipt = get_tx_receipt(chain_cfg["chain_id"], tx_hash)
     if not receipt or not has_swap_event(receipt):
         return True, ""  # not a swap at all -- nothing to alert on
@@ -369,10 +434,9 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
     if is_batch_settlement(receipt):
         return True, ""  # can't attribute to one whale, skip alerting entirely
 
-    whale = (receipt.get("from") or "").lower()
-    if not whale or recipient_address != whale:
-        # The tracked token went to a pool/router, not the actual trader --
-        # this is a SELL of the tracked token, not a buy. Not interesting.
+    pool_addresses = get_dex_pool_addresses(chain_cfg["dexscreener_id"], target_token_address)
+    if recipient_address in pool_addresses:
+        # The tracked token went INTO a pool -- someone sold it, not a buy.
         return True, ""
 
     paid_address = find_paid_token(receipt, target_token_address, recipient_address)
@@ -389,6 +453,9 @@ def main():
 
     chains_in_use = sorted({t[0] for t in tokens})
     latest_blocks = {chain: get_latest_block(CHAINS[chain]["chain_id"]) for chain in chains_in_use}
+    tracked_by_chain = {}
+    for t_chain, t_contract, _, _ in tokens:
+        tracked_by_chain.setdefault(t_chain, set()).add(t_contract)
     print(f"Loaded {len(tokens)} tokens across chains {chains_in_use}, {len(exchange_addresses)} exchange addresses")
 
     for chain, contract, symbol, decimals in tokens:
@@ -438,13 +505,28 @@ def main():
                     print(f"Skipped (batch/aggregated settlement, not a single whale trade): {tx_hash}")
                     continue
 
-                bought_address = find_bought_token_address(receipt, chain_cfg["native_wrapped_address"])
-                if not bought_address:
+                bought_address, whale, raw_bought_amount = find_bought_transfer(
+                    receipt, chain_cfg["native_wrapped_address"]
+                )
+                if not bought_address or not whale:
                     print(f"Skipped (swap detected but couldn't trace bought token): {tx_hash}")
                     continue
 
-                whale = (receipt.get("from") or "").lower()
+                if bought_address in tracked_by_chain.get(chain, set()):
+                    # Already directly tracked as its own token entry -- that
+                    # branch handles it (more accurately, since it isn't
+                    # anchored to this particular native-token leg of a
+                    # multi-hop route). Avoid a duplicate/inconsistent alert.
+                    continue
+
                 if not whale or whale in exchange_addresses:
+                    continue
+
+                pool_addresses = get_dex_pool_addresses(dex_id, bought_address)
+                if whale in pool_addresses:
+                    # The bought token actually went to a pool, not a real
+                    # trader (e.g. this native-token leg was really someone
+                    # else selling bought_address into liquidity).
                     continue
 
                 pair = check_dex_token(dex_id, bought_address)
@@ -463,13 +545,28 @@ def main():
                     mcap = 0
                     liquidity = 0
 
-                received_amount = (usd_value / token_price) if token_price > 0 else 0
+                # Compute the REAL received amount/USD value from the bought
+                # token's own transfer + decimals, not from whichever native-
+                # token leg happened to trigger this scan -- on multi-hop
+                # routes (e.g. USDC->WETH->TOKEN) that leg's value can be
+                # very different from the whale's actual total spend.
+                bought_decimals = get_token_decimals(chain_cfg["chain_id"], bought_address)
+                received_amount = raw_bought_amount / (10 ** bought_decimals)
+                accurate_usd_value = received_amount * token_price if token_price > 0 else usd_value
+                if accurate_usd_value < SINGLE_BUY_THRESHOLD_USD:
+                    # The native-token leg looked big, but the whale's actual
+                    # total buy (once traced properly) doesn't clear the bar.
+                    continue
+
+                paid_address = find_paid_token(receipt, bought_address, whale)
+                paid_symbol = get_token_symbol_label(chain_cfg, paid_address) if paid_address else None
+                paid_line = f"Karşılığında Verilen: {paid_symbol}\n" if paid_symbol else ""
 
                 is_low_cap = mcap == 0 or mcap < LOW_CAP_THRESHOLD_USD
                 if is_low_cap:
                     priority = "🔥"
                     header = "ERKEN BALİNA - DÜŞÜK CAP"
-                elif usd_value >= LARGE_BUY_THRESHOLD_USD:
+                elif accurate_usd_value >= LARGE_BUY_THRESHOLD_USD:
                     priority = "🚨"
                     header = "Yeni Balina Alımı"
                 else:
@@ -481,9 +578,10 @@ def main():
                     f"<pre>"
                     f"Satın Alınan Coin: {bought_name} ({bought_symbol})\n"
                     f"Kontrat: {bought_address}\n\n"
-                    f"Alınan: {received_amount:,.2f} {bought_symbol}\n"
-                    f"USD: ${usd_value:,.0f}\n\n"
-                    f"Fiyat: ${token_price:.8f}\n"
+                    f"Alınan: {received_amount:,.4f} {bought_symbol}\n"
+                    f"USD: ${accurate_usd_value:,.0f}\n"
+                    f"{paid_line}"
+                    f"\nFiyat: ${token_price:.8f}\n"
                     f"Market Cap: ${mcap:,.0f}\n"
                     f"Likidite: ${liquidity:,.0f}\n"
                     f"DEX: {dex_name}"
@@ -493,7 +591,7 @@ def main():
                     f"Grafik: https://dexscreener.com/{dex_id}/{bought_address}"
                 )
 
-                count, total_usd, tier_label = update_cluster(state, f"{chain}:{bought_address}", whale, usd_value)
+                count, total_usd, tier_label = update_cluster(state, f"{chain}:{bought_address}", whale, accurate_usd_value)
                 if tier_label:
                     send_telegram(
                         f"{tier_label} [{chain.upper()}]\n\n"
