@@ -7,7 +7,7 @@ ETHERSCAN_KEY = os.environ["ETHERSCAN_API_KEY"]
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
-SINGLE_BUY_THRESHOLD_USD = 1500
+SINGLE_BUY_THRESHOLD_USD = 1000
 LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
@@ -18,7 +18,7 @@ MAX_DISTINCT_TOKENS_PER_SWAP = 4  # more than this = likely a batch/aggregated
 # settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
 # not a single whale's swap, and not reliably attributable to one wallet.
 
-ETHERSCAN_MIN_INTERVAL = 0.4  # seconds between calls -- Etherscan's free tier
+ETHERSCAN_MIN_INTERVAL = 0.5  # seconds between calls -- Etherscan's free tier
 # allows only ~3 requests/sec; without pacing, a busy run fires dozens of
 # receipt lookups back-to-back and most of them get rejected with a rate
 # limit error, which then looks like "no swap found" everywhere.
@@ -346,7 +346,13 @@ def get_latest_block(chain_id):
     return int(result, 16)
 
 
-def fetch_logs(chain_id, address, topic0, from_block, to_block):
+def fetch_logs(chain_id, address, topic0, from_block, to_block, _depth=0):
+    """Etherscan's getLogs caps out at 1000 results per call. If we hit that
+    cap, it means there's more data we haven't seen -- so we split the block
+    range in half and fetch each half separately, recursively, until every
+    chunk comes back under the cap. Without this, busy tokens (like WETH)
+    silently lose whatever transfers happened to fall past the 1000th log,
+    which could easily be the exact whale buy we're looking for."""
     data = etherscan_call(chain_id, {
         "module": "logs",
         "action": "getLogs",
@@ -359,6 +365,14 @@ def fetch_logs(chain_id, address, topic0, from_block, to_block):
     if not isinstance(result, list):
         print("getLogs unexpected response:", data.get("message"), data.get("result"))
         return []
+
+    if len(result) >= 1000 and from_block < to_block and _depth < 20:
+        mid = (from_block + to_block) // 2
+        print(f"Hit 1000-log cap for blocks {from_block}-{to_block}, splitting at {mid}")
+        left = fetch_logs(chain_id, address, topic0, from_block, mid, _depth + 1)
+        right = fetch_logs(chain_id, address, topic0, mid + 1, to_block, _depth + 1)
+        return left + right
+
     return result
 
 
