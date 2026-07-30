@@ -559,8 +559,22 @@ def main():
                     continue
 
                 paid_address = find_paid_token(receipt, bought_address, whale)
-                paid_symbol = get_token_symbol_label(chain_cfg, paid_address) if paid_address else None
-                paid_line = f"Karşılığında Verilen: {paid_symbol}\n" if paid_symbol else ""
+                if not paid_address:
+                    # Couldn't confirm this whale actually paid something to
+                    # receive the token -- likely not a genuine swap for this
+                    # address (e.g. a bridge withdrawal, fee transfer, or
+                    # relayer/settlement contract doing something unrelated).
+                    print(f"Skipped (couldn't confirm a two-sided trade for the whale): {tx_hash}")
+                    continue
+                paid_symbol = get_token_symbol_label(chain_cfg, paid_address)
+                paid_line = f"Karşılığında Verilen: {paid_symbol}\n"
+
+                if token_price <= 0:
+                    # No real price/liquidity data -- too unreliable to alert
+                    # on (this is also what a bridge/withdrawal-mangled token
+                    # lookup looks like).
+                    print(f"Skipped (no price data for bought token, unreliable): {tx_hash}")
+                    continue
 
                 is_low_cap = mcap == 0 or mcap < LOW_CAP_THRESHOLD_USD
                 if is_low_cap:
