@@ -14,9 +14,12 @@ ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
 LOW_CAP_THRESHOLD_USD = 500_000  # market cap below this = "yeni/düşük cap coin"
 
-MAX_DISTINCT_TOKENS_PER_SWAP = 4  # more than this = likely a batch/aggregated
+MAX_DISTINCT_TOKENS_PER_SWAP = 7  # more than this = likely a batch/aggregated
 # settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
 # not a single whale's swap, and not reliably attributable to one wallet.
+# Kept generous because single-user aggregator routes (1inch/Paraswap/0x
+# splitting one trade across several pools) can legitimately touch 5-6
+# distinct tokens without being a multi-user batch.
 
 ETHERSCAN_MIN_INTERVAL = 0.5  # seconds between calls -- Etherscan's free tier
 # allows only ~3 requests/sec; without pacing, a busy run fires dozens of
