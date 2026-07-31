@@ -272,6 +272,118 @@ def get_token_decimals(chain_id, token_address):
 _pool_address_cache = {}
 
 
+# ---------------------------------------------------------------------------
+# Infrastructure-token classifier
+#
+# Goal: tell a genuine tradeable altcoin/memecoin apart from DeFi
+# infrastructure tokens (liquid staking, liquid restaking, wrapped assets,
+# synthetic assets, stablecoins, yield/vault tokens, receipt tokens, etc.)
+# WITHOUT a per-symbol blacklist, so it keeps working on tokens that don't
+# exist yet. Two independent signals are combined:
+#
+#   1. On-chain contract behavior (ERC4626 vaults expose asset(); wrapped/
+#      receipt tokens commonly expose underlying()). This looks at what the
+#      contract actually IS, not what it's named.
+#   2. CoinGecko's own, continuously-updated category taxonomy. New staking/
+#      restaking/wrapped tokens get classified there as they launch, so this
+#      adapts automatically -- we only hardcode which CATEGORY TYPES to
+#      exclude (matching the token *types* requested), never token names.
+#
+# This is a heuristic, not a proof. It will occasionally miss an infra token
+# CoinGecko hasn't categorized yet, or (rarely) exclude a legitimate token
+# that happens to expose one of these functions for unrelated reasons. Given
+# the choice, we bias toward excluding when uncertain, per user preference.
+# ---------------------------------------------------------------------------
+
+EXCLUDED_CATEGORY_KEYWORDS = [
+    "liquid staking", "liquid restaking", "restaking", "staking",
+    "wrapped-tokens", "wrapped", "stablecoin", "synthetic",
+    "yield aggregator", "yield farming", "yield", "vault",
+    "lp tokens", "liquidity provider", "bridged", "rebase",
+    "receipt token", "tokenized btc", "tokenized eth", "interest bearing",
+]
+
+
+def call_view_function(chain_id, token_address, selector):
+    """Calls a zero-argument view function via eth_call and returns the raw
+    hex result, or None if the call reverted / the function doesn't exist."""
+    try:
+        data = etherscan_call(chain_id, {
+            "module": "proxy",
+            "action": "eth_call",
+            "to": token_address,
+            "data": selector,
+            "tag": "latest",
+        })
+        result = data.get("result")
+        if isinstance(result, str) and result not in ("0x", ""):
+            return result
+    except Exception as e:
+        print("eth_call error:", e)
+    return None
+
+
+def _decodes_to_address(hex_result):
+    try:
+        addr_hex = hex_result[-40:]
+        return len(addr_hex) == 40 and int(addr_hex, 16) != 0
+    except (ValueError, TypeError):
+        return False
+
+
+def is_erc4626_or_wrapped(chain_id, token_address):
+    """Checks contract behavior directly: ERC4626 vaults expose asset(), and
+    most wrapped/receipt tokens expose underlying() -- both return the
+    address of the token they represent/wrap. Neither is name-based."""
+    if _decodes_to_address(call_view_function(chain_id, token_address, "0x38d52e0f")):
+        return True, "ERC4626 vault (asset() fonksiyonu var)"
+    if _decodes_to_address(call_view_function(chain_id, token_address, "0x6f307dc3")):
+        return True, "Wrapped/receipt token (underlying() fonksiyonu var)"
+    return False, ""
+
+
+_cg_category_cache = {}
+
+
+def get_coingecko_categories(coingecko_platform, token_address):
+    """CoinGecko's own category taxonomy for a token -- updates on its own
+    as new tokens launch and get classified, no code changes needed here."""
+    cache_key = (coingecko_platform, token_address)
+    if cache_key in _cg_category_cache:
+        return _cg_category_cache[cache_key]
+    categories = []
+    try:
+        r = requests.get(
+            f"https://api.coingecko.com/api/v3/coins/{coingecko_platform}/contract/{token_address}",
+            timeout=15,
+        )
+        if r.status_code == 200:
+            data = r.json()
+            categories = data.get("categories") or []
+    except Exception as e:
+        print("CoinGecko category fetch error:", e)
+    _cg_category_cache[cache_key] = categories
+    return categories
+
+
+def is_infrastructure_token(chain_cfg, token_address):
+    """Returns (should_exclude, reason). Combines the on-chain check and the
+    CoinGecko category check; either one triggering is enough to exclude."""
+    is_wrapped, reason = is_erc4626_or_wrapped(chain_cfg["chain_id"], token_address)
+    if is_wrapped:
+        return True, reason
+
+    categories = get_coingecko_categories(chain_cfg["coingecko_platform"], token_address)
+    for cat in categories:
+        cat_lower = cat.lower()
+        for keyword in EXCLUDED_CATEGORY_KEYWORDS:
+            if keyword in cat_lower:
+                return True, f"CoinGecko kategorisi: {cat}"
+
+    return False, ""
+
+
+
 def get_dex_pool_addresses(dexscreener_id, token_address):
     """Returns the set of known AMM pool/pair contract addresses for a token,
     so we can tell a real trader apart from pool infrastructure. Needed
@@ -541,6 +653,11 @@ def main():
                     # The bought token actually went to a pool, not a real
                     # trader (e.g. this native-token leg was really someone
                     # else selling bought_address into liquidity).
+                    continue
+
+                is_infra, infra_reason = is_infrastructure_token(chain_cfg, bought_address)
+                if is_infra:
+                    print(f"Skipped (infrastructure/staking/wrapped token - {infra_reason}): {tx_hash}")
                     continue
 
                 pair = check_dex_token(dex_id, bought_address)
