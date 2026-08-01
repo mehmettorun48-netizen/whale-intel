@@ -2633,6 +2633,13 @@
       },
       "total_usd": 3968.470402061026,
       "last_tier": 0
+    },
+    "ethereum:0x0b7f0e51cd1739d6c96982d55ad8fa634dd43a9c": {
+      "whales": {
+        "0x40c7e9977d99fd3db838ffb1e312ad9e2423c457": 1785547747
+      },
+      "total_usd": 3973.7053036858547,
+      "last_tier": 0
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
@@ -15371,11 +15378,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25656210,
+    "last_block": 25656683,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25656210,
+    "last_block": 25656683,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15393,9 +15400,9 @@
         "count": 1
       },
       "0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
-        "total_usd": 679.3152933085829,
-        "since": 1785436991,
-        "count": 2
+        "total_usd": 197.549483474522,
+        "since": 1785547800,
+        "count": 1
       },
       "0xba2ceed10dbb21552d806f222da80d0ad82f9dd6": {
         "total_usd": 151.39662696208626,
@@ -15408,9 +15415,9 @@
         "count": 1
       },
       "0xfd0b31d2e955fa55e3fa641fe90e08b677188d35": {
-        "total_usd": 527.5858024804829,
+        "total_usd": 725.135285955005,
         "since": 1785502376,
-        "count": 1
+        "count": 2
       },
       "0x0db2077e7bd198316bd1acf0ec808ff67bdbb22b": {
         "total_usd": 527.1926490506104,
@@ -15426,11 +15433,16 @@
         "total_usd": 1165.97031504,
         "since": 1785538235,
         "count": 2
+      },
+      "0xbee3211ab312a8d065c4fef0247448e17a8da000": {
+        "total_usd": 197.54948347452017,
+        "since": 1785547800,
+        "count": 1
       }
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25656210,
+    "last_block": 25656683,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
