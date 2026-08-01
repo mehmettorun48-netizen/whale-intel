@@ -2654,6 +2654,13 @@
       },
       "total_usd": 29467.117251765594,
       "last_tier": 0
+    },
+    "ethereum:0xcdf7028ceab81fa0c6971208e83fa7872994bee5": {
+      "whales": {
+        "0x5bae743ccb9e5c432be66798fffc78c2c9b870e2": 1785597706
+      },
+      "total_usd": 4405.674539509499,
+      "last_tier": 0
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
@@ -15392,11 +15399,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25660482,
+    "last_block": 25660840,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25660482,
+    "last_block": 25660840,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15414,9 +15421,9 @@
         "count": 1
       },
       "0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
-        "total_usd": 1193.7670831762086,
+        "total_usd": 1307.2110248379925,
         "since": 1785547800,
-        "count": 2
+        "count": 3
       },
       "0xba2ceed10dbb21552d806f222da80d0ad82f9dd6": {
         "total_usd": 151.39662696208626,
@@ -15429,9 +15436,9 @@
         "count": 1
       },
       "0xfd0b31d2e955fa55e3fa641fe90e08b677188d35": {
-        "total_usd": 725.135285955005,
-        "since": 1785502376,
-        "count": 2
+        "total_usd": 113.44394166178391,
+        "since": 1785597820,
+        "count": 1
       },
       "0x0db2077e7bd198316bd1acf0ec808ff67bdbb22b": {
         "total_usd": 527.1926490506104,
@@ -15457,11 +15464,16 @@
         "total_usd": 171.9486569616238,
         "since": 1785593512,
         "count": 1
+      },
+      "0x27100e8e34272eb6730584d586e0a857575cf1ef": {
+        "total_usd": 240.0636196779465,
+        "since": 1785597812,
+        "count": 1
       }
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25660482,
+    "last_block": 25660840,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -15496,6 +15508,21 @@
       "0xe8736af1926e9d8f5a6602fbbb0893b26436d710": {
         "total_usd": 100.36596527792996,
         "since": 1785593643,
+        "count": 1
+      },
+      "0x905184c521129d4f201964a493d1bbd644cbd3e3": {
+        "total_usd": 750.2589710708962,
+        "since": 1785597884,
+        "count": 1
+      },
+      "0x2100722c97b8aabc3495fe39c175d8c9f0b328c0": {
+        "total_usd": 750.2589710708962,
+        "since": 1785597884,
+        "count": 1
+      },
+      "0xe8e1f50392bd61d0f8f48e8e7af51d3b8a52090a": {
+        "total_usd": 750.2589710708962,
+        "since": 1785597884,
         "count": 1
       }
     }
