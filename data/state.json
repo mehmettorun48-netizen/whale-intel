@@ -15435,11 +15435,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25669453,
+    "last_block": 25669476,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25669453,
+    "last_block": 25669476,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15535,11 +15535,26 @@
         "total_usd": 722.8073344268702,
         "since": 1785682875,
         "count": 1
+      },
+      "0x0889e9327b98d7d1be3c301a4585ff3330502c9a": {
+        "total_usd": 715.0931932692814,
+        "since": 1785701157,
+        "count": 1
+      },
+      "0x74de5d4fcbf63e00296fd95d33236b9794016631": {
+        "total_usd": 715.0931932692814,
+        "since": 1785701157,
+        "count": 1
+      },
+      "0x05c08bab97c8564a1abb682d53e45af013f26c3b": {
+        "total_usd": 708.8361278281752,
+        "since": 1785701157,
+        "count": 1
       }
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25669453,
+    "last_block": 25669476,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
