@@ -2676,6 +2676,13 @@
       },
       "total_usd": 2871.7378941164498,
       "last_tier": 0
+    },
+    "ethereum:0x289ff00235d2b98b0145ff5d4435d3e92f9540a6": {
+      "whales": {
+        "0x55dde54f6d63cd512a3c6216d876e6485f6cad3d": 1785662459
+      },
+      "total_usd": 3131.1001707219652,
+      "last_tier": 0
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
@@ -15414,11 +15421,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25665495,
+    "last_block": 25666221,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25665495,
+    "last_block": 25666221,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15436,9 +15443,9 @@
         "count": 1
       },
       "0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
-        "total_usd": 1307.2110248379925,
-        "since": 1785547800,
-        "count": 3
+        "total_usd": 836.0,
+        "since": 1785662965,
+        "count": 1
       },
       "0xba2ceed10dbb21552d806f222da80d0ad82f9dd6": {
         "total_usd": 151.39662696208626,
@@ -15471,8 +15478,8 @@
         "count": 2
       },
       "0xbee3211ab312a8d065c4fef0247448e17a8da000": {
-        "total_usd": 197.54948347452017,
-        "since": 1785547800,
+        "total_usd": 835.706248429069,
+        "since": 1785662965,
         "count": 1
       },
       "0x49841b9bb1dc499b36c4f618bf8feac85fdfe889": {
@@ -15504,11 +15511,16 @@
         "total_usd": 343.83828251046856,
         "since": 1785645634,
         "count": 1
+      },
+      "0x2c0552e5dcb79b064fd23e358a86810bc5994244": {
+        "total_usd": 835.706248429069,
+        "since": 1785662965,
+        "count": 1
       }
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25665495,
+    "last_block": 25666221,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -15516,9 +15528,9 @@
         "count": 1
       },
       "0x000000000004444c5dc75cb358380d2e3de08a90": {
-        "total_usd": 600.955854841207,
+        "total_usd": 709.0863240832628,
         "since": 1785610168,
-        "count": 1
+        "count": 2
       },
       "0x163f3103de041d25464e2c8a4f8f3187ec1856e0": {
         "total_usd": 410.87487522005296,
