@@ -787,9 +787,10 @@ def main():
                     f"Market Cap: {mcap_line}\n"
                     f"Likidite: {liquidity_line}\n"
 
-                    f"DEX: {dex_name}"
+                    f"DEX: {dex_name}\n"
+                    f"{age_line}"
                     f"</pre>\n"
-                    f"Balina: {whale}\n"
+
                     f"Tx: {explorer}/tx/{tx_hash}\n"
                     f"Grafik: https://dexscreener.com/{dex_id}/{bought_address}"
                 )
