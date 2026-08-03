@@ -754,12 +754,21 @@ def main():
                 mcap_line = f"${mcap:,.0f}" if mcap > 0 else "Bilinmiyor"
                 liquidity_line = f"${liquidity:,.0f}" if liquidity > 0 else "Bilinmiyor"
 
-                is_low_cap = mcap == 0 or mcap < LOW_CAP_THRESHOLD_USD
-
                 creation_ts = get_contract_creation_time(chain_cfg["chain_id"], bought_address)
                 token_age_hours = (time.time() - creation_ts) / 3600 if creation_ts else None
                 is_new_token = token_age_hours is not None and token_age_hours <= NEW_TOKEN_AGE_HOURS
                 age_line = f"Kontrat Yaşı: {token_age_hours:.1f} saat\n" if token_age_hours is not None else ""
+
+                if mcap == 0 and not is_new_token:
+                    # Market cap verisi yok VE coin taze değil -- muhtemelen
+                    # DexScreener/CoinGecko'nun geçici bir hatası, gerçek bir
+                    # "düşük cap" sinyali değil (örn. swETH gibi köklü ama o an
+                    # verisi çekilemeyen bir token). Yanlış "ERKEN BALİNA"
+                    # etiketiyle göndermek yerine hiç göndermiyoruz.
+                    print(f"Skipped (no mcap data and not a new token, likely stale/old token): {tx_hash}")
+                    continue
+
+                is_low_cap = 0 < mcap < LOW_CAP_THRESHOLD_USD
 
                 if is_new_token:
                     priority = "🆕"
@@ -768,6 +777,7 @@ def main():
                     priority = "🔥"
                     header = "ERKEN BALİNA - DÜŞÜK CAP"
                 elif accurate_usd_value >= LARGE_BUY_THRESHOLD_USD:
+
 
                     priority = "🚨"
                     header = "Yeni Balina Alımı"
