@@ -728,8 +728,8 @@ def main():
                     f"USD: ${accurate_usd_value:,.0f}\n"
                     f"{paid_line}"
                     f"\nFiyat: {price_line}\n"
-731                 f"Market Cap: {mcap_line}\n"
-732                 f"Likidite: {liquidity_line}\n"
+                    f"Market Cap: {mcap_line}\n"
+                    f"Likidite: {liquidity_line}\n"
 
                     f"DEX: {dex_name}"
                     f"</pre>\n"
