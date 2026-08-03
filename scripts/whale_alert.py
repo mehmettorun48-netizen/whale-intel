@@ -14,10 +14,16 @@ ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
 LOW_CAP_THRESHOLD_USD = 500_000  # market cap below this = "yeni/düşük cap coin"
 
+NEW_TOKEN_AGE_HOURS = 72  # kontratın deploy'undan bu kadar saat geçmemişse
+# "taze çıkan" olarak öne çıkarılır -- market cap'ten bağımsız bir sinyal,
+# çünkü hızlı pump eden taze bir coin'in mcap'i düşük cap eşiğini çoktan
+# geçmiş olabilir (tam da "01" örneğinde olduğu gibi: mcap zaten $19M).
+
+
 MAX_DISTINCT_TOKENS_PER_SWAP = 7  # more than this = likely a batch/aggregated
 # settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
 # not a single whale's swap, and not reliably attributable to one wallet.
-# Kept generous because single-user aggregator routes (1inch/Paraswap/0x
+# Kept generous because single-user aggregator routes (1inch/Paraswap/0x up
 # splitting one trade across several pools) can legitimately touch 5-6
 # distinct tokens without being a multi-user batch.
 
@@ -270,6 +276,47 @@ def get_token_decimals(chain_id, token_address):
         print("Decimals fetch error:", e)
     _decimals_cache[cache_key] = decimals
     return decimals
+_creation_time_cache = {}
+
+
+def get_contract_creation_time(chain_id, token_address):
+    """Returns the unix timestamp of the token contract's deployment, or
+    None if it can't be determined. Used to catch genuinely NEW tokens --
+    market cap alone can't do this, since a token can pump hard in its
+    first hours and blow past the low-cap threshold before we ever see it."""
+    cache_key = (chain_id, token_address)
+    if cache_key in _creation_time_cache:
+        return _creation_time_cache[cache_key]
+    creation_ts = None
+    try:
+        data = etherscan_call(chain_id, {
+            "module": "contract",
+            "action": "getcontractcreation",
+            "contractaddresses": token_address,
+        })
+        result = data.get("result")
+        if isinstance(result, list) and result:
+            tx_hash = result[0].get("txHash")
+            if tx_hash:
+                receipt = get_tx_receipt(chain_id, tx_hash)
+                block_hex = receipt.get("blockNumber")
+                if block_hex:
+                    block_data = etherscan_call(chain_id, {
+                        "module": "proxy",
+                        "action": "eth_getBlockByNumber",
+                        "tag": block_hex,
+                        "boolean": "false",
+                    })
+                    block = block_data.get("result")
+                    if isinstance(block, dict):
+                        ts_hex = block.get("timestamp")
+                        if ts_hex:
+                            creation_ts = int(ts_hex, 16)
+    except Exception as e:
+        print("Contract creation time fetch error:", e)
+    _creation_time_cache[cache_key] = creation_ts
+    return creation_ts
+
 
 
 _pool_address_cache = {}
@@ -709,10 +756,19 @@ def main():
 
                 is_low_cap = mcap == 0 or mcap < LOW_CAP_THRESHOLD_USD
 
-                if is_low_cap:
+                creation_ts = get_contract_creation_time(chain_cfg["chain_id"], bought_address)
+                token_age_hours = (time.time() - creation_ts) / 3600 if creation_ts else None
+                is_new_token = token_age_hours is not None and token_age_hours <= NEW_TOKEN_AGE_HOURS
+                age_line = f"Kontrat Yaşı: {token_age_hours:.1f} saat\n" if token_age_hours is not None else ""
+
+                if is_new_token:
+                    priority = "🆕"
+                    header = "TAZE ÇIKAN BALİNA ALIMI"
+                elif is_low_cap:
                     priority = "🔥"
                     header = "ERKEN BALİNA - DÜŞÜK CAP"
                 elif accurate_usd_value >= LARGE_BUY_THRESHOLD_USD:
+
                     priority = "🚨"
                     header = "Yeni Balina Alımı"
                 else:
