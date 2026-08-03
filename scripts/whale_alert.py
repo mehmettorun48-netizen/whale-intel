@@ -672,7 +672,7 @@ def main():
                     mcap = pair.get("marketCap") or pair.get("fdv") or 0
                     liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
                 else:
-                    token_price = 0.0
+                    token_price = get_token_price_usd(chain_cfg["coingecko_platform"], bought_address)
                     bought_symbol = "???"
                     bought_name = "Bilinmiyor (DexScreener'da henüz yok)"
                     dex_name = "Bilinmiyor"
@@ -703,14 +703,12 @@ def main():
                 paid_symbol = get_token_symbol_label(chain_cfg, paid_address)
                 paid_line = f"Karşılığında Verilen: {paid_symbol}\n"
 
-                if token_price <= 0:
-                    # No real price/liquidity data -- too unreliable to alert
-                    # on (this is also what a bridge/withdrawal-mangled token
-                    # lookup looks like).
-                    print(f"Skipped (no price data for bought token, unreliable): {tx_hash}")
-                    continue
+                                price_line = f"${token_price:.8f}" if token_price > 0 else "Bilinmiyor"
+                mcap_line = f"${mcap:,.0f}" if mcap > 0 else "Bilinmiyor"
+                liquidity_line = f"${liquidity:,.0f}" if liquidity > 0 else "Bilinmiyor"
 
                 is_low_cap = mcap == 0 or mcap < LOW_CAP_THRESHOLD_USD
+
                 if is_low_cap:
                     priority = "🔥"
                     header = "ERKEN BALİNA - DÜŞÜK CAP"
