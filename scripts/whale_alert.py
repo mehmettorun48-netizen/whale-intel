@@ -703,7 +703,7 @@ def main():
                 paid_symbol = get_token_symbol_label(chain_cfg, paid_address)
                 paid_line = f"Karşılığında Verilen: {paid_symbol}\n"
 
-                                price_line = f"${token_price:.8f}" if token_price > 0 else "Bilinmiyor"
+                price_line = f"${token_price:.8f}" if token_price > 0 else "Bilinmiyor"
                 mcap_line = f"${mcap:,.0f}" if mcap > 0 else "Bilinmiyor"
                 liquidity_line = f"${liquidity:,.0f}" if liquidity > 0 else "Bilinmiyor"
 
@@ -727,9 +727,10 @@ def main():
                     f"Alınan: {received_amount:,.4f} {bought_symbol}\n"
                     f"USD: ${accurate_usd_value:,.0f}\n"
                     f"{paid_line}"
-                    f"\nFiyat: ${token_price:.8f}\n"
-                    f"Market Cap: ${mcap:,.0f}\n"
-                    f"Likidite: ${liquidity:,.0f}\n"
+                    f"\nFiyat: {price_line}\n"
+731                 f"Market Cap: {mcap_line}\n"
+732                 f"Likidite: {liquidity_line}\n"
+
                     f"DEX: {dex_name}"
                     f"</pre>\n"
                     f"Balina: {whale}\n"
