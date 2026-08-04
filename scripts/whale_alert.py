@@ -25,6 +25,9 @@ NEW_TOKEN_MCAP_CEILING = 50_000_000  # bu mcap'in üzerindeki coinler için
 # yok. Bu eşik, her run'da onlarca aday için gereksiz Etherscan çağrısı
 # yapılmasını (ve run süresinin dakikalarca uzamasını) önlüyor.
 
+PRICE_WATCH_MAX_AGE_HOURS = 72  # bir coin ilk bildirimden bu kadar saat
+# sonra takip listesinden düşürülür -- liste sınırsız büyümesin diye.
+
 MAX_DISTINCT_TOKENS_PER_SWAP = 7  # more than this = likely a batch/aggregated
 # settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
 # not a single whale's swap, and not reliably attributable to one wallet.
@@ -44,22 +47,36 @@ ANALYZE_SWAP_MIN_USD = 100  # below this, skip the extra receipt-fetch call
 
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
-MAX_BLOCKS_PER_RUN = 150  # bir run'ın tek seferde tarayabileceği en fazla
-# blok sayısı. Bu değer önce 2000'di, ama normal bir run zaten ~25-50 blok
-# tarıyor (5 dakikalık cron aralığında üretilen blok sayısı kadar) -- 2000
-# blok, bu normal hacmin ~40-80 katı aday coin demekti ve bir run'ı 18+
-# dakikaya kadar uzatabiliyordu. Bu da "Save state" hiç çalışamadığı için
-# ilerlemenin kaydedilmemesine ve bir sonraki run'ın AYNI birikimi baştan
-# taramaya çalışmasına yol açan bir kısır döngü yaratıyordu. 150 gibi küçük
-# bir değer, birikim varken bile her run'ın hızlı bitip state'i kaydetmesini
-# ve birikimin run run kademeli olarak erimesini sağlıyor.
+MAX_BLOCKS_PER_RUN = 30  # bir run'ın tek seferde tarayabileceği en fazla
+# blok sayısı. Önce 2000, sonra 150 idi -- ama WETH o kadar yüksek hacimli
+# ki (150 blokta 6506 transfer logu, Etherscan'in 1000-log limitini bile
+# aşıp bölünüyor) 150 bloklukbir "yakalama" parçası bile ~10 dakika
+# sürüyordu ve cron aralığıyla çakışıyordu. 30, normal (birikimsiz) bir
+# run'ın işlediği hacme (~5 dakikada üretilen blok sayısı) yakın olduğu
+# için, birikim varken de her run'ın normal hızda kalmasını sağlıyor --
+# birikimin tamamen erimesi daha uzun sürer ama hiçbir run asla çakışmaz.
 
-CLUSTER_WINDOW_SECONDS = 24 * 3600
+CLUSTER_WINDOW_SECONDS = 6 * 3600  # önce 24 saatti -- 24 saatlik bir pencerede
+# 2 farklı balina alımı çok da anlamlı bir "ani ilgi" sinyali değil (gün
+# içine yayılmış olabilir). 6 saate indirmek, sinyali "kısa sürede birden
+# fazla balina aynı coin'e ilgi gösteriyor" anlamına gelecek şekilde
+# sıkılaştırıyor -- gerçek bir erken uyarı için daha anlamlı.
 CLUSTER_TIERS = [
     (10, "🔴 Balinalar Yoğun Alıyor"),
     (5, "🟠 Güçlü Balina Birikimi"),
     (2, "🟡 Balina Birikimi Başladı"),
 ]
+
+ACCUMULATION_MAX_RANGE_PCT = 10  # son 6 saatte fiyat bu yüzdeden fazla
+# hareket etmemişse "dipte akümülasyon/yatay bant" sayılır -- coin sakin,
+# birikim aşamasında demektir.
+BREAKOUT_MIN_H1_PCT = 15  # son 1 saatte fiyat bu yüzdeden fazla yukarı
+# hareket ettiyse, akümülasyon bandını "kırdı" sayılır.
+BREAKOUT_MIN_VOLUME_MULTIPLIER = 3  # kırılımın gerçek alım baskısıyla
+# desteklendiğini doğrulamak için son 5 dakikalık hacim, normal temposunun
+# (son 1 saatlik hacmin 1/12'si) en az bu katı olmalı.
+BREAKOUT_COOLDOWN_HOURS = 6  # aynı coin için kırılım bildirimi bu süre
+# dolmadan tekrar gönderilmez.
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 
@@ -686,8 +703,86 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
     return False, f"DEX'te Karşılığında Verilen: {paid_symbol}\n"
 
 
+def check_accumulation_breakouts(state):
+    """Looks for the specific pattern requested: a coin that was flat/ranging
+    (accumulating) for the last several hours and has just broken upward out
+    of that range with real volume behind it -- an early entry signal rather
+    than a "it already pumped" confirmation. Re-checks CEX-listing status at
+    alert time too, since a coin could get listed on a major exchange after
+    it was first discovered. Uses DexScreener only, no Etherscan calls."""
+    watch = state.setdefault("price_watch", {})
+    now = int(time.time())
+
+    stale_keys = [
+        key for key, entry in watch.items()
+        if (now - entry.get("first_seen_ts", now)) / 3600 > PRICE_WATCH_MAX_AGE_HOURS
+    ]
+    for key in stale_keys:
+        del watch[key]
+
+    for key, entry in watch.items():
+        chain, address = key.split(":", 1)
+        chain_cfg = CHAINS.get(chain)
+        if not chain_cfg:
+            continue
+
+        last_alert_ts = entry.get("last_breakout_alert_ts", 0)
+        if (now - last_alert_ts) / 3600 < BREAKOUT_COOLDOWN_HOURS:
+            continue
+
+        if is_cex_listed(chain_cfg["coingecko_platform"], address):
+            # Borsaya sonradan listelenmiş olabilir -- artık DEX-only,
+            # keşfedilmemiş bir sinyal değil, atla.
+            continue
+
+        pair = check_dex_token(chain_cfg["dexscreener_id"], address)
+        if not pair:
+            continue
+
+        volume = pair.get("volume") or {}
+        price_change = pair.get("priceChange") or {}
+        change_h6 = price_change.get("h6")
+        change_h1 = price_change.get("h1")
+        vol_m5 = volume.get("m5") or 0
+        vol_h1 = volume.get("h1") or 0
+        if change_h6 is None or change_h1 is None or vol_h1 <= 0:
+            continue
+
+        was_accumulating = abs(change_h6) <= ACCUMULATION_MAX_RANGE_PCT
+        expected_m5 = vol_h1 / 12
+        volume_confirmed = expected_m5 > 0 and (vol_m5 / expected_m5) >= BREAKOUT_MIN_VOLUME_MULTIPLIER
+
+        if not (was_accumulating and change_h1 >= BREAKOUT_MIN_H1_PCT and volume_confirmed):
+            continue
+
+        _, current_price = resolve_token_info_from_pair(pair, address)
+        mcap = pair.get("marketCap") or pair.get("fdv") or 0
+        liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
+        dex_name = pair.get("dexId", "Unknown DEX")
+        send_telegram(
+            f"⚡ <b>Akümülasyon Kırılımı - Erken Sinyal</b> [{chain.upper()}]\n\n"
+            f"<pre>"
+            f"Coin: {entry.get('name', 'Unknown')} ({entry.get('symbol', '???')})\n"
+            f"Kontrat: {address}\n\n"
+            f"Son 6 Saat Değişim: %{change_h6:.1f} (yataydı)\n"
+            f"Son 1 Saat Değişim: %{change_h1:.1f} (kırılım)\n"
+            f"Hacim Teyidi: {(vol_m5 / expected_m5):.1f}x normal\n"
+            f"Fiyat: ${current_price:.8f}\n"
+            f"Market Cap: ${mcap:,.0f}\n"
+            f"Likidite: ${liquidity:,.0f}\n"
+            f"DEX: {dex_name}"
+            f"</pre>\n"
+            f"Grafik: https://dexscreener.com/{chain_cfg['dexscreener_id']}/{address}\n\n"
+            f"Not: Bu bir tahmin değil, erken bir sinyal -- coin dipte "
+            f"yatay bir bantta birikirken hacimle birlikte yukarı kırdı. "
+            f"Garanti değildir."
+        )
+        entry["last_breakout_alert_ts"] = now
+
+
 def main():
     state = load_state()
+    check_accumulation_breakouts(state)
     tokens = load_tokens()
     exchange_addresses = load_exchanges()
 
@@ -903,6 +998,19 @@ def main():
                 else:
                     priority = "🟢"
                     header = "Yeni Balina Alımı"
+
+                watch_key = f"{chain}:{bought_address}"
+                if token_price > 0 and watch_key not in state.setdefault("price_watch", {}):
+                    # Bu coin'i ilk bildirdiğimiz an, fiyatını kaydediyoruz --
+                    # check_accumulation_breakouts() bir sonraki run'lardan
+                    # itibaren bu coin'in dipte akümülasyon yapıp yapmadığını
+                    # ve yukarı kırılım olup olmadığını izleyecek.
+                    state["price_watch"][watch_key] = {
+                        "baseline_price": token_price,
+                        "first_seen_ts": int(time.time()),
+                        "symbol": bought_symbol,
+                        "name": bought_name,
+                    }
 
                 send_telegram(
                     f"{priority} <b>{header}</b> [{chain.upper()}]\n\n"
