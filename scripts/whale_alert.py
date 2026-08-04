@@ -19,6 +19,12 @@ NEW_TOKEN_AGE_HOURS = 72  # kontratın deploy'undan bu kadar saat geçmemişse
 # çünkü hızlı pump eden taze bir coin'in mcap'i düşük cap eşiğini çoktan
 # geçmiş olabilir (tam da "01" örneğinde olduğu gibi: mcap zaten $19M).
 
+NEW_TOKEN_MCAP_CEILING = 50_000_000  # bu mcap'in üzerindeki coinler için
+# kontrat yaşı hiç sorgulanmaz -- onlarca milyon dolarlık bir mcap'e ulaşmış
+# bir coin pratikte zaten "keşfedilmiş" demektir, yaşını bilmenin bir değeri
+# yok. Bu eşik, her run'da onlarca aday için gereksiz Etherscan çağrısı
+# yapılmasını (ve run süresinin dakikalarca uzamasını) önlüyor.
+
 MAX_DISTINCT_TOKENS_PER_SWAP = 7  # more than this = likely a batch/aggregated
 # settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
 # not a single whale's swap, and not reliably attributable to one wallet.
@@ -829,7 +835,12 @@ def main():
 
                 creation_time_cache_state = state.setdefault("creation_times", {})
                 creation_cache_key = f"{chain}:{bought_address}"
-                if creation_cache_key in creation_time_cache_state:
+                if mcap > 0 and mcap >= NEW_TOKEN_MCAP_CEILING:
+                    # Already well-established by market cap -- not worth
+                    # the two extra Etherscan calls to find out just how
+                    # old it is; it's never going to qualify as "new".
+                    creation_ts = None
+                elif creation_cache_key in creation_time_cache_state:
                     creation_ts = creation_time_cache_state[creation_cache_key]
                 else:
                     # Bu iki ekstra Etherscan çağrısı (getcontractcreation +
