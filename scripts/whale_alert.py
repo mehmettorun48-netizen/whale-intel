@@ -66,11 +66,14 @@ CHAINS = {
         "native_wrapped_symbol": "WETH",
         "discovery_addresses": {
             "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",  # WETH
-            "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",  # USDC
-            "0xdac17f958d2ee523a2206206994597c13d831ec7",  # USDT
             "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI
             "0x4c9edd5852cd905f086c759e8383e09bff1e68b3",  # USDe
             "0x6c3ea9036406852006290770bedfcaba0e23a0e8",  # PYUSD
+            # USDC ve USDT bilinçli olarak dışarıda bırakıldı -- ikisi de
+            # Ethereum'un en yüksek hacimli token'ları (WETH'ten bile fazla
+            # transfer trafiği), keşif tetikleyicisi yapınca her run'ı
+            # ~1 dakikadan ~5+ dakikaya çıkarıp 15 dakikalık cron'u zorladı
+            # ve run kuyruğu birikmeye başladı.
         },
         "dexscreener_id": "ethereum",
         "coingecko_platform": "ethereum",
@@ -775,6 +778,16 @@ def main():
                     dex_name = "Bilinmiyor"
                     mcap = 0
                     liquidity = 0
+
+                if 0.90 <= token_price <= 1.10:
+                    # Trading within a few percent of $1 -- almost certainly
+                    # a stablecoin/synthetic-dollar token that CoinGecko
+                    # hasn't categorized yet (e.g. DUSD "Dialectic USD"),
+                    # not a genuine altcoin whale buy. A real altcoin
+                    # landing exactly on a dollar peg by coincidence is
+                    # essentially never worth alerting on either way.
+                    print(f"Skipped (price near $1, likely an uncategorized stablecoin): {tx_hash}")
+                    continue
 
                 # Compute the REAL received amount/USD value from the bought
                 # token's own transfer + decimals, not from whichever native-
