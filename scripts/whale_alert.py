@@ -474,18 +474,22 @@ def is_cex_listed(coingecko_platform, token_address):
 
 
 def is_infrastructure_token(chain_cfg, token_address):
-    """Returns (should_exclude, reason). Combines the on-chain check and the
-    CoinGecko category check; either one triggering is enough to exclude."""
-    is_wrapped, reason = is_erc4626_or_wrapped(chain_cfg["chain_id"], token_address)
-    if is_wrapped:
-        return True, reason
-
+    """Returns (should_exclude, reason). Checks the CHEAP signal first
+    (CoinGecko's categories, a single non-Etherscan API call) and only pays
+    for the two Etherscan eth_call probes (asset()/underlying()) if the
+    category check didn't already answer -- most common staking/wrapped
+    counterparties to WETH (stETH, wstETH, rETH, weETH, etc.) are already
+    categorized on CoinGecko, so this skips 2 Etherscan calls for them."""
     categories = get_coingecko_categories(chain_cfg["coingecko_platform"], token_address)
     for cat in categories:
         cat_lower = cat.lower()
         for keyword in EXCLUDED_CATEGORY_KEYWORDS:
             if keyword in cat_lower:
                 return True, f"CoinGecko kategorisi: {cat}"
+
+    is_wrapped, reason = is_erc4626_or_wrapped(chain_cfg["chain_id"], token_address)
+    if is_wrapped:
+        return True, reason
 
     return False, ""
 
@@ -692,6 +696,7 @@ def main():
     print(f"Loaded {len(tokens)} tokens across chains {chains_in_use}, {len(exchange_addresses)} exchange addresses")
 
     for chain, contract, symbol, decimals in tokens:
+        token_start_time = time.time()
         chain_cfg = CHAINS[chain]
         latest_block = latest_blocks[chain]
         explorer = chain_cfg["explorer"]
@@ -767,7 +772,19 @@ def main():
                     # else selling bought_address into liquidity).
                     continue
 
-                is_infra, infra_reason = is_infrastructure_token(chain_cfg, bought_address)
+                infra_cache_state = state.setdefault("infra_status", {})
+                infra_cache_key = f"{chain}:{bought_address}"
+                if infra_cache_key in infra_cache_state:
+                    is_infra, infra_reason = infra_cache_state[infra_cache_key]
+                else:
+                    # infra durumu bir tokenin özelliği, zamanla değişmez --
+                    # bu yüzden state.json'a kalıcı olarak kaydediyoruz.
+                    # WETH'in en sık karşılaştığı sahte-altcoin'ler (stETH,
+                    # wstETH, weETH gibi) her run'da tekrar tekrar aday
+                    # olarak geliyordu; artık ilk kontrolden sonra bir daha
+                    # asla ne CoinGecko'ya ne Etherscan'e sorulmuyorlar.
+                    is_infra, infra_reason = is_infrastructure_token(chain_cfg, bought_address)
+                    infra_cache_state[infra_cache_key] = [is_infra, infra_reason]
                 if is_infra:
                     print(f"Skipped (infrastructure/staking/wrapped token - {infra_reason}): {tx_hash}")
                     continue
@@ -971,6 +988,7 @@ def main():
                     acc["count"] = 0
 
         tstate["last_block"] = to_block
+        print(f"[{chain}] {symbol}: this token took {time.time() - token_start_time:.1f}s")
 
     save_state(state)
     print("Done.")
