@@ -44,12 +44,15 @@ ANALYZE_SWAP_MIN_USD = 100  # below this, skip the extra receipt-fetch call
 
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
-MAX_BLOCKS_PER_RUN = 2000  # bir run'ın tek seferde tarayabileceği en fazla
-# blok sayısı. Bir tokenin "son taranan blok"u herhangi bir sebeple geride
-# kalırsa (örn. başarısız bir state.json push'u), bu sınır olmadan bir
-# sonraki run birikmiş TÜM aralığı tek seferde taramaya çalışır -- yüksek
-# hacimli bir token için bu, run'ı saatlerce sürecek şekilde şişirebilir.
-# Bu sınırla bot birikmiş kısmı birkaç run'a yayarak kademeli yakalar.
+MAX_BLOCKS_PER_RUN = 150  # bir run'ın tek seferde tarayabileceği en fazla
+# blok sayısı. Bu değer önce 2000'di, ama normal bir run zaten ~25-50 blok
+# tarıyor (5 dakikalık cron aralığında üretilen blok sayısı kadar) -- 2000
+# blok, bu normal hacmin ~40-80 katı aday coin demekti ve bir run'ı 18+
+# dakikaya kadar uzatabiliyordu. Bu da "Save state" hiç çalışamadığı için
+# ilerlemenin kaydedilmemesine ve bir sonraki run'ın AYNI birikimi baştan
+# taramaya çalışmasına yol açan bir kısır döngü yaratıyordu. 150 gibi küçük
+# bir değer, birikim varken bile her run'ın hızlı bitip state'i kaydetmesini
+# ve birikimin run run kademeli olarak erimesini sağlıyor.
 
 CLUSTER_WINDOW_SECONDS = 24 * 3600
 CLUSTER_TIERS = [
