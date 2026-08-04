@@ -73,14 +73,12 @@ CHAINS = {
         "native_wrapped_symbol": "WETH",
         "discovery_addresses": {
             "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",  # WETH
-            "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI
-            "0x4c9edd5852cd905f086c759e8383e09bff1e68b3",  # USDe
-            "0x6c3ea9036406852006290770bedfcaba0e23a0e8",  # PYUSD
-            # USDC ve USDT bilinçli olarak dışarıda bırakıldı -- ikisi de
-            # Ethereum'un en yüksek hacimli token'ları (WETH'ten bile fazla
-            # transfer trafiği), keşif tetikleyicisi yapınca her run'ı
-            # ~1 dakikadan ~5+ dakikaya çıkarıp 15 dakikalık cron'u zorladı
-            # ve run kuyruğu birikmeye başladı.
+            # DAI/USDe/PYUSD/USDC/USDT hepsi denendi, hepsi kaldırıldı --
+            # her ek keşif tetikleyicisi run süresini artırıyor ve
+            # cron-job.org'un 5 dakikalık tetikleme aralığıyla çakışıp
+            # run'ların kuyrukta iptal edilmesine yol açıyordu. WETH tek
+            # başına zaten en zengin keşif kaynağı (en çok altcoin
+            # WETH'e karşı işlem görüyor).
         },
         "dexscreener_id": "ethereum",
         "coingecko_platform": "ethereum",
@@ -829,7 +827,24 @@ def main():
                 mcap_line = f"${mcap:,.0f}" if mcap > 0 else "Bilinmiyor"
                 liquidity_line = f"${liquidity:,.0f}" if liquidity > 0 else "Bilinmiyor"
 
-                creation_ts = get_contract_creation_time(chain_cfg["chain_id"], bought_address)
+                creation_time_cache_state = state.setdefault("creation_times", {})
+                creation_cache_key = f"{chain}:{bought_address}"
+                if creation_cache_key in creation_time_cache_state:
+                    creation_ts = creation_time_cache_state[creation_cache_key]
+                else:
+                    # Bu iki ekstra Etherscan çağrısı (getcontractcreation +
+                    # eth_getBlockByNumber), yoğun bir run'da onlarca kez
+                    # tekrarlanınca run süresini dakikalarca uzatıyordu --
+                    # aynı coin defalarca görülse bile her seferinde yeniden
+                    # sorgulanıyordu. Artık state.json'a kalıcı olarak
+                    # kaydediyoruz, bir coin'in yaşı bir kere öğrenilince bir
+                    # daha asla tekrar sorgulanmıyor. Başarısız aramaları
+                    # (None) kaydetmiyoruz, böylece geçici bir API hatası
+                    # coin'i kalıcı olarak "yaşı bilinmiyor" durumuna
+                    # kilitlemez -- bir sonraki run'da tekrar denenir.
+                    creation_ts = get_contract_creation_time(chain_cfg["chain_id"], bought_address)
+                    if creation_ts is not None:
+                        creation_time_cache_state[creation_cache_key] = creation_ts
                 token_age_hours = (time.time() - creation_ts) / 3600 if creation_ts else None
                 is_new_token = token_age_hours is not None and token_age_hours <= NEW_TOKEN_AGE_HOURS
                 age_line = f"Kontrat Yaşı: {token_age_hours:.1f} saat\n" if token_age_hours is not None else ""
