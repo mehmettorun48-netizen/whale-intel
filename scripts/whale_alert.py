@@ -19,11 +19,10 @@ NEW_TOKEN_AGE_HOURS = 72  # kontratın deploy'undan bu kadar saat geçmemişse
 # çünkü hızlı pump eden taze bir coin'in mcap'i düşük cap eşiğini çoktan
 # geçmiş olabilir (tam da "01" örneğinde olduğu gibi: mcap zaten $19M).
 
-
 MAX_DISTINCT_TOKENS_PER_SWAP = 7  # more than this = likely a batch/aggregated
 # settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
 # not a single whale's swap, and not reliably attributable to one wallet.
-# Kept generous because single-user aggregator routes (1inch/Paraswap/0x up
+# Kept generous because single-user aggregator routes (1inch/Paraswap/0x
 # splitting one trade across several pools) can legitimately touch 5-6
 # distinct tokens without being a multi-user batch.
 
@@ -65,6 +64,14 @@ CHAINS = {
         "chain_id": 1,
         "native_wrapped_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         "native_wrapped_symbol": "WETH",
+        "discovery_addresses": {
+            "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",  # WETH
+            "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",  # USDC
+            "0xdac17f958d2ee523a2206206994597c13d831ec7",  # USDT
+            "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI
+            "0x4c9edd5852cd905f086c759e8383e09bff1e68b3",  # USDe
+            "0x6c3ea9036406852006290770bedfcaba0e23a0e8",  # PYUSD
+        },
         "dexscreener_id": "ethereum",
         "coingecko_platform": "ethereum",
         "explorer": "https://etherscan.io",
@@ -73,6 +80,9 @@ CHAINS = {
         "chain_id": 56,
         "native_wrapped_address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
         "native_wrapped_symbol": "WBNB",
+        "discovery_addresses": {
+            "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",  # WBNB
+        },
         "dexscreener_id": "bsc",
         "coingecko_platform": "binance-smart-chain",
         "explorer": "https://bscscan.com",
@@ -276,6 +286,8 @@ def get_token_decimals(chain_id, token_address):
         print("Decimals fetch error:", e)
     _decimals_cache[cache_key] = decimals
     return decimals
+
+
 _creation_time_cache = {}
 
 
@@ -316,7 +328,6 @@ def get_contract_creation_time(chain_id, token_address):
         print("Contract creation time fetch error:", e)
     _creation_time_cache[cache_key] = creation_ts
     return creation_ts
-
 
 
 _pool_address_cache = {}
@@ -392,16 +403,17 @@ def is_erc4626_or_wrapped(chain_id, token_address):
     return False, ""
 
 
-_cg_category_cache = {}
+_cg_data_cache = {}
 
 
-def get_coingecko_categories(coingecko_platform, token_address):
-    """CoinGecko's own category taxonomy for a token -- updates on its own
-    as new tokens launch and get classified, no code changes needed here."""
+def get_coingecko_token_data(coingecko_platform, token_address):
+    """Fetches (and caches) the full CoinGecko contract-lookup response for a
+    token once, so categories and exchange-listing checks share a single API
+    call instead of hitting CoinGecko twice per token."""
     cache_key = (coingecko_platform, token_address)
-    if cache_key in _cg_category_cache:
-        return _cg_category_cache[cache_key]
-    categories = []
+    if cache_key in _cg_data_cache:
+        return _cg_data_cache[cache_key]
+    data = {}
     try:
         r = requests.get(
             f"https://api.coingecko.com/api/v3/coins/{coingecko_platform}/contract/{token_address}",
@@ -409,11 +421,42 @@ def get_coingecko_categories(coingecko_platform, token_address):
         )
         if r.status_code == 200:
             data = r.json()
-            categories = data.get("categories") or []
     except Exception as e:
-        print("CoinGecko category fetch error:", e)
-    _cg_category_cache[cache_key] = categories
-    return categories
+        print("CoinGecko token data fetch error:", e)
+    _cg_data_cache[cache_key] = data
+    return data
+
+
+def get_coingecko_categories(coingecko_platform, token_address):
+    """CoinGecko's own category taxonomy for a token -- updates on its own
+    as new tokens launch and get classified, no code changes needed here."""
+    data = get_coingecko_token_data(coingecko_platform, token_address)
+    return data.get("categories") or []
+
+
+MAJOR_CEX_NAMES = [
+    "binance", "coinbase", "kraken", "okx", "bybit", "upbit", "kucoin",
+    "bitget", "gate.io", "gateio", "htx", "huobi", "bitfinex", "crypto.com",
+    "mexc", "bitstamp",
+]
+# Lowercased substrings matched against CoinGecko's exchange "market" name
+# per ticker. Substring match (not exact) because CoinGecko sometimes
+# suffixes regional/entity variants (e.g. "Binance US").
+
+
+def is_cex_listed(coingecko_platform, token_address):
+    """Returns True if the token already trades on a major centralized
+    exchange, per CoinGecko's ticker data. Used to keep alerts to genuinely
+    DEX-only, unlisted tokens -- once a coin lands on a major CEX it's no
+    longer the kind of early/undiscovered signal being looked for here."""
+    data = get_coingecko_token_data(coingecko_platform, token_address)
+    tickers = data.get("tickers") or []
+    for ticker in tickers:
+        market_name = ((ticker.get("market") or {}).get("name") or "").lower()
+        for cex in MAJOR_CEX_NAMES:
+            if cex in market_name:
+                return True
+    return False
 
 
 def is_infrastructure_token(chain_cfg, token_address):
@@ -650,7 +693,7 @@ def main():
         price = get_token_price_usd(chain_cfg["coingecko_platform"], contract)
         print(f"[{chain}] {symbol}: price=${price}")
 
-        is_native_wrapped = contract == chain_cfg["native_wrapped_address"]
+        is_discovery_trigger = contract in chain_cfg["discovery_addresses"]
 
         for log in logs:
             topics = log.get("topics", [])
@@ -669,7 +712,7 @@ def main():
             if usd_value <= 0:
                 continue
 
-            if is_native_wrapped:
+            if is_discovery_trigger:
                 if usd_value < SINGLE_BUY_THRESHOLD_USD:
                     continue
 
@@ -682,7 +725,7 @@ def main():
                     continue
 
                 bought_address, whale, raw_bought_amount = find_bought_transfer(
-                    receipt, chain_cfg["native_wrapped_address"]
+                    receipt, contract
                 )
                 if not bought_address or not whale:
                     print(f"Skipped (swap detected but couldn't trace bought token): {tx_hash}")
@@ -708,6 +751,13 @@ def main():
                 is_infra, infra_reason = is_infrastructure_token(chain_cfg, bought_address)
                 if is_infra:
                     print(f"Skipped (infrastructure/staking/wrapped token - {infra_reason}): {tx_hash}")
+                    continue
+
+                if is_cex_listed(chain_cfg["coingecko_platform"], bought_address):
+                    # Already trades on a major centralized exchange -- not
+                    # the DEX-only, genuinely undiscovered signal the person
+                    # wants to see.
+                    print(f"Skipped (already listed on a major CEX): {tx_hash}")
                     continue
 
                 pair = check_dex_token(dex_id, bought_address)
@@ -777,8 +827,6 @@ def main():
                     priority = "🔥"
                     header = "ERKEN BALİNA - DÜŞÜK CAP"
                 elif accurate_usd_value >= LARGE_BUY_THRESHOLD_USD:
-
-
                     priority = "🚨"
                     header = "Yeni Balina Alımı"
                 else:
@@ -796,11 +844,10 @@ def main():
                     f"\nFiyat: {price_line}\n"
                     f"Market Cap: {mcap_line}\n"
                     f"Likidite: {liquidity_line}\n"
-
                     f"DEX: {dex_name}\n"
                     f"{age_line}"
                     f"</pre>\n"
-
+                    f"Balina: {whale}\n"
                     f"Tx: {explorer}/tx/{tx_hash}\n"
                     f"Grafik: https://dexscreener.com/{dex_id}/{bought_address}"
                 )
