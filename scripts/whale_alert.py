@@ -38,6 +38,13 @@ ANALYZE_SWAP_MIN_USD = 100  # below this, skip the extra receipt-fetch call
 
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
+MAX_BLOCKS_PER_RUN = 2000  # bir run'ın tek seferde tarayabileceği en fazla
+# blok sayısı. Bir tokenin "son taranan blok"u herhangi bir sebeple geride
+# kalırsa (örn. başarısız bir state.json push'u), bu sınır olmadan bir
+# sonraki run birikmiş TÜM aralığı tek seferde taramaya çalışır -- yüksek
+# hacimli bir token için bu, run'ı saatlerce sürecek şekilde şişirebilir.
+# Bu sınırla bot birikmiş kısmı birkaç run'a yayarak kademeli yakalar.
+
 CLUSTER_WINDOW_SECONDS = 24 * 3600
 CLUSTER_TIERS = [
     (10, "🔴 Balinalar Yoğun Alıyor"),
@@ -690,8 +697,13 @@ def main():
         tstate = state.setdefault(state_key, {"last_block": None, "accumulation": {}})
         from_block = tstate["last_block"] + 1 if tstate["last_block"] else latest_block - FIRST_RUN_BLOCK_LOOKBACK
 
-        logs = fetch_logs(chain_cfg["chain_id"], contract, TRANSFER_TOPIC, from_block, latest_block)
-        print(f"[{chain}] {symbol}: scanned blocks {from_block}-{latest_block}, found {len(logs)} transfer logs")
+        to_block = latest_block
+        if to_block - from_block > MAX_BLOCKS_PER_RUN:
+            to_block = from_block + MAX_BLOCKS_PER_RUN
+            print(f"[{chain}] {symbol}: backlog too large ({latest_block - from_block} blocks), capping this run to {from_block}-{to_block}")
+
+        logs = fetch_logs(chain_cfg["chain_id"], contract, TRANSFER_TOPIC, from_block, to_block)
+        print(f"[{chain}] {symbol}: scanned blocks {from_block}-{to_block}, found {len(logs)} transfer logs")
 
         price = get_token_price_usd(chain_cfg["coingecko_platform"], contract)
         print(f"[{chain}] {symbol}: price=${price}")
@@ -932,7 +944,7 @@ def main():
                     acc["since"] = now
                     acc["count"] = 0
 
-        tstate["last_block"] = latest_block
+        tstate["last_block"] = to_block
 
     save_state(state)
     print("Done.")
