@@ -158,12 +158,13 @@ CHAINS = {
         "dexscreener_id": "arbitrum",
         "coingecko_platform": "arbitrum-one",
         "explorer": "https://arbiscan.org",
-        "max_blocks_per_run": 1500,  # Arbitrum bloğu ~0.25sn'de bir
-        # üretiliyor -- gerçek run log'larında 5 dakikalık cron'da ~1000-
-        # 1200 blok üretildiği gözlemlendi (ilk denenen 300 değeri yetersiz
-        # kaldı, backlog birikmeye başladı). 1500, pay bırakarak gerçek
-        # zamana ayak uydurmayı garantiliyor. Arbitrum, Etherscan'in
-        # ücretsiz API planında destekleniyor.
+        "max_blocks_per_run": 3000,  # Arbitrum çok hızlı bir chain --
+        # gerçek run log'larında backlog 1500'lük limitle de büyümeye
+        # devam etti (42.8K -> 50.2K blok), çünkü run'lar arası gerçek
+        # süre bazen 5 dakikadan uzun oluyor (manuel tetiklemeler +
+        # GitHub Actions'ın zamanlanmış run'ları geciktirmesi). 3000,
+        # daha geniş bir pay bırakıyor. Arbitrum, Etherscan'in ücretsiz
+        # API planında destekleniyor.
     },
 }
 
