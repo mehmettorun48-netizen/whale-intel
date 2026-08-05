@@ -47,8 +47,12 @@ ANALYZE_SWAP_MIN_USD = 100  # below this, skip the extra receipt-fetch call
 
 FIRST_RUN_BLOCK_LOOKBACK = 300
 
-MAX_BLOCKS_PER_RUN = 30  # bir run'ın tek seferde tarayabileceği en fazla
-# blok sayısı. Önce 2000, sonra 150 idi -- ama WETH o kadar yüksek hacimli
+MAX_BLOCKS_PER_RUN = 30  # global fallback -- kullanılan asıl değer artık her
+# chain'in kendi CHAINS[chain]["max_blocks_per_run"] alanından okunuyor,
+# çünkü farklı chainlerin blok üretim hızı çok farklı (Ethereum ~12sn/blok,
+# Base ~2sn/blok, Arbitrum ~0.25sn/blok). Bu sabit sadece chain_cfg'de
+# max_blocks_per_run tanımlı değilse devreye giriyor.
+# Önce 2000, sonra 150 idi -- ama WETH o kadar yüksek hacimli
 # ki (150 blokta 6506 transfer logu, Etherscan'in 1000-log limitini bile
 # aşıp bölünüyor) 150 bloklukbir "yakalama" parçası bile ~10 dakika
 # sürüyordu ve cron aralığıyla çakışıyordu. 30, normal (birikimsiz) bir
@@ -92,6 +96,10 @@ SWAP_TOPICS = (V2_SWAP_TOPIC, V3_SWAP_TOPIC, CURVE_EXCHANGE_TOPIC)
 
 # Per-chain configuration. Adding a new EVM chain is just adding an entry
 # here (as long as Etherscan's v2 API and DexScreener both support it).
+# "max_blocks_per_run" chain başına ayrı tanımlanıyor çünkü blok üretim
+# hızı chain'den chain'e çok farklı -- aynı sabiti tüm chainlere uygulamak,
+# hızlı chainlerde (Base, Arbitrum) backlog'un çok daha hızlı büyümesine
+# yol açar.
 CHAINS = {
     "ethereum": {
         "chain_id": 1,
@@ -109,6 +117,7 @@ CHAINS = {
         "dexscreener_id": "ethereum",
         "coingecko_platform": "ethereum",
         "explorer": "https://etherscan.io",
+        "max_blocks_per_run": 30,
     },
     "bsc": {
         "chain_id": 56,
@@ -120,6 +129,23 @@ CHAINS = {
         "dexscreener_id": "bsc",
         "coingecko_platform": "binance-smart-chain",
         "explorer": "https://bscscan.com",
+        "max_blocks_per_run": 30,
+    },
+    "base": {
+        "chain_id": 8453,
+        "native_wrapped_address": "0x4200000000000000000000000000000000000006",
+        "native_wrapped_symbol": "WETH",
+        "discovery_addresses": {
+            "0x4200000000000000000000000000000000000006",  # WETH (Base)
+        },
+        "dexscreener_id": "base",
+        "coingecko_platform": "base",
+        "explorer": "https://basescan.org",
+        "max_blocks_per_run": 150,  # Base bloğu ~2sn'de bir üretiliyor
+        # (Ethereum'un ~6 katı hız) -- 5 dakikalık cron aralığında Base'de
+        # ~150 blok üretiliyor, bu yüzden Ethereum'un 30'una kıyasla daha
+        # yüksek tutulmalı, yoksa backlog Ethereum'dakinden çok daha hızlı
+        # birikir.
     },
 }
 
@@ -805,8 +831,9 @@ def main():
         from_block = tstate["last_block"] + 1 if tstate["last_block"] else latest_block - FIRST_RUN_BLOCK_LOOKBACK
 
         to_block = latest_block
-        if to_block - from_block > MAX_BLOCKS_PER_RUN:
-            to_block = from_block + MAX_BLOCKS_PER_RUN
+        chain_max_blocks = chain_cfg.get("max_blocks_per_run", MAX_BLOCKS_PER_RUN)
+        if to_block - from_block > chain_max_blocks:
+            to_block = from_block + chain_max_blocks
             print(f"[{chain}] {symbol}: backlog too large ({latest_block - from_block} blocks), capping this run to {from_block}-{to_block}")
 
         logs = fetch_logs(chain_cfg["chain_id"], contract, TRANSFER_TOPIC, from_block, to_block)
