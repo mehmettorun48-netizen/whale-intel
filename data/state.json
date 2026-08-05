@@ -15526,11 +15526,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25684561,
+    "last_block": 25684592,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25684561,
+    "last_block": 25684592,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15665,7 +15665,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25684561,
+    "last_block": 25684592,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -15972,6 +15972,10 @@
     "ethereum:0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f": [
       true,
       "CoinGecko kategorisi: Stablecoins"
+    ],
+    "ethereum:0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": [
+      true,
+      "CoinGecko kategorisi: Tokenized BTC"
     ]
   },
   "price_watch": {
