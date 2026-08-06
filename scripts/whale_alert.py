@@ -12,122 +12,66 @@ LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
-LOW_CAP_THRESHOLD_USD = 500_000  # market cap below this = "yeni/düşük cap coin"
+LOW_CAP_THRESHOLD_USD = 500_000
 
-NEW_TOKEN_AGE_HOURS = 72  # kontratın deploy'undan bu kadar saat geçmemişse
-# "taze çıkan" olarak öne çıkarılır -- market cap'ten bağımsız bir sinyal,
-# çünkü hızlı pump eden taze bir coin'in mcap'i düşük cap eşiğini çoktan
-# geçmiş olabilir (tam da "01" örneğinde olduğu gibi: mcap zaten $19M).
+NEW_TOKEN_AGE_HOURS = 72
+NEW_TOKEN_MCAP_CEILING = 50_000_000
+PRICE_WATCH_MAX_AGE_HOURS = 72
+MAX_DISTINCT_TOKENS_PER_SWAP = 7
 
-NEW_TOKEN_MCAP_CEILING = 50_000_000  # bu mcap'in üzerindeki coinler için
-# kontrat yaşı hiç sorgulanmaz -- onlarca milyon dolarlık bir mcap'e ulaşmış
-# bir coin pratikte zaten "keşfedilmiş" demektir, yaşını bilmenin bir değeri
-# yok. Bu eşik, her run'da onlarca aday için gereksiz Etherscan çağrısı
-# yapılmasını (ve run süresinin dakikalarca uzamasını) önlüyor.
-
-PRICE_WATCH_MAX_AGE_HOURS = 72  # bir coin ilk bildirimden bu kadar saat
-# sonra takip listesinden düşürülür -- liste sınırsız büyümesin diye.
-
-MAX_DISTINCT_TOKENS_PER_SWAP = 7  # more than this = likely a batch/aggregated
-# settlement tx (e.g. CoW Protocol) bundling many unrelated users' trades --
-# not a single whale's swap, and not reliably attributable to one wallet.
-# Kept generous because single-user aggregator routes (1inch/Paraswap/0x
-# splitting one trade across several pools) can legitimately touch 5-6
-# distinct tokens without being a multi-user batch.
-
-ETHERSCAN_MIN_INTERVAL = 0.5  # seconds between calls -- Etherscan's free tier
-# allows only ~3 requests/sec; without pacing, a busy run fires dozens of
-# receipt lookups back-to-back and most of them get rejected with a rate
-# limit error, which then looks like "no swap found" everywhere.
+ETHERSCAN_MIN_INTERVAL = 0.5
 _last_etherscan_call = 0.0
 
-BLOCKSCOUT_MIN_INTERVAL = 0.25  # Blockscout ücretsiz katmanı 5 istek/saniye
-# izin veriyor -- Etherscan'inkiyle aynı disiplinle, ayrı bir sayaçla
-# pace ediyoruz (aynı global sayaç kullanılırsa iki API birbirini
-# gereksiz yere geciktirir).
+BLOCKSCOUT_MIN_INTERVAL = 0.25
 _last_blockscout_call = 0.0
 
-ANALYZE_SWAP_MIN_USD = 100  # below this, skip the extra receipt-fetch call
-# for directly-tracked tokens -- too small to be worth the API budget or to
-# meaningfully affect the accumulation total.
-
+ANALYZE_SWAP_MIN_USD = 100
 FIRST_RUN_BLOCK_LOOKBACK = 300
+MAX_BLOCKS_PER_RUN = 30
 
-MAX_BLOCKS_PER_RUN = 30  # global fallback -- kullanılan asıl değer artık her
-# chain'in kendi CHAINS[chain]["max_blocks_per_run"] alanından okunuyor,
-# çünkü farklı chainlerin blok üretim hızı çok farklı (Ethereum ~12sn/blok,
-# Base ~2sn/blok, Arbitrum ~0.25sn/blok). Bu sabit sadece chain_cfg'de
-# max_blocks_per_run tanımlı değilse devreye giriyor.
-# Önce 2000, sonra 150 idi -- ama WETH o kadar yüksek hacimli
-# ki (150 blokta 6506 transfer logu, Etherscan'in 1000-log limitini bile
-# aşıp bölünüyor) 150 bloklukbir "yakalama" parçası bile ~10 dakika
-# sürüyordu ve cron aralığıyla çakışıyordu. 30, normal (birikimsiz) bir
-# run'ın işlediği hacme (~5 dakikada üretilen blok sayısı) yakın olduğu
-# için, birikim varken de her run'ın normal hızda kalmasını sağlıyor --
-# birikimin tamamen erimesi daha uzun sürer ama hiçbir run asla çakışmaz.
-
-CLUSTER_WINDOW_SECONDS = 6 * 3600  # önce 24 saatti -- 24 saatlik bir pencerede
-# 2 farklı balina alımı çok da anlamlı bir "ani ilgi" sinyali değil (gün
-# içine yayılmış olabilir). 6 saate indirmek, sinyali "kısa sürede birden
-# fazla balina aynı coin'e ilgi gösteriyor" anlamına gelecek şekilde
-# sıkılaştırıyor -- gerçek bir erken uyarı için daha anlamlı.
+CLUSTER_WINDOW_SECONDS = 6 * 3600
 CLUSTER_TIERS = [
     (10, "🔴 Balinalar Yoğun Alıyor"),
     (5, "🟠 Güçlü Balina Birikimi"),
     (2, "🟡 Balina Birikimi Başladı"),
 ]
 
-ACCUMULATION_MAX_RANGE_PCT = 10  # son 6 saatte fiyat bu yüzdeden fazla
-# hareket etmemişse "dipte akümülasyon/yatay bant" sayılır -- coin sakin,
-# birikim aşamasında demektir.
-BREAKOUT_MIN_H1_PCT = 15  # son 1 saatte fiyat bu yüzdeden fazla yukarı
-# hareket ettiyse, akümülasyon bandını "kırdı" sayılır.
-BREAKOUT_MIN_VOLUME_MULTIPLIER = 3  # kırılımın gerçek alım baskısıyla
-# desteklendiğini doğrulamak için son 5 dakikalık hacim, normal temposunun
-# (son 1 saatlik hacmin 1/12'si) en az bu katı olmalı.
-BREAKOUT_COOLDOWN_HOURS = 6  # aynı coin için kırılım bildirimi bu süre
-# dolmadan tekrar gönderilmez.
+ACCUMULATION_MAX_RANGE_PCT = 25  # son 6 saatte fiyat bu yüzdeden fazla
+# hareket etmemişse "dipte akümülasyon/yatay bant" sayılır. Önce %10 idi --
+# DEX/memecoin ortamının doğal volatilitesine göre çok sıkıydı, taze
+# coinlerin normal gürültüsünü bile "zaten hareket etti" sayıp
+# filtreliyordu. %25, BREAKOUT_MIN_H1_PCT (%15) eşiğinin biraz üzerinde
+# tutularak "zaten kırılmış" ile "hâlâ bantta" arasında gerçek bir ayrımı
+# koruyor.
+BREAKOUT_MIN_H1_PCT = 15
+BREAKOUT_MIN_VOLUME_MULTIPLIER = 3
+BREAKOUT_MIN_VOLUME_USD = 30_000  # oransal hacim teyidine (3x normal tempo)
+# ek olarak, kırılım anındaki son 1 saatlik hacmin (vol_h1) mutlak değeri
+# de bu tutarın altında olmamalı -- çok düşük hacimli coinlerde "3 katı"
+# şartı çok küçük mutlak sayılarla (örn. $500 -> $1500) da sağlanabiliyordu,
+# bu da anlamsız/gürültü sinyalleri üretiyordu. $50.000 gibi bir taban ise
+# gerçekten taze/düşük likiditeli coinlerin çoğunu elerdi -- $30.000 ikisi
+# arasında bir denge.
+BREAKOUT_COOLDOWN_HOURS = 6
 
-ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14  # Blockscout tokens listesinden gelen
-# bir token, "seen_tokens" kaydından bu kadar gün sonra pruning ile
-# temizlenir -- state.json'ın sınırsız büyümesini önlemek için.
-
-ROBINHOOD_MIN_LIQUIDITY_USD = 100  # bu likiditenin altındaki pool'lar
-# pratikte "toz miktar" sayılır, henüz gerçek bir pool oluşmamış olabilir --
-# bu durumda kalıcı silme yapmıyoruz, bir sonraki run'da tekrar denenir.
+ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14
+ROBINHOOD_MIN_LIQUIDITY_USD = 100
+ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS = 48  # bu saatten daha eski bir pair,
+# botun ilk kez gördüğü token olsa bile izleme listesine eklenmez --
+# ilk run'da zaten var olan tüm tokenlerin toptan işleme girmesini önler.
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-
 V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
 V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
 CURVE_EXCHANGE_TOPIC = "0x8b3e96f2b889fa771c53c981b40daf005f63f637f1869f707052d15a3dd97140"
-# Covers Uniswap V2, Uniswap V3, and every fork that reuses their Swap event
-# signature (Sushiswap, PancakeSwap V2/V3 on BSC, etc.), plus Curve pools.
-# Does NOT cover Balancer, 0x/1inch's own settlement events, or other AMM
-# designs with different event signatures -- those would need their own
-# verified topic hashes.
 SWAP_TOPICS = (V2_SWAP_TOPIC, V3_SWAP_TOPIC, CURVE_EXCHANGE_TOPIC)
 
-# Per-chain configuration. Adding a new EVM chain is just adding an entry
-# here (as long as Etherscan's v2 API and DexScreener both support it).
-# "max_blocks_per_run" chain başına ayrı tanımlanıyor çünkü blok üretim
-# hızı chain'den chain'e çok farklı -- aynı sabiti tüm chainlere uygulamak,
-# hızlı chainlerde (Base, Arbitrum) backlog'un çok daha hızlı büyümesine
-# yol açar.
 CHAINS = {
     "ethereum": {
         "chain_id": 1,
         "native_wrapped_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         "native_wrapped_symbol": "WETH",
-        "discovery_addresses": {
-            "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",  # WETH
-            # DAI/USDe/PYUSD/USDC/USDT hepsi denendi, hepsi kaldırıldı --
-            # her ek keşif tetikleyicisi run süresini artırıyor ve
-            # cron-job.org'un 5 dakikalık tetikleme aralığıyla çakışıp
-            # run'ların kuyrukta iptal edilmesine yol açıyordu. WETH tek
-            # başına zaten en zengin keşif kaynağı (en çok altcoin
-            # WETH'e karşı işlem görüyor).
-        },
+        "discovery_addresses": {"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"},
         "dexscreener_id": "ethereum",
         "coingecko_platform": "ethereum",
         "explorer": "https://etherscan.io",
@@ -137,9 +81,7 @@ CHAINS = {
         "chain_id": 56,
         "native_wrapped_address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
         "native_wrapped_symbol": "WBNB",
-        "discovery_addresses": {
-            "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",  # WBNB
-        },
+        "discovery_addresses": {"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"},
         "dexscreener_id": "bsc",
         "coingecko_platform": "binance-smart-chain",
         "explorer": "https://bscscan.com",
@@ -149,67 +91,31 @@ CHAINS = {
         "chain_id": 8453,
         "native_wrapped_address": "0x4200000000000000000000000000000000000006",
         "native_wrapped_symbol": "WETH",
-        "discovery_addresses": {
-            "0x4200000000000000000000000000000000000006",  # WETH (Base)
-        },
+        "discovery_addresses": {"0x4200000000000000000000000000000000000006"},
         "dexscreener_id": "base",
         "coingecko_platform": "base",
         "explorer": "https://basescan.org",
-        "max_blocks_per_run": 150,  # Base bloğu ~2sn'de bir üretiliyor
-        # (Ethereum'un ~6 katı hız) -- 5 dakikalık cron'da Base'de ~150
-        # blok üretiliyor. NOT: Base, Etherscan'in ücretsiz API planında
-        # desteklenmiyor -- "Free API access is not supported for this
-        # chain" hatası alınıyorsa, Etherscan hesabında Lite plana (veya
-        # üstüne) geçilmesi gerekiyor.
+        "max_blocks_per_run": 150,
     },
     "arbitrum": {
         "chain_id": 42161,
         "native_wrapped_address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
         "native_wrapped_symbol": "WETH",
-        "discovery_addresses": {
-            "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",  # WETH (Arbitrum)
-        },
+        "discovery_addresses": {"0x82af49447d8a07e3bd95bd0d56f35241523fbab1"},
         "dexscreener_id": "arbitrum",
         "coingecko_platform": "arbitrum-one",
         "explorer": "https://arbiscan.org",
-        "max_blocks_per_run": 10000,  # Arbitrum'un gerçek üretim hızı ilk
-        # tahminlerin (300, sonra 1500, sonra 3000) hepsinin çok üzerinde
-        # çıktı -- gerçek run log'larında backlog 3000'lik limitle bile
-        # sürekli büyümeye devam etti (42.8K -> 50.2K -> 53K -> 57.4K blok).
-        # fetch_logs zaten 1000-log Etherscan limitini otomatik olarak
-        # parçalara bölüyor, bu yüzden yüksek bir değer burada güvenli --
-        # sadece run süresini uzatır, hataya yol açmaz. Arbitrum,
-        # Etherscan'in ücretsiz API planında destekleniyor.
+        "max_blocks_per_run": 10000,
     },
 }
 
-# ---------------------------------------------------------------------------
-# Blockscout-only chainler (Etherscan'in desteklemediği chainler için).
-#
-# Robinhood Chain (chainId 4663), 1 Temmuz 2026'da açılan bir Arbitrum
-# Orbit L2. Etherscan bu chain'i hiç desteklemiyor -- resmi explorer'ı
-# Blockscout. Ayrıca bu chain'de Uniswap V2, V3 VE V4 aynı anda, ilk
-# günden itibaren aktif kullanılıyor, üstüne birden fazla rakip memecoin
-# launchpad'i (Bags, Pons, Pools.trade) kendi kontratlarıyla token/pool
-# oluşturuyor. Bu yüzden mevcut CHAINS mimarisindeki "WETH transferini
-# izle" discovery mantığı burada işe yaramaz:
-#   1) Hangi tek factory/PoolManager adresinin izleneceği güvenilir
-#      şekilde doğrulanamadı (29+ adres "PoolManager" adıyla kayıtlı,
-#      hangisi launchpad'lerin kendi türevi hangisi gerçek Uniswap
-#      singleton'ı ayırt edilemedi).
-#   2) Uniswap V4 pool'ları saf native ETH'e karşı işlem görebiliyor
-#      (WETH ERC20 Transfer'i hiç yok) -- WETH-izleme mantığı bu
-#      pool'larda kavramsal olarak çalışmaz.
-#
-# Bunun yerine: Blockscout'un genel "tokens" API'sinden yeni token
-# kontratlarını çekip, her biri için DexScreener'da pool/likidite
-# oluşmuş mu diye kontrol ediyoruz (bkz. discover_new_tokens_blockscout).
-# Bu yaklaşım hangi launchpad/DEX versiyonu kullanıldığına bakmaz.
+# Etherscan'in desteklemediği chainler (şu an: Robinhood Chain, chainId 4663).
 BLOCKSCOUT_CHAINS = {
     "robinhood": {
         "chain_id": 4663,
         "api_base": "https://robinhoodchain.blockscout.com/api/v2",
         "dexscreener_id": "robinhood",
+        "coingecko_platform": None,
         "explorer": "https://robinhoodchain.blockscout.com",
         "native_symbol": "ETH",
     },
@@ -225,9 +131,6 @@ _token_pair_cache = {}
 
 
 def etherscan_call(chain_id, params, timeout=20):
-    """Single choke point for every Etherscan API request, so we can pace
-    them and never blow past the rate limit (shared across all chains,
-    since it's the same account/key)."""
     global _last_etherscan_call
     elapsed = time.time() - _last_etherscan_call
     if elapsed < ETHERSCAN_MIN_INTERVAL:
@@ -241,10 +144,6 @@ def etherscan_call(chain_id, params, timeout=20):
 
 
 def blockscout_call(api_base, path, params=None, timeout=20):
-    """Etherscan'in desteklemediği chainler (şu an: Robinhood Chain) için
-    Blockscout API v2'ye tek çıkış noktası. etherscan_call()'ın Blockscout
-    karşılığı -- aynı disiplinle pace ediyor, hatayı asla yutmuyor
-    (except:pass yok), her zaman logluyor."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
@@ -261,6 +160,10 @@ def blockscout_call(api_base, path, params=None, timeout=20):
         return {}
 
 
+def get_chain_cfg(chain_key):
+    return CHAINS.get(chain_key) or BLOCKSCOUT_CHAINS.get(chain_key)
+
+
 def load_state():
     with open(STATE_FILE, "r") as f:
         return json.load(f)
@@ -272,8 +175,6 @@ def save_state(state):
 
 
 def load_tokens():
-    """Format: chain,address,symbol,decimals -- e.g.
-    ethereum,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,WETH,18"""
     items = []
     with open(TOKENS_FILE, "r") as f:
         for line in f:
@@ -330,9 +231,6 @@ def get_token_price_usd(coingecko_platform, contract_address):
 
 
 def get_tx_receipt(chain_id, tx_hash):
-    """Fetches (and caches) the full transaction receipt, including all logs
-    and the tx sender. Used both to confirm a real swap happened and to find
-    which token the whale actually ended up receiving."""
     cache_key = (chain_id, tx_hash)
     if cache_key in _receipt_cache:
         return _receipt_cache[cache_key]
@@ -355,9 +253,6 @@ def get_tx_receipt(chain_id, tx_hash):
 
 
 def has_swap_event(receipt):
-    """Confirms this transaction contains an actual DEX Swap event, not just
-    a token transfer that happens to pass through a DEX-adjacent address
-    (which also happens on liquidity add/remove -- those are NOT purchases)."""
     logs = receipt.get("logs", [])
     for log in logs:
         topic0 = (log.get("topics") or [""])[0]
@@ -367,11 +262,6 @@ def has_swap_event(receipt):
 
 
 def is_batch_settlement(receipt):
-    """Detects aggregated settlement transactions (e.g. CoW Protocol batch
-    auctions) that bundle many different users' trades into one tx. These
-    involve an unusually high number of distinct tokens moving at once and
-    can't be reliably attributed to a single whale's trade -- the "wallet"
-    involved is typically a shared router/settlement contract, not a person."""
     logs = receipt.get("logs", [])
     tokens = set()
     for log in logs:
@@ -384,14 +274,6 @@ def is_batch_settlement(receipt):
 
 
 def find_bought_transfer(receipt, native_wrapped_address):
-    """Finds the LAST Transfer log in the receipt whose token isn't the
-    chain's wrapped native token. Returns (token_address, recipient, raw_amount).
-    This works regardless of whether the swap went straight to a pool or was
-    routed through an aggregator/router/solver -- the final leg of any swap
-    is always a Transfer of the output token to whoever actually receives it,
-    which is more reliable than assuming tx.from is the real trader (that's
-    false for CoW Protocol, 1inch Fusion, and other intent-based DEXes where
-    a solver -- not the user -- submits the transaction)."""
     logs = receipt.get("logs", [])
     bought_address, recipient, raw_amount = None, None, 0
     for log in logs:
@@ -414,8 +296,6 @@ _decimals_cache = {}
 
 
 def get_token_decimals(chain_id, token_address):
-    """Reads a token's decimals() directly from the contract via eth_call,
-    for tokens we discover dynamically (not pre-configured in tokens.txt)."""
     cache_key = (chain_id, token_address)
     if cache_key in _decimals_cache:
         return _decimals_cache[cache_key]
@@ -441,10 +321,6 @@ _creation_time_cache = {}
 
 
 def get_contract_creation_time(chain_id, token_address):
-    """Returns the unix timestamp of the token contract's deployment, or
-    None if it can't be determined. Used to catch genuinely NEW tokens --
-    market cap alone can't do this, since a token can pump hard in its
-    first hours and blow past the low-cap threshold before we ever see it."""
     cache_key = (chain_id, token_address)
     if cache_key in _creation_time_cache:
         return _creation_time_cache[cache_key]
@@ -481,30 +357,6 @@ def get_contract_creation_time(chain_id, token_address):
 
 _pool_address_cache = {}
 
-
-# ---------------------------------------------------------------------------
-# Infrastructure-token classifier
-#
-# Goal: tell a genuine tradeable altcoin/memecoin apart from DeFi
-# infrastructure tokens (liquid staking, liquid restaking, wrapped assets,
-# synthetic assets, stablecoins, yield/vault tokens, receipt tokens, etc.)
-# WITHOUT a per-symbol blacklist, so it keeps working on tokens that don't
-# exist yet. Two independent signals are combined:
-#
-#   1. On-chain contract behavior (ERC4626 vaults expose asset(); wrapped/
-#      receipt tokens commonly expose underlying()). This looks at what the
-#      contract actually IS, not what it's named.
-#   2. CoinGecko's own, continuously-updated category taxonomy. New staking/
-#      restaking/wrapped tokens get classified there as they launch, so this
-#      adapts automatically -- we only hardcode which CATEGORY TYPES to
-#      exclude (matching the token *types* requested), never token names.
-#
-# This is a heuristic, not a proof. It will occasionally miss an infra token
-# CoinGecko hasn't categorized yet, or (rarely) exclude a legitimate token
-# that happens to expose one of these functions for unrelated reasons. Given
-# the choice, we bias toward excluding when uncertain, per user preference.
-# ---------------------------------------------------------------------------
-
 EXCLUDED_CATEGORY_KEYWORDS = [
     "liquid staking", "liquid restaking", "restaking", "staking",
     "wrapped-tokens", "wrapped", "stablecoin", "synthetic",
@@ -515,8 +367,6 @@ EXCLUDED_CATEGORY_KEYWORDS = [
 
 
 def call_view_function(chain_id, token_address, selector):
-    """Calls a zero-argument view function via eth_call and returns the raw
-    hex result, or None if the call reverted / the function doesn't exist."""
     try:
         data = etherscan_call(chain_id, {
             "module": "proxy",
@@ -542,9 +392,6 @@ def _decodes_to_address(hex_result):
 
 
 def is_erc4626_or_wrapped(chain_id, token_address):
-    """Checks contract behavior directly: ERC4626 vaults expose asset(), and
-    most wrapped/receipt tokens expose underlying() -- both return the
-    address of the token they represent/wrap. Neither is name-based."""
     if _decodes_to_address(call_view_function(chain_id, token_address, "0x38d52e0f")):
         return True, "ERC4626 vault (asset() fonksiyonu var)"
     if _decodes_to_address(call_view_function(chain_id, token_address, "0x6f307dc3")):
@@ -556,9 +403,6 @@ _cg_data_cache = {}
 
 
 def get_coingecko_token_data(coingecko_platform, token_address):
-    """Fetches (and caches) the full CoinGecko contract-lookup response for a
-    token once, so categories and exchange-listing checks share a single API
-    call instead of hitting CoinGecko twice per token."""
     if not coingecko_platform:
         return {}
     cache_key = (coingecko_platform, token_address)
@@ -579,8 +423,6 @@ def get_coingecko_token_data(coingecko_platform, token_address):
 
 
 def get_coingecko_categories(coingecko_platform, token_address):
-    """CoinGecko's own category taxonomy for a token -- updates on its own
-    as new tokens launch and get classified, no code changes needed here."""
     data = get_coingecko_token_data(coingecko_platform, token_address)
     return data.get("categories") or []
 
@@ -590,16 +432,9 @@ MAJOR_CEX_NAMES = [
     "bitget", "gate.io", "gateio", "htx", "huobi", "bitfinex", "crypto.com",
     "mexc", "bitstamp",
 ]
-# Lowercased substrings matched against CoinGecko's exchange "market" name
-# per ticker. Substring match (not exact) because CoinGecko sometimes
-# suffixes regional/entity variants (e.g. "Binance US").
 
 
 def is_cex_listed(coingecko_platform, token_address):
-    """Returns True if the token already trades on a major centralized
-    exchange, per CoinGecko's ticker data. Used to keep alerts to genuinely
-    DEX-only, unlisted tokens -- once a coin lands on a major CEX it's no
-    longer the kind of early/undiscovered signal being looked for here."""
     data = get_coingecko_token_data(coingecko_platform, token_address)
     tickers = data.get("tickers") or []
     for ticker in tickers:
@@ -611,12 +446,6 @@ def is_cex_listed(coingecko_platform, token_address):
 
 
 def is_infrastructure_token(chain_cfg, token_address):
-    """Returns (should_exclude, reason). Checks the CHEAP signal first
-    (CoinGecko's categories, a single non-Etherscan API call) and only pays
-    for the two Etherscan eth_call probes (asset()/underlying()) if the
-    category check didn't already answer -- most common staking/wrapped
-    counterparties to WETH (stETH, wstETH, rETH, weETH, etc.) are already
-    categorized on CoinGecko, so this skips 2 Etherscan calls for them."""
     categories = get_coingecko_categories(chain_cfg["coingecko_platform"], token_address)
     for cat in categories:
         cat_lower = cat.lower()
@@ -631,12 +460,7 @@ def is_infrastructure_token(chain_cfg, token_address):
     return False, ""
 
 
-
 def get_dex_pool_addresses(dexscreener_id, token_address):
-    """Returns the set of known AMM pool/pair contract addresses for a token,
-    so we can tell a real trader apart from pool infrastructure. Needed
-    because a pool receiving a token (someone selling INTO it) looks
-    identical, at the single-Transfer-log level, to a whale receiving it."""
     cache_key = (dexscreener_id, token_address)
     if cache_key in _pool_address_cache:
         return _pool_address_cache[cache_key]
@@ -659,8 +483,6 @@ def get_dex_pool_addresses(dexscreener_id, token_address):
 
 
 def check_dex_token(dexscreener_id, token_address):
-    """Looks up DexScreener pairs by the TOKEN's contract address (not a pool
-    address), filtered to the right chain."""
     cache_key = (dexscreener_id, token_address)
     if cache_key in _token_pair_cache:
         return _token_pair_cache[cache_key]
@@ -682,9 +504,6 @@ def check_dex_token(dexscreener_id, token_address):
 
 
 def resolve_token_info_from_pair(pair, token_address):
-    """DexScreener's priceUsd/priceNative are always relative to the pair's
-    BASE token. Figures out whether our token is the base or the quote side
-    of the returned pair and returns (token_info, price_usd) either way."""
     base = pair.get("baseToken", {})
     quote = pair.get("quoteToken", {})
 
@@ -707,12 +526,6 @@ def get_latest_block(chain_id):
 
 
 def fetch_logs(chain_id, address, topic0, from_block, to_block, _depth=0):
-    """Etherscan's getLogs caps out at 1000 results per call. If we hit that
-    cap, it means there's more data we haven't seen -- so we split the block
-    range in half and fetch each half separately, recursively, until every
-    chunk comes back under the cap. Without this, busy tokens (like WETH)
-    silently lose whatever transfers happened to fall past the 1000th log,
-    which could easily be the exact whale buy we're looking for."""
     data = etherscan_call(chain_id, {
         "module": "logs",
         "action": "getLogs",
@@ -763,8 +576,6 @@ def update_cluster(state, cluster_key, whale_address, usd_value):
 
 
 def find_paid_token(receipt, target_token_address, payer_address):
-    """Given a swap tx, finds what OTHER token `payer_address` sent out in
-    the same tx (i.e. what they paid to acquire target_token_address)."""
     logs = receipt.get("logs", [])
     for log in logs:
         topics = log.get("topics") or []
@@ -780,9 +591,7 @@ def find_paid_token(receipt, target_token_address, payer_address):
 
 
 def get_token_symbol_label(chain_cfg, token_address):
-    """Best-effort human-readable symbol for a token address, without
-    failing hard if DexScreener doesn't know it."""
-    if token_address == chain_cfg["native_wrapped_address"]:
+    if token_address == chain_cfg.get("native_wrapped_address"):
         return chain_cfg["native_wrapped_symbol"]
     pair = check_dex_token(chain_cfg["dexscreener_id"], token_address)
     if pair:
@@ -794,23 +603,15 @@ def get_token_symbol_label(chain_cfg, token_address):
 
 
 def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
-    """For a plain (non-native-wrapped-triggered) tracked-token transfer,
-    checks whether it was part of a real DEX swap AND whether the tracked
-    token actually ended up with a real trader (a BUY) rather than flowing
-    into a pool (a SELL of the tracked token -- not what we want to alert
-    on). Uses known pool addresses rather than tx.from, since tx.from is a
-    solver/relayer -- not the actual trader -- on intent-based DEXes like
-    CoW Protocol or 1inch Fusion. Returns (should_skip, note)."""
     receipt = get_tx_receipt(chain_cfg["chain_id"], tx_hash)
     if not receipt or not has_swap_event(receipt):
-        return True, ""  # not a swap at all -- nothing to alert on
+        return True, ""
 
     if is_batch_settlement(receipt):
-        return True, ""  # can't attribute to one whale, skip alerting entirely
+        return True, ""
 
     pool_addresses = get_dex_pool_addresses(chain_cfg["dexscreener_id"], target_token_address)
     if recipient_address in pool_addresses:
-        # The tracked token went INTO a pool -- someone sold it, not a buy.
         return True, ""
 
     paid_address = find_paid_token(receipt, target_token_address, recipient_address)
@@ -821,12 +622,10 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
 
 
 def check_accumulation_breakouts(state):
-    """Looks for the specific pattern requested: a coin that was flat/ranging
-    (accumulating) for the last several hours and has just broken upward out
-    of that range with real volume behind it -- an early entry signal rather
-    than a "it already pumped" confirmation. Re-checks CEX-listing status at
-    alert time too, since a coin could get listed on a major exchange after
-    it was first discovered. Uses DexScreener only, no Etherscan calls."""
+    """Ethereum/Arbitrum/Base VE Robinhood Chain -- hepsi için ortak.
+    price_watch listesindeki her coin'i chain'ine bakmadan aynı kriterle
+    tarar: son 6 saat sakin (±%25) + son 1 saat kırılım (%15+) + hacim
+    teyidi (3x normal tempo VE mutlak olarak en az $30.000)."""
     watch = state.setdefault("price_watch", {})
     now = int(time.time())
 
@@ -839,7 +638,7 @@ def check_accumulation_breakouts(state):
 
     for key, entry in watch.items():
         chain, address = key.split(":", 1)
-        chain_cfg = CHAINS.get(chain)
+        chain_cfg = get_chain_cfg(chain)
         if not chain_cfg:
             continue
 
@@ -847,9 +646,7 @@ def check_accumulation_breakouts(state):
         if (now - last_alert_ts) / 3600 < BREAKOUT_COOLDOWN_HOURS:
             continue
 
-        if is_cex_listed(chain_cfg["coingecko_platform"], address):
-            # Borsaya sonradan listelenmiş olabilir -- artık DEX-only,
-            # keşfedilmemiş bir sinyal değil, atla.
+        if is_cex_listed(chain_cfg.get("coingecko_platform"), address):
             continue
 
         pair = check_dex_token(chain_cfg["dexscreener_id"], address)
@@ -868,8 +665,9 @@ def check_accumulation_breakouts(state):
         was_accumulating = abs(change_h6) <= ACCUMULATION_MAX_RANGE_PCT
         expected_m5 = vol_h1 / 12
         volume_confirmed = expected_m5 > 0 and (vol_m5 / expected_m5) >= BREAKOUT_MIN_VOLUME_MULTIPLIER
+        volume_meets_minimum = vol_h1 >= BREAKOUT_MIN_VOLUME_USD
 
-        if not (was_accumulating and change_h1 >= BREAKOUT_MIN_H1_PCT and volume_confirmed):
+        if not (was_accumulating and change_h1 >= BREAKOUT_MIN_H1_PCT and volume_confirmed and volume_meets_minimum):
             continue
 
         _, current_price = resolve_token_info_from_pair(pair, address)
@@ -883,6 +681,7 @@ def check_accumulation_breakouts(state):
             f"Kontrat: {address}\n\n"
             f"Son 6 Saat Değişim: %{change_h6:.1f} (yataydı)\n"
             f"Son 1 Saat Değişim: %{change_h1:.1f} (kırılım)\n"
+            f"Son 1 Saat Hacim: ${vol_h1:,.0f}\n"
             f"Hacim Teyidi: {(vol_m5 / expected_m5):.1f}x normal\n"
             f"Fiyat: ${current_price:.8f}\n"
             f"Market Cap: ${mcap:,.0f}\n"
@@ -898,24 +697,6 @@ def check_accumulation_breakouts(state):
 
 
 def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
-    """Robinhood Chain (ve ileride eklenebilecek başka Blockscout-only
-    chainler) için discovery. Mevcut WETH-transfer-izleme mantığından
-    kasıtlı olarak farklı çalışıyor -- gerekçesi BLOCKSCOUT_CHAINS
-    tanımının üstündeki yorumda açıklandı.
-
-    Blockscout'un genel token listesini çekiyoruz, her yeni (daha önce
-    görülmemiş) token için DexScreener'da gerçek bir pool/likidite oluşmuş
-    mu diye bakıyoruz. Henüz pool yoksa ya da likidite toz miktardaysa
-    KALICI OLARAK SİLMİYORUZ (önceki mimarideki "bir daha asla tekrar
-    denenmez" bug'ına düşmemek için) -- sadece bu run'da atlıyoruz, bir
-    sonraki run'da tekrar kontrol edilecek.
-
-    NOT: /tokens endpoint'inin gerçekten "en yeni önce" sıralı dönüp
-    dönmediği bu yazıldığı sırada canlı olarak doğrulanamadı. İlk
-    run'ların loglarına bakıp gerekirse sıralama/sayfalama mantığını
-    ayarlayacağız -- aynen Etherscan blok aralıklarını log'a bakarak
-    kalibre ettiğimiz gibi.
-    """
     seen_tokens = state.setdefault(f"{chain_key}_seen_tokens", {})
 
     now = int(time.time())
@@ -937,7 +718,10 @@ def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
 
     print(f"[{chain_key}] Blockscout tokens API {len(items)} token döndürdü")
 
-    new_count = 0
+    watch = state.setdefault("price_watch", {})
+    added_to_watch = 0
+    skipped_not_fresh = 0
+
     for item in items:
         address = (item.get("address") or item.get("address_hash") or "").lower()
         if not address:
@@ -960,34 +744,39 @@ def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
                   f"-- eşiğin altında, bu run'da atlanıyor, tekrar denenecek")
             continue
 
-        info, token_price = resolve_token_info_from_pair(pair, address)
-        mcap = pair.get("marketCap") or pair.get("fdv") or 0
-        dex_name = pair.get("dexId", "Bilinmiyor")
         pair_created_ms = pair.get("pairCreatedAt")
-        age_line = ""
-        if pair_created_ms:
-            age_hours = (time.time() - pair_created_ms / 1000) / 3600
-            age_line = f"Pair Yaşı: {age_hours:.1f} saat\n"
-
         seen_tokens[address] = now
-        new_count += 1
 
-        send_telegram(
-            f"🆕 <b>TAZE TOKEN - ROBINHOOD CHAIN</b>\n\n"
-            f"<pre>"
-            f"Coin: {name} ({symbol})\n"
-            f"Kontrat: {address}\n\n"
-            f"Fiyat: ${token_price:.8f}\n"
-            f"Market Cap: ${mcap:,.0f}\n"
-            f"Likidite: ${liquidity:,.0f}\n"
-            f"DEX: {dex_name}\n"
-            f"{age_line}"
-            f"</pre>\n"
-            f"Kontrat: {chain_cfg['explorer']}/token/{address}\n"
-            f"Grafik: https://dexscreener.com/{chain_cfg['dexscreener_id']}/{address}"
-        )
+        if not pair_created_ms:
+            print(f"[{chain_key}] {symbol} ({address}): pair yaşı bilinmiyor, "
+                  f"izleme listesine eklenmeden görüldü işaretlendi")
+            skipped_not_fresh += 1
+            continue
 
-    print(f"[{chain_key}] {new_count} yeni token bildirimi gönderildi")
+        age_hours = (time.time() - pair_created_ms / 1000) / 3600
+        if age_hours > ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS:
+            print(f"[{chain_key}] {symbol} ({address}): pair {age_hours:.1f} "
+                  f"saatlik, eşiğin ({ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS}sa) "
+                  f"üzerinde -- izleme listesine eklenmeden görüldü işaretlendi")
+            skipped_not_fresh += 1
+            continue
+
+        info, token_price = resolve_token_info_from_pair(pair, address)
+        watch_key = f"{chain_key}:{address}"
+        if token_price > 0 and watch_key not in watch:
+            watch[watch_key] = {
+                "baseline_price": token_price,
+                "first_seen_ts": now,
+                "symbol": symbol,
+                "name": name,
+            }
+            added_to_watch += 1
+            print(f"[{chain_key}] {symbol} ({address}): pair {age_hours:.1f} "
+                  f"saatlik, taze -- izleme listesine eklendi (bildirim "
+                  f"kırılım anında gönderilecek)")
+
+    print(f"[{chain_key}] {added_to_watch} coin izleme listesine eklendi, "
+          f"{skipped_not_fresh} taze olmadığı için sessizce işaretlendi")
 
 
 def main():
@@ -998,8 +787,6 @@ def main():
         try:
             discover_new_tokens_blockscout(chain_key, chain_cfg, state)
         except Exception as e:
-            # Bu chain'deki bir hata, aşağıdaki Ethereum/Base/Arbitrum
-            # taramasını asla etkilememeli -- hatayı logluyoruz, yutmuyoruz.
             print(f"[{chain_key}] discover_new_tokens_blockscout hata verdi: {e}")
 
     tokens = load_tokens()
@@ -1066,18 +853,12 @@ def main():
                     print(f"Skipped (batch/aggregated settlement, not a single whale trade): {tx_hash}")
                     continue
 
-                bought_address, whale, raw_bought_amount = find_bought_transfer(
-                    receipt, contract
-                )
+                bought_address, whale, raw_bought_amount = find_bought_transfer(receipt, contract)
                 if not bought_address or not whale:
                     print(f"Skipped (swap detected but couldn't trace bought token): {tx_hash}")
                     continue
 
                 if bought_address in tracked_by_chain.get(chain, set()):
-                    # Already directly tracked as its own token entry -- that
-                    # branch handles it (more accurately, since it isn't
-                    # anchored to this particular native-token leg of a
-                    # multi-hop route). Avoid a duplicate/inconsistent alert.
                     continue
 
                 if not whale or whale in exchange_addresses:
@@ -1085,9 +866,6 @@ def main():
 
                 pool_addresses = get_dex_pool_addresses(dex_id, bought_address)
                 if whale in pool_addresses:
-                    # The bought token actually went to a pool, not a real
-                    # trader (e.g. this native-token leg was really someone
-                    # else selling bought_address into liquidity).
                     continue
 
                 infra_cache_state = state.setdefault("infra_status", {})
@@ -1095,12 +873,6 @@ def main():
                 if infra_cache_key in infra_cache_state:
                     is_infra, infra_reason = infra_cache_state[infra_cache_key]
                 else:
-                    # infra durumu bir tokenin özelliği, zamanla değişmez --
-                    # bu yüzden state.json'a kalıcı olarak kaydediyoruz.
-                    # WETH'in en sık karşılaştığı sahte-altcoin'ler (stETH,
-                    # wstETH, weETH gibi) her run'da tekrar tekrar aday
-                    # olarak geliyordu; artık ilk kontrolden sonra bir daha
-                    # asla ne CoinGecko'ya ne Etherscan'e sorulmuyorlar.
                     is_infra, infra_reason = is_infrastructure_token(chain_cfg, bought_address)
                     infra_cache_state[infra_cache_key] = [is_infra, infra_reason]
                 if is_infra:
@@ -1108,9 +880,6 @@ def main():
                     continue
 
                 if is_cex_listed(chain_cfg["coingecko_platform"], bought_address):
-                    # Already trades on a major centralized exchange -- not
-                    # the DEX-only, genuinely undiscovered signal the person
-                    # wants to see.
                     print(f"Skipped (already listed on a major CEX): {tx_hash}")
                     continue
 
@@ -1131,37 +900,17 @@ def main():
                     liquidity = 0
 
                 if 0.90 <= token_price <= 1.10:
-                    # Trading within a few percent of $1 -- almost certainly
-                    # a stablecoin/synthetic-dollar token that CoinGecko
-                    # hasn't categorized yet (e.g. DUSD "Dialectic USD"),
-                    # not a genuine altcoin whale buy. A real altcoin
-                    # landing exactly on a dollar peg by coincidence is
-                    # essentially never worth alerting on either way.
                     print(f"Skipped (price near $1, likely an uncategorized stablecoin): {tx_hash}")
                     continue
 
-                # Compute the REAL received amount/USD value from the bought
-                # token's own transfer + decimals, not from whichever native-
-                # token leg happened to trigger this scan -- on multi-hop
-                # routes (e.g. USDC->WETH->TOKEN) that leg's value can be
-                # very different from the whale's actual total spend.
                 bought_decimals = get_token_decimals(chain_cfg["chain_id"], bought_address)
                 received_amount = raw_bought_amount / (10 ** bought_decimals)
                 accurate_usd_value = received_amount * token_price if token_price > 0 else usd_value
                 if accurate_usd_value < SINGLE_BUY_THRESHOLD_USD:
-                    # The native-token leg looked big, but the whale's actual
-                    # total buy (once traced properly) doesn't clear the bar.
                     continue
 
                 paid_address = find_paid_token(receipt, bought_address, whale)
                 if not paid_address:
-                    # Whale muhtemelen doğrudan native ETH ile ödedi (WETH
-                    # ERC20 Transfer'i whale'in kendi adresinden çıkmadı --
-                    # router içinde deposit edildi). Bu artık bildirim
-                    # bastırmıyor, sadece "ödeme yöntemi net değil" notu
-                    # ekliyoruz -- önceki mimarideki en kritik bug tam
-                    # buydu: gerçek bir whale alımı, sırf ödeme kaynağı
-                    # tespit edilemediği için tamamen bastırılıyordu.
                     paid_line = "Karşılığında Verilen: Bilinmiyor (muhtemelen doğrudan native ETH)\n"
                 else:
                     paid_symbol = get_token_symbol_label(chain_cfg, paid_address)
@@ -1174,23 +923,10 @@ def main():
                 creation_time_cache_state = state.setdefault("creation_times", {})
                 creation_cache_key = f"{chain}:{bought_address}"
                 if mcap > 0 and mcap >= NEW_TOKEN_MCAP_CEILING:
-                    # Already well-established by market cap -- not worth
-                    # the two extra Etherscan calls to find out just how
-                    # old it is; it's never going to qualify as "new".
                     creation_ts = None
                 elif creation_cache_key in creation_time_cache_state:
                     creation_ts = creation_time_cache_state[creation_cache_key]
                 else:
-                    # Bu iki ekstra Etherscan çağrısı (getcontractcreation +
-                    # eth_getBlockByNumber), yoğun bir run'da onlarca kez
-                    # tekrarlanınca run süresini dakikalarca uzatıyordu --
-                    # aynı coin defalarca görülse bile her seferinde yeniden
-                    # sorgulanıyordu. Artık state.json'a kalıcı olarak
-                    # kaydediyoruz, bir coin'in yaşı bir kere öğrenilince bir
-                    # daha asla tekrar sorgulanmıyor. Başarısız aramaları
-                    # (None) kaydetmiyoruz, böylece geçici bir API hatası
-                    # coin'i kalıcı olarak "yaşı bilinmiyor" durumuna
-                    # kilitlemez -- bir sonraki run'da tekrar denenir.
                     creation_ts = get_contract_creation_time(chain_cfg["chain_id"], bought_address)
                     if creation_ts is not None:
                         creation_time_cache_state[creation_cache_key] = creation_ts
@@ -1199,10 +935,6 @@ def main():
                 age_line = f"Kontrat Yaşı: {token_age_hours:.1f} saat\n" if token_age_hours is not None else ""
 
                 if mcap == 0 and not is_new_token:
-                    # Market cap verisi hâlâ yoksa, coin'i state'e "beklemede"
-                    # olarak kaydediyoruz (kalıcı silme yapmıyoruz -- eski
-                    # mimarideki bug tam buydu: DexScreener/CoinGecko henüz
-                    # indekslememişse coin bir daha asla yeniden denenmiyordu).
                     pending = state.setdefault("pending_mcap_recheck", {})
                     pending_key = f"{chain}:{bought_address}"
                     pending[pending_key] = pending.get(pending_key, 0) + 1
@@ -1229,10 +961,6 @@ def main():
 
                 watch_key = f"{chain}:{bought_address}"
                 if token_price > 0 and watch_key not in state.setdefault("price_watch", {}):
-                    # Bu coin'i ilk bildirdiğimiz an, fiyatını kaydediyoruz --
-                    # check_accumulation_breakouts() bir sonraki run'lardan
-                    # itibaren bu coin'in dipte akümülasyon yapıp yapmadığını
-                    # ve yukarı kırılım olup olmadığını izleyecek.
                     state["price_watch"][watch_key] = {
                         "baseline_price": token_price,
                         "first_seen_ts": int(time.time()),
