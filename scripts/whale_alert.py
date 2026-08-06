@@ -60,9 +60,13 @@ STABLECOIN_QUOTE_SYMBOLS = {
 }
 # Bir coin'in pool'unun KARŞI tarafı (base/quote'un diğeri) bu listedeki
 # bir stablecoin ise, o coin hiç izleme listesine alınmıyor -- kullanıcı
-# sadece native ETH'ye karşı kurulan pool'ları izlemek istiyor, dolar
-# paritesine karşı kurulanları değil. Robinhood Chain'de USDG ve USDe
-# yerleşik olarak destekleniyor, bu yüzden özellikle bu ikisi önemli.
+# sadece native ETH'ye karşı kurulan pool'ları izlemek istiyor.
+
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"  # bridge/burn
+# işlemlerinde (örn. Chainlink CCIP ile başka bir chain'e köprüleme)
+# alıcı olarak sıkça görünüyor -- gerçek bir whale/alıcı değil, kesinlikle
+# bir "alım" sayılmamalı. Bunu kontrol etmeden önce whale bu adres
+# çıktığında, bot yanlışlıkla "yeni balina alımı" bildirimi gönderiyordu.
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
@@ -438,10 +442,6 @@ MAJOR_CEX_NAMES = [
 
 
 def is_cex_listed(coingecko_platform, token_address):
-    """NOT: Robinhood Chain CoinGecko'da henüz indekslenmediği için bu
-    fonksiyon o chain'deki coinler için her zaman False dönüyor (bilinen,
-    şu an için çözülmemiş bir kısıt -- güvenilir bir alternatif kaynak
-    doğrulanmadı, tahmini bir çözüm eklenmedi)."""
     data = get_coingecko_token_data(coingecko_platform, token_address)
     tickers = data.get("tickers") or []
     for ticker in tickers:
@@ -527,9 +527,6 @@ def resolve_token_info_from_pair(pair, token_address):
 
 
 def get_counterparty_symbol(pair, token_address):
-    """Pair'in KARŞI tarafının sembolünü döndürür (base/quote'un token_address
-    OLMAYAN tarafı) -- bu, coin'in hangi para birimine karşı işlem gördüğünü
-    (ETH mi, USDT/USDG gibi bir stablecoin mi) anlamak için kullanılıyor."""
     base = pair.get("baseToken", {})
     quote = pair.get("quoteToken", {})
     if base.get("address", "").lower() == token_address:
@@ -642,7 +639,6 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
 
 
 def check_accumulation_breakouts(state):
-    """Ethereum/Arbitrum/Base VE Robinhood Chain -- hepsi için ortak."""
     watch = state.setdefault("price_watch", {})
     now = int(time.time())
 
@@ -714,10 +710,6 @@ def check_accumulation_breakouts(state):
 
 
 def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
-    """Robinhood Chain için discovery. Anında bildirim GÖNDERMİYOR -- taze,
-    likit VE ETH'ye karşı kurulmuş (stablecoin'e karşı DEĞİL) bir token
-    bulunca sessizce price_watch listesine ekliyor, check_accumulation_
-    breakouts() tarafından değerlendirilmesini bekliyor."""
     seen_tokens = state.setdefault(f"{chain_key}_seen_tokens", {})
 
     now = int(time.time())
@@ -893,7 +885,7 @@ def main():
                 if bought_address in tracked_by_chain.get(chain, set()):
                     continue
 
-                if not whale or whale in exchange_addresses:
+                if not whale or whale == ZERO_ADDRESS or whale in exchange_addresses:
                     continue
 
                 pool_addresses = get_dex_pool_addresses(dex_id, bought_address)
