@@ -38,27 +38,31 @@ CLUSTER_TIERS = [
 
 ACCUMULATION_MAX_RANGE_PCT = 25  # son 6 saatte fiyat bu yüzdeden fazla
 # hareket etmemişse "dipte akümülasyon/yatay bant" sayılır. Önce %10 idi --
-# DEX/memecoin ortamının doğal volatilitesine göre çok sıkıydı, taze
-# coinlerin normal gürültüsünü bile "zaten hareket etti" sayıp
-# filtreliyordu. %25, BREAKOUT_MIN_H1_PCT (%15) eşiğinin biraz üzerinde
-# tutularak "zaten kırılmış" ile "hâlâ bantta" arasında gerçek bir ayrımı
-# koruyor.
+# DEX/memecoin ortamının doğal volatilitesine göre çok sıkıydı. %25,
+# BREAKOUT_MIN_H1_PCT (%15) eşiğinin biraz üzerinde tutularak "zaten
+# kırılmış" ile "hâlâ bantta" arasında gerçek bir ayrımı koruyor.
 BREAKOUT_MIN_H1_PCT = 15
 BREAKOUT_MIN_VOLUME_MULTIPLIER = 3
 BREAKOUT_MIN_VOLUME_USD = 30_000  # oransal hacim teyidine (3x normal tempo)
 # ek olarak, kırılım anındaki son 1 saatlik hacmin (vol_h1) mutlak değeri
-# de bu tutarın altında olmamalı -- çok düşük hacimli coinlerde "3 katı"
-# şartı çok küçük mutlak sayılarla (örn. $500 -> $1500) da sağlanabiliyordu,
-# bu da anlamsız/gürültü sinyalleri üretiyordu. $50.000 gibi bir taban ise
-# gerçekten taze/düşük likiditeli coinlerin çoğunu elerdi -- $30.000 ikisi
-# arasında bir denge.
+# de bu tutarın altında olmamalı -- çok küçük mutlak sayılarla da "3 katı"
+# şartı sağlanabiliyordu, bu gürültü sinyalleri üretiyordu.
 BREAKOUT_COOLDOWN_HOURS = 6
 
 ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14
 ROBINHOOD_MIN_LIQUIDITY_USD = 100
 ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS = 48  # bu saatten daha eski bir pair,
-# botun ilk kez gördüğü token olsa bile izleme listesine eklenmez --
-# ilk run'da zaten var olan tüm tokenlerin toptan işleme girmesini önler.
+# botun ilk kez gördüğü token olsa bile izleme listesine eklenmez.
+
+STABLECOIN_QUOTE_SYMBOLS = {
+    "USDT", "USDC", "USDC.E", "USDG", "USDE", "DAI", "BUSD", "TUSD",
+    "USDP", "FDUSD", "USDD", "PYUSD", "FRAX", "GUSD", "LUSD",
+}
+# Bir coin'in pool'unun KARŞI tarafı (base/quote'un diğeri) bu listedeki
+# bir stablecoin ise, o coin hiç izleme listesine alınmıyor -- kullanıcı
+# sadece native ETH'ye karşı kurulan pool'ları izlemek istiyor, dolar
+# paritesine karşı kurulanları değil. Robinhood Chain'de USDG ve USDe
+# yerleşik olarak destekleniyor, bu yüzden özellikle bu ikisi önemli.
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
@@ -109,7 +113,6 @@ CHAINS = {
     },
 }
 
-# Etherscan'in desteklemediği chainler (şu an: Robinhood Chain, chainId 4663).
 BLOCKSCOUT_CHAINS = {
     "robinhood": {
         "chain_id": 4663,
@@ -435,6 +438,10 @@ MAJOR_CEX_NAMES = [
 
 
 def is_cex_listed(coingecko_platform, token_address):
+    """NOT: Robinhood Chain CoinGecko'da henüz indekslenmediği için bu
+    fonksiyon o chain'deki coinler için her zaman False dönüyor (bilinen,
+    şu an için çözülmemiş bir kısıt -- güvenilir bir alternatif kaynak
+    doğrulanmadı, tahmini bir çözüm eklenmedi)."""
     data = get_coingecko_token_data(coingecko_platform, token_address)
     tickers = data.get("tickers") or []
     for ticker in tickers:
@@ -517,6 +524,19 @@ def resolve_token_info_from_pair(pair, token_address):
         return quote, price
 
     return {}, 0.0
+
+
+def get_counterparty_symbol(pair, token_address):
+    """Pair'in KARŞI tarafının sembolünü döndürür (base/quote'un token_address
+    OLMAYAN tarafı) -- bu, coin'in hangi para birimine karşı işlem gördüğünü
+    (ETH mi, USDT/USDG gibi bir stablecoin mi) anlamak için kullanılıyor."""
+    base = pair.get("baseToken", {})
+    quote = pair.get("quoteToken", {})
+    if base.get("address", "").lower() == token_address:
+        return (quote.get("symbol") or "").upper()
+    if quote.get("address", "").lower() == token_address:
+        return (base.get("symbol") or "").upper()
+    return ""
 
 
 def get_latest_block(chain_id):
@@ -622,10 +642,7 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
 
 
 def check_accumulation_breakouts(state):
-    """Ethereum/Arbitrum/Base VE Robinhood Chain -- hepsi için ortak.
-    price_watch listesindeki her coin'i chain'ine bakmadan aynı kriterle
-    tarar: son 6 saat sakin (±%25) + son 1 saat kırılım (%15+) + hacim
-    teyidi (3x normal tempo VE mutlak olarak en az $30.000)."""
+    """Ethereum/Arbitrum/Base VE Robinhood Chain -- hepsi için ortak."""
     watch = state.setdefault("price_watch", {})
     now = int(time.time())
 
@@ -697,6 +714,10 @@ def check_accumulation_breakouts(state):
 
 
 def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
+    """Robinhood Chain için discovery. Anında bildirim GÖNDERMİYOR -- taze,
+    likit VE ETH'ye karşı kurulmuş (stablecoin'e karşı DEĞİL) bir token
+    bulunca sessizce price_watch listesine ekliyor, check_accumulation_
+    breakouts() tarafından değerlendirilmesini bekliyor."""
     seen_tokens = state.setdefault(f"{chain_key}_seen_tokens", {})
 
     now = int(time.time())
@@ -721,6 +742,7 @@ def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
     watch = state.setdefault("price_watch", {})
     added_to_watch = 0
     skipped_not_fresh = 0
+    skipped_stablecoin_pair = 0
 
     for item in items:
         address = (item.get("address") or item.get("address_hash") or "").lower()
@@ -736,6 +758,15 @@ def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
         if not pair:
             print(f"[{chain_key}] {symbol} ({address}): DexScreener'da pool "
                   f"henüz yok, bu run'da atlanıyor, tekrar denenecek")
+            continue
+
+        counterparty_symbol = get_counterparty_symbol(pair, address)
+        if counterparty_symbol in STABLECOIN_QUOTE_SYMBOLS:
+            print(f"[{chain_key}] {symbol} ({address}): pool {counterparty_symbol} "
+                  f"stablecoin'ine karşı kurulmuş -- izleme listesine "
+                  f"eklenmeden görüldü işaretlendi")
+            seen_tokens[address] = now
+            skipped_stablecoin_pair += 1
             continue
 
         liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0) or 0
@@ -772,11 +803,12 @@ def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
             }
             added_to_watch += 1
             print(f"[{chain_key}] {symbol} ({address}): pair {age_hours:.1f} "
-                  f"saatlik, taze -- izleme listesine eklendi (bildirim "
-                  f"kırılım anında gönderilecek)")
+                  f"saatlik, taze, ETH pariteli -- izleme listesine eklendi")
 
     print(f"[{chain_key}] {added_to_watch} coin izleme listesine eklendi, "
-          f"{skipped_not_fresh} taze olmadığı için sessizce işaretlendi")
+          f"{skipped_not_fresh} taze olmadığı için, "
+          f"{skipped_stablecoin_pair} stablecoin pariteli olduğu için "
+          f"sessizce işaretlendi")
 
 
 def main():
