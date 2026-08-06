@@ -2788,6 +2788,13 @@
       },
       "total_usd": 13454.116609642193,
       "last_tier": 0
+    },
+    "ethereum:0xb8d89678e75a973e74698c976716308abb8a46a4": {
+      "whales": {
+        "0x0000000000000000000000000000000000000000": 1786051898
+      },
+      "total_usd": 4350.8581029597135,
+      "last_tier": 0
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
@@ -15526,11 +15533,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25689180,
+    "last_block": 25689211,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25689180,
+    "last_block": 25689211,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15680,7 +15687,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25689180,
+    "last_block": 25689211,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -15842,7 +15849,8 @@
     "ethereum:0x58749c46ffe97e4d79508a2c781c440f4756f064": 1720836455,
     "ethereum:0x8f294a99a0609822c233b24867f331c292ce2da9": 1785809495,
     "ethereum:0xa0df17b5ac76ababa36e1450e2cbcd18a620c845": 1784223743,
-    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 1735731443
+    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 1735731443,
+    "ethereum:0xb8d89678e75a973e74698c976716308abb8a46a4": 1763993903
   },
   "infra_status": {
     "ethereum:0xd166337499e176bbc38a1fbd113ab144e5bd2df7": [
@@ -16108,6 +16116,10 @@
     "arbitrum:0xeb466342c4d449bc9f53a865d5cb90586f405215": [
       true,
       "CoinGecko kategorisi: Bridged USDC"
+    ],
+    "ethereum:0xb8d89678e75a973e74698c976716308abb8a46a4": [
+      false,
+      ""
     ]
   },
   "price_watch": {
@@ -16123,10 +16135,16 @@
       "symbol": "FWA",
       "name": "Fake World Assets",
       "last_breakout_alert_ts": 1786033199
+    },
+    "ethereum:0xb8d89678e75a973e74698c976716308abb8a46a4": {
+      "baseline_price": 1.18,
+      "first_seen_ts": 1786051897,
+      "symbol": "savUSD",
+      "name": "Staked avUSD"
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 491807205,
+    "last_block": 491817206,
     "accumulation": {}
   },
   "robinhood_seen_tokens": {
