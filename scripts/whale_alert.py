@@ -24,7 +24,10 @@ MAX_DISTINCT_TOKENS_PER_SWAP = 7
 ETHERSCAN_MIN_INTERVAL = 0.5
 _last_etherscan_call = 0.0
 
-BLOCKSCOUT_MIN_INTERVAL = 0.25
+BLOCKSCOUT_MIN_INTERVAL = 1.5  # önce 0.25 idi -- Blockscout'un anonim/
+# API-key'siz erişimi çok daha düşük bir hız sınırına sahip, daha ilk
+# çağrıda "429 Too many requests" hatası alındı. 1.5 saniye daha güvenli
+# bir tempo.
 _last_blockscout_call = 0.0
 
 ANALYZE_SWAP_MIN_USD = 100
@@ -130,8 +133,6 @@ def etherscan_call(chain_id, params, timeout=20):
 
 
 def _to_hex_block(value):
-    """Etherscan-tarzı ondalık blok numaralarını (veya zaten hex olanları)
-    JSON-RPC'nin beklediği hex string'e çevirir."""
     if value is None:
         return "latest"
     s = str(value)
@@ -142,14 +143,11 @@ def _to_hex_block(value):
     return hex(int(s))
 
 
-def blockscout_jsonrpc_call(api_base, method, rpc_params, timeout=20):
+def blockscout_jsonrpc_call(api_base, method, rpc_params, timeout=20, _retry=0):
     """Blockscout'un standart Ethereum JSON-RPC 2.0 endpoint'i
-    ({instance}/api/eth-rpc) -- eth_blockNumber, eth_call,
-    eth_getTransactionReceipt, eth_getBlockByNumber, eth_getLogs gibi saf
-    RPC metodları için. Etherscan'in module=proxy ile sardığı metodların
-    Blockscout'taki karşılığı budur -- module=proxy Blockscout'ta hiç
-    desteklenmiyor ("Unknown module" hatası veriyor), bu yüzden bu ayrı
-    endpoint gerekiyor."""
+    ({instance}/api/eth-rpc). 429 (rate limit) hatası alınırsa, artan
+    bekleme süreleriyle en fazla 3 kez yeniden dener -- API key'siz
+    erişimin düşük hız sınırına takılmak, tüm run'ı iptal etmesin diye."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
@@ -162,6 +160,11 @@ def blockscout_jsonrpc_call(api_base, method, rpc_params, timeout=20):
             "params": rpc_params,
             "id": 1,
         }, timeout=timeout)
+        if r.status_code == 429 and _retry < 3:
+            wait = 3 * (2 ** _retry)
+            print(f"Blockscout rate limited ({method}), waiting {wait}s and retrying ({_retry + 1}/3)")
+            time.sleep(wait)
+            return blockscout_jsonrpc_call(api_base, method, rpc_params, timeout, _retry + 1)
         if not r.ok:
             print(f"Blockscout JSON-RPC call failed ({method}): HTTP {r.status_code} -- {r.text[:200]}")
             return {}
@@ -172,8 +175,6 @@ def blockscout_jsonrpc_call(api_base, method, rpc_params, timeout=20):
 
 
 def blockscout_legacy_call(api_base, params, timeout=20):
-    """Blockscout'un Etherscan-uyumlu eski API'si -- module=contract gibi
-    (eth_* OLMAYAN) Etherscan-tarzı çağrılar için."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
@@ -191,11 +192,6 @@ def blockscout_legacy_call(api_base, params, timeout=20):
 
 
 def rpc_call(chain_cfg, params, timeout=20):
-    """Etherscan ve Blockscout arasında tek çıkış noktası. Etherscan için
-    hiçbir şey değişmiyor. Blockscout için, module=proxy ve
-    module=logs&action=getLogs çağrıları JSON-RPC 2.0'a çevrilip
-    /api/eth-rpc'ye POST ediliyor; diğer module'ler (örn. module=contract)
-    eski GET tabanlı Etherscan-uyumlu API'ye gönderiliyor."""
     if chain_cfg.get("api_type") != "blockscout":
         return etherscan_call(chain_cfg["chain_id"], params, timeout)
 
@@ -229,16 +225,10 @@ def rpc_call(chain_cfg, params, timeout=20):
             "address": params.get("address"),
             "topics": [params.get("topic0")],
         }], timeout)
-        # eth_getLogs sonucu JSON-RPC'de doğrudan "result" altında bir
-        # liste olarak geliyor -- Etherscan'in getLogs'uyla aynı şekilde
-        # {"result": [...]} formatında olduğu için fetch_logs() hiç
-        # değişmeden çalışıyor.
         if "result" in result:
             return result
         return {"result": []}
 
-    # module=contract&action=getcontractcreation gibi diğer çağrılar --
-    # eski Etherscan-uyumlu GET API'de deniyoruz.
     return blockscout_legacy_call(api_base, params, timeout)
 
 
