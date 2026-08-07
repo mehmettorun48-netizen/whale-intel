@@ -12,11 +12,14 @@ LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
-MIN_MCAP_USD = 20_000
+MIN_MCAP_USD = 20_000  # bu market cap'in altındaki coinler bildirim
+# üretmiyor.
 
-MAX_PAIR_AGE_DAYS = 30
+MAX_PAIR_AGE_DAYS = 30  # pair'in DexScreener'da kayıtlı oluşturulma
+# zamanından bu kadar gün geçmişse, coin artık "yeni/taze" sayılmıyor ve
+# bildirim gönderilmiyor.
 
-NEW_TOKEN_AGE_HOURS = 2160
+NEW_TOKEN_AGE_HOURS = 2160  # 90 gün
 NEW_TOKEN_MCAP_CEILING = 50_000_000
 PRICE_WATCH_MAX_AGE_HOURS = 72
 MAX_DISTINCT_TOKENS_PER_SWAP = 7
@@ -38,12 +41,6 @@ CLUSTER_TIERS = [
     (2, "🟡 Balina Birikimi Başladı"),
 ]
 
-ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14
-ROBINHOOD_MIN_LIQUIDITY_USD = 100
-ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS = 10  # önce 48 saatti -- kullanıcı isteğiyle
-# 10 saate düşürüldü, sadece gerçekten çok taze pair'ler izleme listesine
-# girsin diye.
-
 STABLECOIN_QUOTE_SYMBOLS = {
     "USDT", "USDT0", "USD₮0", "USDC", "USDC.E", "USDG", "USDE", "DAI",
     "BUSD", "TUSD", "USDP", "FDUSD", "USDD", "PYUSD", "FRAX", "GUSD",
@@ -55,6 +52,11 @@ V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d
 V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
 CURVE_EXCHANGE_TOPIC = "0x8b3e96f2b889fa771c53c981b40daf005f63f637f1869f707052d15a3dd97140"
 SWAP_TOPICS = (V2_SWAP_TOPIC, V3_SWAP_TOPIC, CURVE_EXCHANGE_TOPIC)
+# NOT: Robinhood Chain'de Uniswap V4 pool'ları saf native ETH'e karşı
+# (WETH ERC20 değil) kurulabiliyor -- bu tür pool'lardaki swap'ler bu
+# WETH-transfer-izleme mantığıyla yakalanamaz (WETH hiç hareket etmiyor).
+# WETH'e karşı kurulan pool'lar (görülen çoğu taze coin -- POD dahil)
+# sorunsuz yakalanıyor. Bu, tahmin değil, bilinen ve kabul edilen bir sınır.
 
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -99,16 +101,23 @@ CHAINS = {
         "explorer": "https://arbiscan.org",
         "max_blocks_per_run": 10000,
     },
-}
-
-BLOCKSCOUT_CHAINS = {
     "robinhood": {
         "chain_id": 4663,
-        "api_base": "https://robinhoodchain.blockscout.com/api/v2",
+        "native_wrapped_address": "0x0bd7d308f8e1639fab988df18a8011f41eacad73",
+        "native_wrapped_symbol": "WETH",
+        "discovery_addresses": {"0x0bd7d308f8e1639fab988df18a8011f41eacad73"},
         "dexscreener_id": "robinhood",
         "coingecko_platform": None,
         "explorer": "https://robinhoodchain.blockscout.com",
-        "native_symbol": "ETH",
+        "api_type": "blockscout",  # Etherscan bu chain'i desteklemiyor --
+        # Robinhood'un resmi duyurusu Blockscout'un aynı Etherscan API
+        # şeklini (module=.../action=...) desteklediğini doğruluyor.
+        "legacy_api_base": "https://robinhoodchain.blockscout.com/api",
+        "max_blocks_per_run": 20000,  # Robinhood bloğu ~0.1sn'de bir
+        # üretiliyor (Arbitrum'dan bile hızlı) -- 5 dakikalık cron'da
+        # teorik olarak ~3000 blok üretiliyor, ama Arbitrum'da tahminlerin
+        # gerçek hızın çok altında kaldığını gördüğümüz için geniş bir pay
+        # bırakıldı. İlk run loglarına bakıp gerekirse ayarlanacak.
     },
 }
 
@@ -134,25 +143,38 @@ def etherscan_call(chain_id, params, timeout=20):
     return r.json()
 
 
-def blockscout_call(api_base, path, params=None, timeout=20):
+def blockscout_rpc_call(api_base, params, timeout=20):
+    """Blockscout'un Etherscan-uyumlu eski API'sine (module=.../action=...)
+    tek çıkış noktası. Robinhood Chain'in resmi duyurusu bu formatın
+    Etherscan'inkiyle birebir aynı olduğunu doğruluyor -- apikey/chainid
+    parametresi gerekmiyor (tek chain'lik bir Blockscout kurulumu)."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
         time.sleep(BLOCKSCOUT_MIN_INTERVAL - elapsed)
     _last_blockscout_call = time.time()
     try:
-        r = requests.get(f"{api_base}{path}", params=params or {}, timeout=timeout)
+        r = requests.get(api_base, params=params, timeout=timeout)
         if not r.ok:
-            print(f"Blockscout call failed ({path}): HTTP {r.status_code} -- {r.text[:200]}")
+            print(f"Blockscout RPC call failed: HTTP {r.status_code} -- {r.text[:200]}")
             return {}
         return r.json()
     except Exception as e:
-        print(f"Blockscout call error ({path}): {e}")
+        print(f"Blockscout RPC call error: {e}")
         return {}
 
 
+def rpc_call(chain_cfg, params, timeout=20):
+    """Etherscan ve Blockscout arasında tek çıkış noktası -- ikisi de aynı
+    module/action parametre yapısını paylaştığı için, geri kalan tüm kod
+    hangi API'nin kullanıldığını hiç bilmek zorunda değil."""
+    if chain_cfg.get("api_type") == "blockscout":
+        return blockscout_rpc_call(chain_cfg["legacy_api_base"], params, timeout)
+    return etherscan_call(chain_cfg["chain_id"], params, timeout)
+
+
 def get_chain_cfg(chain_key):
-    return CHAINS.get(chain_key) or BLOCKSCOUT_CHAINS.get(chain_key)
+    return CHAINS.get(chain_key)
 
 
 def load_state():
@@ -221,13 +243,13 @@ def get_token_price_usd(coingecko_platform, contract_address):
     return price
 
 
-def get_tx_receipt(chain_id, tx_hash):
-    cache_key = (chain_id, tx_hash)
+def get_tx_receipt(chain_cfg, tx_hash):
+    cache_key = (chain_cfg["chain_id"], tx_hash)
     if cache_key in _receipt_cache:
         return _receipt_cache[cache_key]
     result = {}
     try:
-        data = etherscan_call(chain_id, {
+        data = rpc_call(chain_cfg, {
             "module": "proxy",
             "action": "eth_getTransactionReceipt",
             "txhash": tx_hash,
@@ -286,13 +308,13 @@ def find_bought_transfer(receipt, native_wrapped_address):
 _decimals_cache = {}
 
 
-def get_token_decimals(chain_id, token_address):
-    cache_key = (chain_id, token_address)
+def get_token_decimals(chain_cfg, token_address):
+    cache_key = (chain_cfg["chain_id"], token_address)
     if cache_key in _decimals_cache:
         return _decimals_cache[cache_key]
     decimals = 18
     try:
-        data = etherscan_call(chain_id, {
+        data = rpc_call(chain_cfg, {
             "module": "proxy",
             "action": "eth_call",
             "to": token_address,
@@ -311,13 +333,13 @@ def get_token_decimals(chain_id, token_address):
 _creation_time_cache = {}
 
 
-def get_contract_creation_time(chain_id, token_address):
-    cache_key = (chain_id, token_address)
+def get_contract_creation_time(chain_cfg, token_address):
+    cache_key = (chain_cfg["chain_id"], token_address)
     if cache_key in _creation_time_cache:
         return _creation_time_cache[cache_key]
     creation_ts = None
     try:
-        data = etherscan_call(chain_id, {
+        data = rpc_call(chain_cfg, {
             "module": "contract",
             "action": "getcontractcreation",
             "contractaddresses": token_address,
@@ -326,10 +348,10 @@ def get_contract_creation_time(chain_id, token_address):
         if isinstance(result, list) and result:
             tx_hash = result[0].get("txHash")
             if tx_hash:
-                receipt = get_tx_receipt(chain_id, tx_hash)
+                receipt = get_tx_receipt(chain_cfg, tx_hash)
                 block_hex = receipt.get("blockNumber")
                 if block_hex:
-                    block_data = etherscan_call(chain_id, {
+                    block_data = rpc_call(chain_cfg, {
                         "module": "proxy",
                         "action": "eth_getBlockByNumber",
                         "tag": block_hex,
@@ -357,9 +379,9 @@ EXCLUDED_CATEGORY_KEYWORDS = [
 ]
 
 
-def call_view_function(chain_id, token_address, selector):
+def call_view_function(chain_cfg, token_address, selector):
     try:
-        data = etherscan_call(chain_id, {
+        data = rpc_call(chain_cfg, {
             "module": "proxy",
             "action": "eth_call",
             "to": token_address,
@@ -382,10 +404,10 @@ def _decodes_to_address(hex_result):
         return False
 
 
-def is_erc4626_or_wrapped(chain_id, token_address):
-    if _decodes_to_address(call_view_function(chain_id, token_address, "0x38d52e0f")):
+def is_erc4626_or_wrapped(chain_cfg, token_address):
+    if _decodes_to_address(call_view_function(chain_cfg, token_address, "0x38d52e0f")):
         return True, "ERC4626 vault (asset() fonksiyonu var)"
-    if _decodes_to_address(call_view_function(chain_id, token_address, "0x6f307dc3")):
+    if _decodes_to_address(call_view_function(chain_cfg, token_address, "0x6f307dc3")):
         return True, "Wrapped/receipt token (underlying() fonksiyonu var)"
     return False, ""
 
@@ -444,7 +466,7 @@ def is_infrastructure_token(chain_cfg, token_address):
             if keyword in cat_lower:
                 return True, f"CoinGecko kategorisi: {cat}"
 
-    is_wrapped, reason = is_erc4626_or_wrapped(chain_cfg["chain_id"], token_address)
+    is_wrapped, reason = is_erc4626_or_wrapped(chain_cfg, token_address)
     if is_wrapped:
         return True, reason
 
@@ -527,14 +549,14 @@ def get_pair_age_days(pair):
     return (time.time() - pair_created_ms / 1000) / 86400
 
 
-def get_latest_block(chain_id):
-    data = etherscan_call(chain_id, {"module": "proxy", "action": "eth_blockNumber"})
+def get_latest_block(chain_cfg):
+    data = rpc_call(chain_cfg, {"module": "proxy", "action": "eth_blockNumber"})
     result = data.get("result", "0x0")
     return int(result, 16)
 
 
-def fetch_logs(chain_id, address, topic0, from_block, to_block, _depth=0):
-    data = etherscan_call(chain_id, {
+def fetch_logs(chain_cfg, address, topic0, from_block, to_block, _depth=0):
+    data = rpc_call(chain_cfg, {
         "module": "logs",
         "action": "getLogs",
         "address": address,
@@ -550,8 +572,8 @@ def fetch_logs(chain_id, address, topic0, from_block, to_block, _depth=0):
     if len(result) >= 1000 and from_block < to_block and _depth < 20:
         mid = (from_block + to_block) // 2
         print(f"Hit 1000-log cap for blocks {from_block}-{to_block}, splitting at {mid}")
-        left = fetch_logs(chain_id, address, topic0, from_block, mid, _depth + 1)
-        right = fetch_logs(chain_id, address, topic0, mid + 1, to_block, _depth + 1)
+        left = fetch_logs(chain_cfg, address, topic0, from_block, mid, _depth + 1)
+        right = fetch_logs(chain_cfg, address, topic0, mid + 1, to_block, _depth + 1)
         return left + right
 
     return result
@@ -611,7 +633,7 @@ def get_token_symbol_label(chain_cfg, token_address):
 
 
 def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
-    receipt = get_tx_receipt(chain_cfg["chain_id"], tx_hash)
+    receipt = get_tx_receipt(chain_cfg, tx_hash)
     if not receipt or not has_swap_event(receipt):
         return True, ""
 
@@ -705,115 +727,15 @@ def check_accumulation_breakouts(state):
         entry["alerted"] = True
 
 
-def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
-    seen_tokens = state.setdefault(f"{chain_key}_seen_tokens", {})
-
-    now = int(time.time())
-    stale_cutoff = now - ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS * 24 * 3600
-    stale_keys = [addr for addr, ts in seen_tokens.items() if ts < stale_cutoff]
-    for addr in stale_keys:
-        del seen_tokens[addr]
-
-    data = blockscout_call(chain_cfg["api_base"], "/tokens", {"type": "ERC-20"})
-    if not isinstance(data, dict):
-        print(f"[{chain_key}] tokens API beklenmeyen cevap döndürdü: {type(data)}")
-        return
-
-    items = data.get("items")
-    if not isinstance(items, list):
-        print(f"[{chain_key}] tokens API cevabında 'items' listesi yok. "
-              f"Cevap anahtarları: {list(data.keys())}")
-        return
-
-    print(f"[{chain_key}] Blockscout tokens API {len(items)} token döndürdü. "
-          f"İlk 5 adres: {[it.get('address') for it in items[:5]]}")
-
-    watch = state.setdefault("price_watch", {})
-    added_to_watch = 0
-    skipped_not_fresh = 0
-    skipped_stablecoin_pair = 0
-
-    for item in items:
-        address = (item.get("address") or item.get("address_hash") or "").lower()
-        if not address:
-            continue
-        if address in seen_tokens:
-            continue
-
-        symbol = item.get("symbol") or "???"
-        name = item.get("name") or "Bilinmiyor"
-
-        pair = check_dex_token(chain_cfg["dexscreener_id"], address)
-        if not pair:
-            print(f"[{chain_key}] {symbol} ({address}): DexScreener'da pool "
-                  f"henüz yok, bu run'da atlanıyor, tekrar denenecek")
-            continue
-
-        counterparty_symbol = get_counterparty_symbol(pair, address)
-        if counterparty_symbol in STABLECOIN_QUOTE_SYMBOLS:
-            print(f"[{chain_key}] {symbol} ({address}): pool {counterparty_symbol} "
-                  f"stablecoin'ine karşı kurulmuş -- izleme listesine "
-                  f"eklenmeden görüldü işaretlendi")
-            seen_tokens[address] = now
-            skipped_stablecoin_pair += 1
-            continue
-
-        liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0) or 0
-        if liquidity < ROBINHOOD_MIN_LIQUIDITY_USD:
-            print(f"[{chain_key}] {symbol} ({address}): likidite ${liquidity:,.0f} "
-                  f"-- eşiğin altında, bu run'da atlanıyor, tekrar denenecek")
-            continue
-
-        pair_age_days = get_pair_age_days(pair)
-        seen_tokens[address] = now
-
-        if pair_age_days is None:
-            print(f"[{chain_key}] {symbol} ({address}): pair yaşı bilinmiyor, "
-                  f"izleme listesine eklenmeden görüldü işaretlendi")
-            skipped_not_fresh += 1
-            continue
-
-        if pair_age_days * 24 > ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS:
-            print(f"[{chain_key}] {symbol} ({address}): pair {pair_age_days * 24:.1f} "
-                  f"saatlik, eşiğin ({ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS}sa) "
-                  f"üzerinde -- izleme listesine eklenmeden görüldü işaretlendi")
-            skipped_not_fresh += 1
-            continue
-
-        info, token_price = resolve_token_info_from_pair(pair, address)
-        watch_key = f"{chain_key}:{address}"
-        if token_price > 0 and watch_key not in watch:
-            watch[watch_key] = {
-                "baseline_price": token_price,
-                "first_seen_ts": now,
-                "symbol": symbol,
-                "name": name,
-            }
-            added_to_watch += 1
-            print(f"[{chain_key}] {symbol} ({address}): pair {pair_age_days * 24:.1f} "
-                  f"saatlik, taze, ETH pariteli -- izleme listesine eklendi")
-
-    print(f"[{chain_key}] {added_to_watch} coin izleme listesine eklendi, "
-          f"{skipped_not_fresh} taze olmadığı için, "
-          f"{skipped_stablecoin_pair} stablecoin pariteli olduğu için "
-          f"sessizce işaretlendi")
-
-
 def main():
     state = load_state()
     check_accumulation_breakouts(state)
-
-    for chain_key, chain_cfg in BLOCKSCOUT_CHAINS.items():
-        try:
-            discover_new_tokens_blockscout(chain_key, chain_cfg, state)
-        except Exception as e:
-            print(f"[{chain_key}] discover_new_tokens_blockscout hata verdi: {e}")
 
     tokens = load_tokens()
     exchange_addresses = load_exchanges()
 
     chains_in_use = sorted({t[0] for t in tokens})
-    latest_blocks = {chain: get_latest_block(CHAINS[chain]["chain_id"]) for chain in chains_in_use}
+    latest_blocks = {chain: get_latest_block(CHAINS[chain]) for chain in chains_in_use}
     tracked_by_chain = {}
     for t_chain, t_contract, _, _ in tokens:
         tracked_by_chain.setdefault(t_chain, set()).add(t_contract)
@@ -836,7 +758,7 @@ def main():
             to_block = from_block + chain_max_blocks
             print(f"[{chain}] {symbol}: backlog too large ({latest_block - from_block} blocks), capping this run to {from_block}-{to_block}")
 
-        logs = fetch_logs(chain_cfg["chain_id"], contract, TRANSFER_TOPIC, from_block, to_block)
+        logs = fetch_logs(chain_cfg, contract, TRANSFER_TOPIC, from_block, to_block)
         print(f"[{chain}] {symbol}: scanned blocks {from_block}-{to_block}, found {len(logs)} transfer logs")
 
         price = get_token_price_usd(chain_cfg["coingecko_platform"], contract)
@@ -872,7 +794,7 @@ def main():
                 if usd_value < SINGLE_BUY_THRESHOLD_USD:
                     continue
 
-                receipt = get_tx_receipt(chain_cfg["chain_id"], tx_hash)
+                receipt = get_tx_receipt(chain_cfg, tx_hash)
                 if not receipt or not has_swap_event(receipt):
                     continue
 
@@ -942,7 +864,7 @@ def main():
                     print(f"Skipped (price near $1, likely an uncategorized stablecoin): {tx_hash}")
                     continue
 
-                bought_decimals = get_token_decimals(chain_cfg["chain_id"], bought_address)
+                bought_decimals = get_token_decimals(chain_cfg, bought_address)
                 received_amount = raw_bought_amount / (10 ** bought_decimals)
                 accurate_usd_value = received_amount * token_price if token_price > 0 else usd_value
                 if accurate_usd_value < SINGLE_BUY_THRESHOLD_USD:
@@ -969,7 +891,7 @@ def main():
                 elif creation_cache_key in creation_time_cache_state:
                     creation_ts = creation_time_cache_state[creation_cache_key]
                 else:
-                    creation_ts = get_contract_creation_time(chain_cfg["chain_id"], bought_address)
+                    creation_ts = get_contract_creation_time(chain_cfg, bought_address)
                     if creation_ts is not None:
                         creation_time_cache_state[creation_cache_key] = creation_ts
                 token_age_hours = (time.time() - creation_ts) / 3600 if creation_ts else None
