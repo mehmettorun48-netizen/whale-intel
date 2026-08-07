@@ -13,11 +13,16 @@ ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
 MIN_MCAP_USD = 20_000  # bu market cap'in altındaki coinler bildirim
-# üretmiyor -- önce $500K'lik "düşük cap" üst sınırı vardı, kullanıcı
-# isteğiyle kaldırıldı, yerine sadece bu minimum taban kondu.
+# üretmiyor.
 
-NEW_TOKEN_AGE_HOURS = 2160  # 90 gün -- önce 72 saatti, kullanıcı isteğiyle
-# genişletildi.
+MAX_PAIR_AGE_DAYS = 30  # pair'in DexScreener'da kayıtlı oluşturulma
+# zamanından bu kadar gün geçmişse, coin artık "yeni/taze" sayılmıyor ve
+# bildirim gönderilmiyor -- OHM (4 yıl), EVA (1 yıl 3 ay) gibi çoktan
+# köklenmiş, dev market cap'li coinlerin akümülasyon/kırılım eşikleri
+# kaldırıldıktan sonra bildirim üretmesini önlemek için eklendi. Hem ana
+# discovery akışında hem check_accumulation_breakouts'ta uygulanıyor.
+
+NEW_TOKEN_AGE_HOURS = 2160  # 90 gün
 NEW_TOKEN_MCAP_CEILING = 50_000_000
 PRICE_WATCH_MAX_AGE_HOURS = 72
 MAX_DISTINCT_TOKENS_PER_SWAP = 7
@@ -38,12 +43,6 @@ CLUSTER_TIERS = [
     (5, "🟠 Güçlü Balina Birikimi"),
     (2, "🟡 Balina Birikimi Başladı"),
 ]
-
-# NOT: Akümülasyon/kırılım/hacim/cooldown eşikleri kullanıcı isteğiyle
-# kaldırıldı (bkz. check_accumulation_breakouts). İlgili sabitler
-# (ACCUMULATION_MAX_RANGE_PCT, BREAKOUT_MIN_H1_PCT,
-# BREAKOUT_MIN_VOLUME_MULTIPLIER, BREAKOUT_MIN_VOLUME_USD,
-# BREAKOUT_COOLDOWN_HOURS) artık kullanılmadığı için dosyadan çıkarıldı.
 
 ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14
 ROBINHOOD_MIN_LIQUIDITY_USD = 100
@@ -525,6 +524,15 @@ def get_counterparty_symbol(pair, token_address):
     return ""
 
 
+def get_pair_age_days(pair):
+    """DexScreener'ın pairCreatedAt alanından (ms epoch) pair'in gün
+    cinsinden yaşını döndürür, bilgi yoksa None döner."""
+    pair_created_ms = pair.get("pairCreatedAt")
+    if not pair_created_ms:
+        return None
+    return (time.time() - pair_created_ms / 1000) / 86400
+
+
 def get_latest_block(chain_id):
     data = etherscan_call(chain_id, {"module": "proxy", "action": "eth_blockNumber"})
     result = data.get("result", "0x0")
@@ -630,12 +638,12 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
 
 
 def check_accumulation_breakouts(state):
-    """price_watch listesindeki her coin için -- kullanıcı isteği üzerine
-    sakin/kırılım/hacim/cooldown eşikleri KALDIRILDI. Artık geçerli fiyat
-    verisi olan, CEX'te listeli olmayan ve stablecoin'e karşı kurulmamış
-    her coin bildirim üretiyor. Sonsuz tekrar spam'ini önlemek için zaman
-    bazlı cooldown yerine tek seferlik "alerted" bayrağı kullanılıyor --
-    her coin en fazla bir kez bildirim üretir."""
+    """price_watch listesindeki her coin için -- sakin/kırılım/hacim/
+    cooldown eşikleri kaldırılmış durumda. Buna karşılık iki koruma var:
+    stablecoin-parite kontrolü ve MAX_PAIR_AGE_DAYS (30 gün) -- eski,
+    çoktan köklenmiş coinlerin (OHM gibi) bildirim üretmesini önlüyor.
+    Her coin en fazla bir kez bildirim üretir (zaman bazlı cooldown yerine
+    tek seferlik "alerted" bayrağı)."""
     watch = state.setdefault("price_watch", {})
     now = int(time.time())
 
@@ -664,6 +672,15 @@ def check_accumulation_breakouts(state):
 
         counterparty_symbol = get_counterparty_symbol(pair, address)
         if counterparty_symbol in STABLECOIN_QUOTE_SYMBOLS:
+            print(f"[{chain}] {entry.get('symbol')}: pool {counterparty_symbol} "
+                  f"stablecoin'ine karşı -- bildirim gönderilmiyor")
+            continue
+
+        pair_age_days = get_pair_age_days(pair)
+        if pair_age_days is not None and pair_age_days > MAX_PAIR_AGE_DAYS:
+            print(f"[{chain}] {entry.get('symbol')}: pair {pair_age_days:.1f} gün "
+                  f"-- eşiğin ({MAX_PAIR_AGE_DAYS} gün) üzerinde, bildirim "
+                  f"gönderilmiyor")
             continue
 
         volume = pair.get("volume") or {}
@@ -673,7 +690,8 @@ def check_accumulation_breakouts(state):
         vol_h1 = volume.get("h1") or 0
 
         print(f"[{chain}] {entry.get('symbol')}: h6={change_h6}, h1={change_h1}, "
-              f"vol_h1=${vol_h1:,.0f} -- eşik kontrolleri kaldırıldı, doğrudan bildirim gönderiliyor")
+              f"vol_h1=${vol_h1:,.0f}, pair_yaşı={pair_age_days} gün -- "
+              f"eşik kontrolleri kaldırıldı, doğrudan bildirim gönderiliyor")
 
         _, current_price = resolve_token_info_from_pair(pair, address)
         mcap = pair.get("marketCap") or pair.get("fdv") or 0
@@ -757,18 +775,17 @@ def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
                   f"-- eşiğin altında, bu run'da atlanıyor, tekrar denenecek")
             continue
 
-        pair_created_ms = pair.get("pairCreatedAt")
+        pair_age_days = get_pair_age_days(pair)
         seen_tokens[address] = now
 
-        if not pair_created_ms:
+        if pair_age_days is None:
             print(f"[{chain_key}] {symbol} ({address}): pair yaşı bilinmiyor, "
                   f"izleme listesine eklenmeden görüldü işaretlendi")
             skipped_not_fresh += 1
             continue
 
-        age_hours = (time.time() - pair_created_ms / 1000) / 3600
-        if age_hours > ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS:
-            print(f"[{chain_key}] {symbol} ({address}): pair {age_hours:.1f} "
+        if pair_age_days * 24 > ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS:
+            print(f"[{chain_key}] {symbol} ({address}): pair {pair_age_days * 24:.1f} "
                   f"saatlik, eşiğin ({ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS}sa) "
                   f"üzerinde -- izleme listesine eklenmeden görüldü işaretlendi")
             skipped_not_fresh += 1
@@ -784,7 +801,7 @@ def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
                 "name": name,
             }
             added_to_watch += 1
-            print(f"[{chain_key}] {symbol} ({address}): pair {age_hours:.1f} "
+            print(f"[{chain_key}] {symbol} ({address}): pair {pair_age_days * 24:.1f} "
                   f"saatlik, taze, ETH pariteli -- izleme listesine eklendi")
 
     print(f"[{chain_key}] {added_to_watch} coin izleme listesine eklendi, "
@@ -905,6 +922,18 @@ def main():
                     dex_name = pair.get("dexId", "Unknown DEX")
                     mcap = pair.get("marketCap") or pair.get("fdv") or 0
                     liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
+
+                    counterparty_symbol = get_counterparty_symbol(pair, bought_address)
+                    if counterparty_symbol in STABLECOIN_QUOTE_SYMBOLS:
+                        print(f"Skipped (token's own pool is against stablecoin "
+                              f"{counterparty_symbol}, not ETH): {tx_hash}")
+                        continue
+
+                    pair_age_days = get_pair_age_days(pair)
+                    if pair_age_days is not None and pair_age_days > MAX_PAIR_AGE_DAYS:
+                        print(f"Skipped (pair is {pair_age_days:.1f} days old, "
+                              f"above {MAX_PAIR_AGE_DAYS}-day ceiling): {tx_hash}")
+                        continue
                 else:
                     token_price = get_token_price_usd(chain_cfg["coingecko_platform"], bought_address)
                     bought_symbol = "???"
