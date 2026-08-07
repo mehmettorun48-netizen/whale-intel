@@ -37,42 +37,36 @@ CLUSTER_TIERS = [
 ]
 
 ACCUMULATION_MAX_RANGE_PCT = 25  # son 6 saatte fiyat bu yüzdeden fazla
-# hareket etmemişse "dipte akümülasyon/yatay bant" sayılır. Önce %10 idi --
-# DEX/memecoin ortamının doğal volatilitesine göre çok sıkıydı. %25,
-# BREAKOUT_MIN_H1_PCT (%15) eşiğinin biraz üzerinde tutularak "zaten
-# kırılmış" ile "hâlâ bantta" arasında gerçek bir ayrımı koruyor.
-BREAKOUT_MIN_H1_PCT = 15
+# hareket etmemişse "dipte akümülasyon/yatay bant" sayılır.
+BREAKOUT_MIN_H1_PCT = 15  # son 1 saatte fiyat bu yüzdeden fazla yukarı
+# hareket ettiyse, akümülasyon bandını "kırdı" sayılır. Bilinçli olarak
+# düşürülmedi -- gerçek "kırılım" ile normal gürültü arasındaki en net
+# ayrım burada, düşürülürse spam riski artar.
 BREAKOUT_MIN_VOLUME_MULTIPLIER = 3
-BREAKOUT_MIN_VOLUME_USD = 30_000  # oransal hacim teyidine (3x normal tempo)
-# ek olarak, kırılım anındaki son 1 saatlik hacmin (vol_h1) mutlak değeri
-# de bu tutarın altında olmamalı -- çok küçük mutlak sayılarla da "3 katı"
-# şartı sağlanabiliyordu, bu gürültü sinyalleri üretiyordu.
+BREAKOUT_MIN_VOLUME_USD = 20_000  # önce $30.000 idi -- gerçek taze/düşük
+# cap coinlerin (örn. $9M FDV'li, birkaç saatlik pairler) çoğunu
+# sistematik olarak dışlıyordu, kullanıcının asıl hedefiyle (coin henüz
+# çok küçük seviyedeyken yakalamak) çelişiyordu. $20.000, hâlâ anlamlı bir
+# taban ama gerçek taze coinlere yer bırakıyor.
 BREAKOUT_COOLDOWN_HOURS = 6
 
 ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14
 ROBINHOOD_MIN_LIQUIDITY_USD = 100
-ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS = 48  # bu saatten daha eski bir pair,
-# botun ilk kez gördüğü token olsa bile izleme listesine eklenmez.
+ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS = 48
 
 STABLECOIN_QUOTE_SYMBOLS = {
-    "USDT", "USDC", "USDC.E", "USDG", "USDE", "DAI", "BUSD", "TUSD",
-    "USDP", "FDUSD", "USDD", "PYUSD", "FRAX", "GUSD", "LUSD",
+    "USDT", "USDT0", "USD₮0", "USDC", "USDC.E", "USDG", "USDE", "DAI",
+    "BUSD", "TUSD", "USDP", "FDUSD", "USDD", "PYUSD", "FRAX", "GUSD",
+    "LUSD",
 }
-# Bir coin'in pool'unun KARŞI tarafı (base/quote'un diğeri) bu listedeki
-# bir stablecoin ise, o coin hiç izleme listesine alınmıyor -- kullanıcı
-# sadece native ETH'ye karşı kurulan pool'ları izlemek istiyor.
-
-ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"  # bridge/burn
-# işlemlerinde (örn. Chainlink CCIP ile başka bir chain'e köprüleme)
-# alıcı olarak sıkça görünüyor -- gerçek bir whale/alıcı değil, kesinlikle
-# bir "alım" sayılmamalı. Bunu kontrol etmeden önce whale bu adres
-# çıktığında, bot yanlışlıkla "yeni balina alımı" bildirimi gönderiyordu.
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d82"
 V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
 CURVE_EXCHANGE_TOPIC = "0x8b3e96f2b889fa771c53c981b40daf005f63f637f1869f707052d15a3dd97140"
 SWAP_TOPICS = (V2_SWAP_TOPIC, V3_SWAP_TOPIC, CURVE_EXCHANGE_TOPIC)
+
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 CHAINS = {
     "ethereum": {
@@ -635,6 +629,8 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
     if not paid_address:
         return False, "⚠️ DEX swap'ı ama karşılığı tespit edilemedi\n"
     paid_symbol = get_token_symbol_label(chain_cfg, paid_address)
+    if paid_symbol.upper() in STABLECOIN_QUOTE_SYMBOLS:
+        return True, ""
     return False, f"DEX'te Karşılığında Verilen: {paid_symbol}\n"
 
 
@@ -666,6 +662,10 @@ def check_accumulation_breakouts(state):
         if not pair:
             continue
 
+        counterparty_symbol = get_counterparty_symbol(pair, address)
+        if counterparty_symbol in STABLECOIN_QUOTE_SYMBOLS:
+            continue
+
         volume = pair.get("volume") or {}
         price_change = pair.get("priceChange") or {}
         change_h6 = price_change.get("h6")
@@ -679,6 +679,11 @@ def check_accumulation_breakouts(state):
         expected_m5 = vol_h1 / 12
         volume_confirmed = expected_m5 > 0 and (vol_m5 / expected_m5) >= BREAKOUT_MIN_VOLUME_MULTIPLIER
         volume_meets_minimum = vol_h1 >= BREAKOUT_MIN_VOLUME_USD
+
+        print(f"[{chain}] {entry.get('symbol')}: h6={change_h6:.1f}% (sakin={was_accumulating}), "
+              f"h1={change_h1:.1f}% (eşik={BREAKOUT_MIN_H1_PCT}), "
+              f"vol_h1=${vol_h1:,.0f} (min={BREAKOUT_MIN_VOLUME_USD:,.0f}), "
+              f"vol_teyit={volume_confirmed}, vol_taban={volume_meets_minimum}")
 
         if not (was_accumulating and change_h1 >= BREAKOUT_MIN_H1_PCT and volume_confirmed and volume_meets_minimum):
             continue
@@ -938,6 +943,9 @@ def main():
                     paid_line = "Karşılığında Verilen: Bilinmiyor (muhtemelen doğrudan native ETH)\n"
                 else:
                     paid_symbol = get_token_symbol_label(chain_cfg, paid_address)
+                    if paid_symbol.upper() in STABLECOIN_QUOTE_SYMBOLS:
+                        print(f"Skipped (paid with stablecoin {paid_symbol}, not ETH): {tx_hash}")
+                        continue
                     paid_line = f"Karşılığında Verilen: {paid_symbol}\n"
 
                 price_line = f"${token_price:.8f}" if token_price > 0 else "Bilinmiyor"
