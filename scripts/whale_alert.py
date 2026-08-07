@@ -12,9 +12,12 @@ LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
-LOW_CAP_THRESHOLD_USD = 500_000
+MIN_MCAP_USD = 20_000  # bu market cap'in altındaki coinler bildirim
+# üretmiyor -- önce $500K'lik "düşük cap" üst sınırı vardı, kullanıcı
+# isteğiyle kaldırıldı, yerine sadece bu minimum taban kondu.
 
-NEW_TOKEN_AGE_HOURS = 72
+NEW_TOKEN_AGE_HOURS = 2160  # 90 gün -- önce 72 saatti, kullanıcı isteğiyle
+# genişletildi.
 NEW_TOKEN_MCAP_CEILING = 50_000_000
 PRICE_WATCH_MAX_AGE_HOURS = 72
 MAX_DISTINCT_TOKENS_PER_SWAP = 7
@@ -36,15 +39,11 @@ CLUSTER_TIERS = [
     (2, "🟡 Balina Birikimi Başladı"),
 ]
 
-ACCUMULATION_MAX_RANGE_PCT = 25  # son 6 saatte fiyat bu yüzdeden fazla
-# hareket etmemişse "dipte akümülasyon/yatay bant" sayılır.
-BREAKOUT_MIN_H1_PCT = 15  # ARTIK KAPIDA KULLANILMIYOR -- test amaçlı
-# geçici olarak devre dışı bırakıldı (bkz. aşağıdaki if koşulu). Sabit
-# referans için burada tutuluyor, geri almak istersek koşula tekrar
-# eklemek yeterli.
-BREAKOUT_MIN_VOLUME_MULTIPLIER = 3
-BREAKOUT_MIN_VOLUME_USD = 20_000
-BREAKOUT_COOLDOWN_HOURS = 6
+# NOT: Akümülasyon/kırılım/hacim/cooldown eşikleri kullanıcı isteğiyle
+# kaldırıldı (bkz. check_accumulation_breakouts). İlgili sabitler
+# (ACCUMULATION_MAX_RANGE_PCT, BREAKOUT_MIN_H1_PCT,
+# BREAKOUT_MIN_VOLUME_MULTIPLIER, BREAKOUT_MIN_VOLUME_USD,
+# BREAKOUT_COOLDOWN_HOURS) artık kullanılmadığı için dosyadan çıkarıldı.
 
 ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14
 ROBINHOOD_MIN_LIQUIDITY_USD = 100
@@ -631,6 +630,12 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
 
 
 def check_accumulation_breakouts(state):
+    """price_watch listesindeki her coin için -- kullanıcı isteği üzerine
+    sakin/kırılım/hacim/cooldown eşikleri KALDIRILDI. Artık geçerli fiyat
+    verisi olan, CEX'te listeli olmayan ve stablecoin'e karşı kurulmamış
+    her coin bildirim üretiyor. Sonsuz tekrar spam'ini önlemek için zaman
+    bazlı cooldown yerine tek seferlik "alerted" bayrağı kullanılıyor --
+    her coin en fazla bir kez bildirim üretir."""
     watch = state.setdefault("price_watch", {})
     now = int(time.time())
 
@@ -642,13 +647,12 @@ def check_accumulation_breakouts(state):
         del watch[key]
 
     for key, entry in watch.items():
+        if entry.get("alerted"):
+            continue
+
         chain, address = key.split(":", 1)
         chain_cfg = get_chain_cfg(chain)
         if not chain_cfg:
-            continue
-
-        last_alert_ts = entry.get("last_breakout_alert_ts", 0)
-        if (now - last_alert_ts) / 3600 < BREAKOUT_COOLDOWN_HOURS:
             continue
 
         if is_cex_listed(chain_cfg.get("coingecko_platform"), address):
@@ -666,53 +670,33 @@ def check_accumulation_breakouts(state):
         price_change = pair.get("priceChange") or {}
         change_h6 = price_change.get("h6")
         change_h1 = price_change.get("h1")
-        vol_m5 = volume.get("m5") or 0
         vol_h1 = volume.get("h1") or 0
-        if change_h6 is None or change_h1 is None or vol_h1 <= 0:
-            continue
 
-        was_accumulating = abs(change_h6) <= ACCUMULATION_MAX_RANGE_PCT
-        expected_m5 = vol_h1 / 12
-        volume_confirmed = expected_m5 > 0 and (vol_m5 / expected_m5) >= BREAKOUT_MIN_VOLUME_MULTIPLIER
-        volume_meets_minimum = vol_h1 >= BREAKOUT_MIN_VOLUME_USD
-        price_moved_up = change_h1 > 0  # TEST MODU: %15 eşiği kaldırıldı,
-        # sadece fiyatın negatif değil pozitif yönde olması isteniyor --
-        # tamamen yönsüz bırakılırsa satış baskısı olan coinler de
-        # "kırılım" sayılabilir, bu son güvenlik şartı onu önlüyor.
-
-        print(f"[{chain}] {entry.get('symbol')}: h6={change_h6:.1f}% (sakin={was_accumulating}), "
-              f"h1={change_h1:.1f}% (TEST MODU: sadece pozitif olması yeterli, "
-              f"normal eşik={BREAKOUT_MIN_H1_PCT} şu an KULLANILMIYOR), "
-              f"vol_h1=${vol_h1:,.0f} (min={BREAKOUT_MIN_VOLUME_USD:,.0f}), "
-              f"vol_teyit={volume_confirmed}, vol_taban={volume_meets_minimum}")
-
-        if not (was_accumulating and price_moved_up and volume_confirmed and volume_meets_minimum):
-            continue
+        print(f"[{chain}] {entry.get('symbol')}: h6={change_h6}, h1={change_h1}, "
+              f"vol_h1=${vol_h1:,.0f} -- eşik kontrolleri kaldırıldı, doğrudan bildirim gönderiliyor")
 
         _, current_price = resolve_token_info_from_pair(pair, address)
         mcap = pair.get("marketCap") or pair.get("fdv") or 0
         liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
         dex_name = pair.get("dexId", "Unknown DEX")
         send_telegram(
-            f"⚡ <b>Akümülasyon Kırılımı - Erken Sinyal (TEST MODU)</b> [{chain.upper()}]\n\n"
+            f"⚡ <b>Coin İzleme Bildirimi</b> [{chain.upper()}]\n\n"
             f"<pre>"
             f"Coin: {entry.get('name', 'Unknown')} ({entry.get('symbol', '???')})\n"
             f"Kontrat: {address}\n\n"
-            f"Son 6 Saat Değişim: %{change_h6:.1f} (yataydı)\n"
-            f"Son 1 Saat Değişim: %{change_h1:.1f}\n"
+            f"Son 6 Saat Değişim: {change_h6}%\n"
+            f"Son 1 Saat Değişim: {change_h1}%\n"
             f"Son 1 Saat Hacim: ${vol_h1:,.0f}\n"
-            f"Hacim Teyidi: {(vol_m5 / expected_m5):.1f}x normal\n"
             f"Fiyat: ${current_price:.8f}\n"
             f"Market Cap: ${mcap:,.0f}\n"
             f"Likidite: ${liquidity:,.0f}\n"
             f"DEX: {dex_name}"
             f"</pre>\n"
             f"Grafik: https://dexscreener.com/{chain_cfg['dexscreener_id']}/{address}\n\n"
-            f"Not: TEST MODU -- %15 kırılım eşiği geçici olarak kapalı, "
-            f"sadece pozitif fiyat hareketi + hacim teyidi aranıyor. "
-            f"Garanti değildir."
+            f"Not: Eşik kontrolleri (sakin/kırılım/hacim/cooldown) kapalı -- "
+            f"bu coin izleme listesine girmiş olması yeterli oldu."
         )
-        entry["last_breakout_alert_ts"] = now
+        entry["alerted"] = True
 
 
 def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
@@ -977,14 +961,13 @@ def main():
                     print(f"Skipped permanently (no mcap data after 3 retries, likely stale/old token): {tx_hash}")
                     continue
 
-                is_low_cap = 0 < mcap < LOW_CAP_THRESHOLD_USD
+                if mcap > 0 and mcap < MIN_MCAP_USD:
+                    print(f"Skipped (mcap ${mcap:,.0f} below minimum ${MIN_MCAP_USD:,.0f}): {tx_hash}")
+                    continue
 
                 if is_new_token:
                     priority = "🆕"
                     header = "TAZE ÇIKAN BALİNA ALIMI"
-                elif is_low_cap:
-                    priority = "🔥"
-                    header = "ERKEN BALİNA - DÜŞÜK CAP"
                 elif accurate_usd_value >= LARGE_BUY_THRESHOLD_USD:
                     priority = "🚨"
                     header = "Yeni Balina Alımı"
