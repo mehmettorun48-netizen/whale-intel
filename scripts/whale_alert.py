@@ -38,16 +38,12 @@ CLUSTER_TIERS = [
 
 ACCUMULATION_MAX_RANGE_PCT = 25  # son 6 saatte fiyat bu yüzdeden fazla
 # hareket etmemişse "dipte akümülasyon/yatay bant" sayılır.
-BREAKOUT_MIN_H1_PCT = 15  # son 1 saatte fiyat bu yüzdeden fazla yukarı
-# hareket ettiyse, akümülasyon bandını "kırdı" sayılır. Bilinçli olarak
-# düşürülmedi -- gerçek "kırılım" ile normal gürültü arasındaki en net
-# ayrım burada, düşürülürse spam riski artar.
+BREAKOUT_MIN_H1_PCT = 15  # ARTIK KAPIDA KULLANILMIYOR -- test amaçlı
+# geçici olarak devre dışı bırakıldı (bkz. aşağıdaki if koşulu). Sabit
+# referans için burada tutuluyor, geri almak istersek koşula tekrar
+# eklemek yeterli.
 BREAKOUT_MIN_VOLUME_MULTIPLIER = 3
-BREAKOUT_MIN_VOLUME_USD = 20_000  # önce $30.000 idi -- gerçek taze/düşük
-# cap coinlerin (örn. $9M FDV'li, birkaç saatlik pairler) çoğunu
-# sistematik olarak dışlıyordu, kullanıcının asıl hedefiyle (coin henüz
-# çok küçük seviyedeyken yakalamak) çelişiyordu. $20.000, hâlâ anlamlı bir
-# taban ama gerçek taze coinlere yer bırakıyor.
+BREAKOUT_MIN_VOLUME_USD = 20_000
 BREAKOUT_COOLDOWN_HOURS = 6
 
 ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14
@@ -679,13 +675,18 @@ def check_accumulation_breakouts(state):
         expected_m5 = vol_h1 / 12
         volume_confirmed = expected_m5 > 0 and (vol_m5 / expected_m5) >= BREAKOUT_MIN_VOLUME_MULTIPLIER
         volume_meets_minimum = vol_h1 >= BREAKOUT_MIN_VOLUME_USD
+        price_moved_up = change_h1 > 0  # TEST MODU: %15 eşiği kaldırıldı,
+        # sadece fiyatın negatif değil pozitif yönde olması isteniyor --
+        # tamamen yönsüz bırakılırsa satış baskısı olan coinler de
+        # "kırılım" sayılabilir, bu son güvenlik şartı onu önlüyor.
 
         print(f"[{chain}] {entry.get('symbol')}: h6={change_h6:.1f}% (sakin={was_accumulating}), "
-              f"h1={change_h1:.1f}% (eşik={BREAKOUT_MIN_H1_PCT}), "
+              f"h1={change_h1:.1f}% (TEST MODU: sadece pozitif olması yeterli, "
+              f"normal eşik={BREAKOUT_MIN_H1_PCT} şu an KULLANILMIYOR), "
               f"vol_h1=${vol_h1:,.0f} (min={BREAKOUT_MIN_VOLUME_USD:,.0f}), "
               f"vol_teyit={volume_confirmed}, vol_taban={volume_meets_minimum}")
 
-        if not (was_accumulating and change_h1 >= BREAKOUT_MIN_H1_PCT and volume_confirmed and volume_meets_minimum):
+        if not (was_accumulating and price_moved_up and volume_confirmed and volume_meets_minimum):
             continue
 
         _, current_price = resolve_token_info_from_pair(pair, address)
@@ -693,12 +694,12 @@ def check_accumulation_breakouts(state):
         liquidity = (pair.get("liquidity", {}) or {}).get("usd", 0)
         dex_name = pair.get("dexId", "Unknown DEX")
         send_telegram(
-            f"⚡ <b>Akümülasyon Kırılımı - Erken Sinyal</b> [{chain.upper()}]\n\n"
+            f"⚡ <b>Akümülasyon Kırılımı - Erken Sinyal (TEST MODU)</b> [{chain.upper()}]\n\n"
             f"<pre>"
             f"Coin: {entry.get('name', 'Unknown')} ({entry.get('symbol', '???')})\n"
             f"Kontrat: {address}\n\n"
             f"Son 6 Saat Değişim: %{change_h6:.1f} (yataydı)\n"
-            f"Son 1 Saat Değişim: %{change_h1:.1f} (kırılım)\n"
+            f"Son 1 Saat Değişim: %{change_h1:.1f}\n"
             f"Son 1 Saat Hacim: ${vol_h1:,.0f}\n"
             f"Hacim Teyidi: {(vol_m5 / expected_m5):.1f}x normal\n"
             f"Fiyat: ${current_price:.8f}\n"
@@ -707,8 +708,8 @@ def check_accumulation_breakouts(state):
             f"DEX: {dex_name}"
             f"</pre>\n"
             f"Grafik: https://dexscreener.com/{chain_cfg['dexscreener_id']}/{address}\n\n"
-            f"Not: Bu bir tahmin değil, erken bir sinyal -- coin dipte "
-            f"yatay bir bantta birikirken hacimle birlikte yukarı kırdı. "
+            f"Not: TEST MODU -- %15 kırılım eşiği geçici olarak kapalı, "
+            f"sadece pozitif fiyat hareketi + hacim teyidi aranıyor. "
             f"Garanti değildir."
         )
         entry["last_breakout_alert_ts"] = now
