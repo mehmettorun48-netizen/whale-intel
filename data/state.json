@@ -15547,11 +15547,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25691443,
+    "last_block": 25691474,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25691443,
+    "last_block": 25691474,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15706,7 +15706,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25691443,
+    "last_block": 25691474,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -16176,26 +16176,30 @@
       "baseline_price": 18.478078279858895,
       "first_seen_ts": 1785889888,
       "symbol": "OHM",
-      "name": "Olympus"
+      "name": "Olympus",
+      "alerted": true
     },
     "ethereum:0xa0df17b5ac76ababa36e1450e2cbcd18a620c845": {
       "baseline_price": 0.008142,
       "first_seen_ts": 1785895355,
       "symbol": "FWA",
       "name": "Fake World Assets",
-      "last_breakout_alert_ts": 1786033199
+      "last_breakout_alert_ts": 1786033199,
+      "alerted": true
     },
     "ethereum:0xb8d89678e75a973e74698c976716308abb8a46a4": {
       "baseline_price": 1.18,
       "first_seen_ts": 1786051897,
       "symbol": "savUSD",
-      "name": "Staked avUSD"
+      "name": "Staked avUSD",
+      "alerted": true
     },
     "arbitrum:0x45d9831d8751b2325f3dbf48db748723726e1c8c": {
       "baseline_price": 34.031,
       "first_seen_ts": 1786054756,
       "symbol": "EVA",
-      "name": "EverValueCoin"
+      "name": "EverValueCoin",
+      "alerted": true
     },
     "ethereum:0x96f6ef951840721adbf46ac996b59e0235cb985c": {
       "baseline_price": 1.14,
@@ -16205,7 +16209,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 492056709,
+    "last_block": 492059752,
     "accumulation": {}
   },
   "robinhood_seen_tokens": {
@@ -16263,7 +16267,8 @@
     "0x727701f88f09fed71eb217bcea88b3f314cf7079": 1786054543,
     "0x51fb76be80ab6daaa345d818f4e06441816b4fea": 1786061739,
     "0x5c0033ce0029f709a51313e20615f74e1d00a549": 1786061739,
-    "0xbd957cc9f1e94617792f37bc40f2f299e78acf3e": 1786079731
+    "0xbd957cc9f1e94617792f37bc40f2f299e78acf3e": 1786079731,
+    "0x385b36ff682ab4c76e7c37a66b96aabc466471d5": 1786108422
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 1
