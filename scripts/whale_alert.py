@@ -12,14 +12,11 @@ LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
-MIN_MCAP_USD = 20_000  # bu market cap'in altındaki coinler bildirim
-# üretmiyor.
+MIN_MCAP_USD = 20_000
 
-MAX_PAIR_AGE_DAYS = 30  # pair'in DexScreener'da kayıtlı oluşturulma
-# zamanından bu kadar gün geçmişse, coin artık "yeni/taze" sayılmıyor ve
-# bildirim gönderilmiyor.
+MAX_PAIR_AGE_DAYS = 30
 
-NEW_TOKEN_AGE_HOURS = 2160  # 90 gün
+NEW_TOKEN_AGE_HOURS = 2160
 NEW_TOKEN_MCAP_CEILING = 50_000_000
 PRICE_WATCH_MAX_AGE_HOURS = 72
 MAX_DISTINCT_TOKENS_PER_SWAP = 7
@@ -52,11 +49,6 @@ V2_SWAP_TOPIC = "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d
 V3_SWAP_TOPIC = "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca6"
 CURVE_EXCHANGE_TOPIC = "0x8b3e96f2b889fa771c53c981b40daf005f63f637f1869f707052d15a3dd97140"
 SWAP_TOPICS = (V2_SWAP_TOPIC, V3_SWAP_TOPIC, CURVE_EXCHANGE_TOPIC)
-# NOT: Robinhood Chain'de Uniswap V4 pool'ları saf native ETH'e karşı
-# (WETH ERC20 değil) kurulabiliyor -- bu tür pool'lardaki swap'ler bu
-# WETH-transfer-izleme mantığıyla yakalanamaz (WETH hiç hareket etmiyor).
-# WETH'e karşı kurulan pool'lar (görülen çoğu taze coin -- POD dahil)
-# sorunsuz yakalanıyor. Bu, tahmin değil, bilinen ve kabul edilen bir sınır.
 
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -109,15 +101,9 @@ CHAINS = {
         "dexscreener_id": "robinhood",
         "coingecko_platform": None,
         "explorer": "https://robinhoodchain.blockscout.com",
-        "api_type": "blockscout",  # Etherscan bu chain'i desteklemiyor --
-        # Robinhood'un resmi duyurusu Blockscout'un aynı Etherscan API
-        # şeklini (module=.../action=...) desteklediğini doğruluyor.
+        "api_type": "blockscout",
         "legacy_api_base": "https://robinhoodchain.blockscout.com/api",
-        "max_blocks_per_run": 20000,  # Robinhood bloğu ~0.1sn'de bir
-        # üretiliyor (Arbitrum'dan bile hızlı) -- 5 dakikalık cron'da
-        # teorik olarak ~3000 blok üretiliyor, ama Arbitrum'da tahminlerin
-        # gerçek hızın çok altında kaldığını gördüğümüz için geniş bir pay
-        # bırakıldı. İlk run loglarına bakıp gerekirse ayarlanacak.
+        "max_blocks_per_run": 20000,
     },
 }
 
@@ -143,11 +129,51 @@ def etherscan_call(chain_id, params, timeout=20):
     return r.json()
 
 
-def blockscout_rpc_call(api_base, params, timeout=20):
-    """Blockscout'un Etherscan-uyumlu eski API'sine (module=.../action=...)
-    tek çıkış noktası. Robinhood Chain'in resmi duyurusu bu formatın
-    Etherscan'inkiyle birebir aynı olduğunu doğruluyor -- apikey/chainid
-    parametresi gerekmiyor (tek chain'lik bir Blockscout kurulumu)."""
+def _to_hex_block(value):
+    """Etherscan-tarzı ondalık blok numaralarını (veya zaten hex olanları)
+    JSON-RPC'nin beklediği hex string'e çevirir."""
+    if value is None:
+        return "latest"
+    s = str(value)
+    if s in ("latest", "earliest", "pending"):
+        return s
+    if s.startswith("0x"):
+        return s
+    return hex(int(s))
+
+
+def blockscout_jsonrpc_call(api_base, method, rpc_params, timeout=20):
+    """Blockscout'un standart Ethereum JSON-RPC 2.0 endpoint'i
+    ({instance}/api/eth-rpc) -- eth_blockNumber, eth_call,
+    eth_getTransactionReceipt, eth_getBlockByNumber, eth_getLogs gibi saf
+    RPC metodları için. Etherscan'in module=proxy ile sardığı metodların
+    Blockscout'taki karşılığı budur -- module=proxy Blockscout'ta hiç
+    desteklenmiyor ("Unknown module" hatası veriyor), bu yüzden bu ayrı
+    endpoint gerekiyor."""
+    global _last_blockscout_call
+    elapsed = time.time() - _last_blockscout_call
+    if elapsed < BLOCKSCOUT_MIN_INTERVAL:
+        time.sleep(BLOCKSCOUT_MIN_INTERVAL - elapsed)
+    _last_blockscout_call = time.time()
+    try:
+        r = requests.post(f"{api_base}/eth-rpc", json={
+            "jsonrpc": "2.0",
+            "method": method,
+            "params": rpc_params,
+            "id": 1,
+        }, timeout=timeout)
+        if not r.ok:
+            print(f"Blockscout JSON-RPC call failed ({method}): HTTP {r.status_code} -- {r.text[:200]}")
+            return {}
+        return r.json()
+    except Exception as e:
+        print(f"Blockscout JSON-RPC call error ({method}): {e}")
+        return {}
+
+
+def blockscout_legacy_call(api_base, params, timeout=20):
+    """Blockscout'un Etherscan-uyumlu eski API'si -- module=contract gibi
+    (eth_* OLMAYAN) Etherscan-tarzı çağrılar için."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
@@ -156,21 +182,64 @@ def blockscout_rpc_call(api_base, params, timeout=20):
     try:
         r = requests.get(api_base, params=params, timeout=timeout)
         if not r.ok:
-            print(f"Blockscout RPC call failed: HTTP {r.status_code} -- {r.text[:200]}")
+            print(f"Blockscout legacy call failed: HTTP {r.status_code} -- {r.text[:200]}")
             return {}
         return r.json()
     except Exception as e:
-        print(f"Blockscout RPC call error: {e}")
+        print(f"Blockscout legacy call error: {e}")
         return {}
 
 
 def rpc_call(chain_cfg, params, timeout=20):
-    """Etherscan ve Blockscout arasında tek çıkış noktası -- ikisi de aynı
-    module/action parametre yapısını paylaştığı için, geri kalan tüm kod
-    hangi API'nin kullanıldığını hiç bilmek zorunda değil."""
-    if chain_cfg.get("api_type") == "blockscout":
-        return blockscout_rpc_call(chain_cfg["legacy_api_base"], params, timeout)
-    return etherscan_call(chain_cfg["chain_id"], params, timeout)
+    """Etherscan ve Blockscout arasında tek çıkış noktası. Etherscan için
+    hiçbir şey değişmiyor. Blockscout için, module=proxy ve
+    module=logs&action=getLogs çağrıları JSON-RPC 2.0'a çevrilip
+    /api/eth-rpc'ye POST ediliyor; diğer module'ler (örn. module=contract)
+    eski GET tabanlı Etherscan-uyumlu API'ye gönderiliyor."""
+    if chain_cfg.get("api_type") != "blockscout":
+        return etherscan_call(chain_cfg["chain_id"], params, timeout)
+
+    api_base = chain_cfg["legacy_api_base"]
+    module = params.get("module")
+    action = params.get("action")
+
+    if module == "proxy":
+        if action == "eth_blockNumber":
+            return blockscout_jsonrpc_call(api_base, "eth_blockNumber", [], timeout)
+        if action == "eth_call":
+            return blockscout_jsonrpc_call(api_base, "eth_call", [
+                {"to": params.get("to"), "data": params.get("data")},
+                params.get("tag", "latest"),
+            ], timeout)
+        if action == "eth_getTransactionReceipt":
+            return blockscout_jsonrpc_call(api_base, "eth_getTransactionReceipt",
+                                            [params.get("txhash")], timeout)
+        if action == "eth_getBlockByNumber":
+            bool_flag = str(params.get("boolean", "false")).lower() == "true"
+            return blockscout_jsonrpc_call(api_base, "eth_getBlockByNumber", [
+                _to_hex_block(params.get("tag")), bool_flag,
+            ], timeout)
+        print(f"Blockscout: bilinmeyen proxy action: {action}")
+        return {}
+
+    if module == "logs" and action == "getLogs":
+        result = blockscout_jsonrpc_call(api_base, "eth_getLogs", [{
+            "fromBlock": _to_hex_block(params.get("fromBlock")),
+            "toBlock": _to_hex_block(params.get("toBlock")),
+            "address": params.get("address"),
+            "topics": [params.get("topic0")],
+        }], timeout)
+        # eth_getLogs sonucu JSON-RPC'de doğrudan "result" altında bir
+        # liste olarak geliyor -- Etherscan'in getLogs'uyla aynı şekilde
+        # {"result": [...]} formatında olduğu için fetch_logs() hiç
+        # değişmeden çalışıyor.
+        if "result" in result:
+            return result
+        return {"result": []}
+
+    # module=contract&action=getcontractcreation gibi diğer çağrılar --
+    # eski Etherscan-uyumlu GET API'de deniyoruz.
+    return blockscout_legacy_call(api_base, params, timeout)
 
 
 def get_chain_cfg(chain_key):
