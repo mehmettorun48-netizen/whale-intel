@@ -12,17 +12,11 @@ LARGE_BUY_THRESHOLD_USD = 5000
 ACCUMULATION_THRESHOLD_USD = 5000
 ACCUMULATION_WINDOW_SECONDS = 24 * 3600
 
-MIN_MCAP_USD = 20_000  # bu market cap'in altındaki coinler bildirim
-# üretmiyor.
+MIN_MCAP_USD = 20_000
 
-MAX_PAIR_AGE_DAYS = 30  # pair'in DexScreener'da kayıtlı oluşturulma
-# zamanından bu kadar gün geçmişse, coin artık "yeni/taze" sayılmıyor ve
-# bildirim gönderilmiyor -- OHM (4 yıl), EVA (1 yıl 3 ay) gibi çoktan
-# köklenmiş, dev market cap'li coinlerin akümülasyon/kırılım eşikleri
-# kaldırıldıktan sonra bildirim üretmesini önlemek için eklendi. Hem ana
-# discovery akışında hem check_accumulation_breakouts'ta uygulanıyor.
+MAX_PAIR_AGE_DAYS = 30
 
-NEW_TOKEN_AGE_HOURS = 2160  # 90 gün
+NEW_TOKEN_AGE_HOURS = 2160
 NEW_TOKEN_MCAP_CEILING = 50_000_000
 PRICE_WATCH_MAX_AGE_HOURS = 72
 MAX_DISTINCT_TOKENS_PER_SWAP = 7
@@ -46,7 +40,9 @@ CLUSTER_TIERS = [
 
 ROBINHOOD_NEW_TOKEN_MAX_AGE_DAYS = 14
 ROBINHOOD_MIN_LIQUIDITY_USD = 100
-ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS = 48
+ROBINHOOD_NEW_PAIR_MAX_AGE_HOURS = 10  # önce 48 saatti -- kullanıcı isteğiyle
+# 10 saate düşürüldü, sadece gerçekten çok taze pair'ler izleme listesine
+# girsin diye.
 
 STABLECOIN_QUOTE_SYMBOLS = {
     "USDT", "USDT0", "USD₮0", "USDC", "USDC.E", "USDG", "USDE", "DAI",
@@ -525,8 +521,6 @@ def get_counterparty_symbol(pair, token_address):
 
 
 def get_pair_age_days(pair):
-    """DexScreener'ın pairCreatedAt alanından (ms epoch) pair'in gün
-    cinsinden yaşını döndürür, bilgi yoksa None döner."""
     pair_created_ms = pair.get("pairCreatedAt")
     if not pair_created_ms:
         return None
@@ -638,12 +632,6 @@ def analyze_swap(chain_cfg, tx_hash, target_token_address, recipient_address):
 
 
 def check_accumulation_breakouts(state):
-    """price_watch listesindeki her coin için -- sakin/kırılım/hacim/
-    cooldown eşikleri kaldırılmış durumda. Buna karşılık iki koruma var:
-    stablecoin-parite kontrolü ve MAX_PAIR_AGE_DAYS (30 gün) -- eski,
-    çoktan köklenmiş coinlerin (OHM gibi) bildirim üretmesini önlüyor.
-    Her coin en fazla bir kez bildirim üretir (zaman bazlı cooldown yerine
-    tek seferlik "alerted" bayrağı)."""
     watch = state.setdefault("price_watch", {})
     now = int(time.time())
 
@@ -737,7 +725,8 @@ def discover_new_tokens_blockscout(chain_key, chain_cfg, state):
               f"Cevap anahtarları: {list(data.keys())}")
         return
 
-    print(f"[{chain_key}] Blockscout tokens API {len(items)} token döndürdü")
+    print(f"[{chain_key}] Blockscout tokens API {len(items)} token döndürdü. "
+          f"İlk 5 adres: {[it.get('address') for it in items[:5]]}")
 
     watch = state.setdefault("price_watch", {})
     added_to_watch = 0
@@ -855,6 +844,8 @@ def main():
 
         is_discovery_trigger = contract in chain_cfg["discovery_addresses"]
 
+        seen_tx_hashes_this_token = set()
+
         for log in logs:
             topics = log.get("topics", [])
             if len(topics) < 3:
@@ -862,6 +853,11 @@ def main():
             from_address = topic_to_address(topics[1])
             to_address = topic_to_address(topics[2])
             tx_hash = log.get("transactionHash", "")
+
+            if tx_hash and tx_hash in seen_tx_hashes_this_token:
+                continue
+            if tx_hash:
+                seen_tx_hashes_this_token.add(tx_hash)
 
             try:
                 raw_value = int(log.get("data", "0x0"), 16)
