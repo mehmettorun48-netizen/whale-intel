@@ -130,18 +130,21 @@ def etherscan_call(chain_id, params, timeout=20):
 
 
 def blockscout_pro_call(chain_id, params, timeout=20, _retry=0):
-    """Blockscout Pro API -- key'in kendi ürettiği örnek URL'ye göre doğru
-    format şu: https://api.blockscout.com/{chain_id}/api?...&apikey=...
-    Chain ID query parametresi değil, URL'nin PATH'inde geçiyor."""
+    """Blockscout Pro API. Önce URL path'inde chain_id (/{chain_id}/api)
+    denendi ama 401 Unauthorized alındı. Şimdi en açık dokümante edilen
+    format deneniyor: chain_id QUERY parametresi olarak, base URL
+    https://api.blockscout.com/v2/api -- Etherscan V2'nin birebir aynısı,
+    tek fark "chainid" yerine "chain_id" kullanılması."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
         time.sleep(BLOCKSCOUT_MIN_INTERVAL - elapsed)
     full_params = dict(params)
+    full_params["chain_id"] = chain_id
     full_params["apikey"] = BLOCKSCOUT_KEY
     _last_blockscout_call = time.time()
     try:
-        r = requests.get(f"https://api.blockscout.com/{chain_id}/api",
+        r = requests.get("https://api.blockscout.com/v2/api",
                           params=full_params, timeout=timeout)
         if r.status_code == 429 and _retry < 3:
             wait = 3 * (2 ** _retry)
