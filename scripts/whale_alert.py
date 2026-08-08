@@ -141,9 +141,8 @@ def _to_hex_block(value):
 
 
 def blockscout_jsonrpc_call(chain_id, method, rpc_params, timeout=20, _retry=0):
-    """eth_* metodları (Etherscan'in module=proxy ile sardığı şeyler) için
-    Blockscout Pro API'nin JSON-RPC ucu -- Authorization: Bearer header'ı
-    gerekiyor."""
+    """eth_* metodları için Blockscout Pro API'nin JSON-RPC ucu --
+    Authorization: Bearer header'ı gerekiyor."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
@@ -584,6 +583,26 @@ def check_dex_token(dexscreener_id, token_address):
     return result
 
 
+def get_chain_native_price_usd(chain_cfg, dex_id, contract):
+    """WETH/native-wrapped token'ın USD fiyatını önce CoinGecko'dan, o
+    başarısız olursa (rate limit ya da desteklenmeyen chain -- Robinhood
+    gibi) DexScreener'ın kendi pool fiyatından çekiyor. Bu run'da
+    Arbitrum'un CoinGecko fiyatı $0 dönmüştü (muhtemelen rate limit),
+    Robinhood'unki de hep $0 dönüyordu (CoinGecko hiç desteklemiyor) --
+    ikisi de discovery'nin tamamen atlanmasına sebep oluyordu."""
+    price = 0.0
+    if chain_cfg["coingecko_platform"]:
+        price = get_token_price_usd(chain_cfg["coingecko_platform"], contract)
+    if price <= 0:
+        fallback_pair = check_dex_token(dex_id, contract)
+        if fallback_pair:
+            price = float(fallback_pair.get("priceUsd", 0) or 0)
+            if price > 0:
+                print(f"[{dex_id}] CoinGecko fiyat vermedi, DexScreener'dan "
+                      f"alındı: ${price}")
+    return price
+
+
 def resolve_token_info_from_pair(pair, token_address):
     base = pair.get("baseToken", {})
     quote = pair.get("quoteToken", {})
@@ -829,7 +848,7 @@ def main():
         logs = fetch_logs(chain_cfg, contract, TRANSFER_TOPIC, from_block, to_block)
         print(f"[{chain}] {symbol}: scanned blocks {from_block}-{to_block}, found {len(logs)} transfer logs")
 
-        price = get_token_price_usd(chain_cfg["coingecko_platform"], contract)
+        price = get_chain_native_price_usd(chain_cfg, dex_id, contract)
         print(f"[{chain}] {symbol}: price=${price}")
 
         is_discovery_trigger = contract in chain_cfg["discovery_addresses"]
