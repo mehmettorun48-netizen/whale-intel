@@ -6,6 +6,7 @@ import requests
 ETHERSCAN_KEY = os.environ["ETHERSCAN_API_KEY"]
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
+BLOCKSCOUT_KEY = os.environ.get("BLOCKSCOUT_API_KEY", "")
 
 SINGLE_BUY_THRESHOLD_USD = 1000
 LARGE_BUY_THRESHOLD_USD = 5000
@@ -24,10 +25,7 @@ MAX_DISTINCT_TOKENS_PER_SWAP = 7
 ETHERSCAN_MIN_INTERVAL = 0.5
 _last_etherscan_call = 0.0
 
-BLOCKSCOUT_MIN_INTERVAL = 1.5  # önce 0.25 idi -- Blockscout'un anonim/
-# API-key'siz erişimi çok daha düşük bir hız sınırına sahip, daha ilk
-# çağrıda "429 Too many requests" hatası alındı. 1.5 saniye daha güvenli
-# bir tempo.
+BLOCKSCOUT_MIN_INTERVAL = 0.5
 _last_blockscout_call = 0.0
 
 ANALYZE_SWAP_MIN_USD = 100
@@ -105,7 +103,6 @@ CHAINS = {
         "coingecko_platform": None,
         "explorer": "https://robinhoodchain.blockscout.com",
         "api_type": "blockscout",
-        "legacy_api_base": "https://robinhoodchain.blockscout.com/api",
         "max_blocks_per_run": 20000,
     },
 }
@@ -132,104 +129,39 @@ def etherscan_call(chain_id, params, timeout=20):
     return r.json()
 
 
-def _to_hex_block(value):
-    if value is None:
-        return "latest"
-    s = str(value)
-    if s in ("latest", "earliest", "pending"):
-        return s
-    if s.startswith("0x"):
-        return s
-    return hex(int(s))
-
-
-def blockscout_jsonrpc_call(api_base, method, rpc_params, timeout=20, _retry=0):
-    """Blockscout'un standart Ethereum JSON-RPC 2.0 endpoint'i
-    ({instance}/api/eth-rpc). 429 (rate limit) hatası alınırsa, artan
-    bekleme süreleriyle en fazla 3 kez yeniden dener -- API key'siz
-    erişimin düşük hız sınırına takılmak, tüm run'ı iptal etmesin diye."""
+def blockscout_pro_call(chain_id, params, timeout=20, _retry=0):
+    """Blockscout Pro API -- gerçek key'in kendi ürettiği örnek URL'ye göre
+    doğru format şu: https://api.blockscout.com/{chain_id}/api?...&apikey=...
+    Chain ID query parametresi değil, URL'nin PATH'inde geçiyor. Bunun
+    dışında (module=proxy&action=... gibi) her şey Etherscan'inkiyle aynı."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
         time.sleep(BLOCKSCOUT_MIN_INTERVAL - elapsed)
+    full_params = dict(params)
+    full_params["apikey"] = BLOCKSCOUT_KEY
     _last_blockscout_call = time.time()
     try:
-        r = requests.post(f"{api_base}/eth-rpc", json={
-            "jsonrpc": "2.0",
-            "method": method,
-            "params": rpc_params,
-            "id": 1,
-        }, timeout=timeout)
+        r = requests.get(f"https://api.blockscout.com/{chain_id}/api",
+                          params=full_params, timeout=timeout)
         if r.status_code == 429 and _retry < 3:
             wait = 3 * (2 ** _retry)
-            print(f"Blockscout rate limited ({method}), waiting {wait}s and retrying ({_retry + 1}/3)")
+            print(f"Blockscout Pro API rate limited, waiting {wait}s and retrying ({_retry + 1}/3)")
             time.sleep(wait)
-            return blockscout_jsonrpc_call(api_base, method, rpc_params, timeout, _retry + 1)
+            return blockscout_pro_call(chain_id, params, timeout, _retry + 1)
         if not r.ok:
-            print(f"Blockscout JSON-RPC call failed ({method}): HTTP {r.status_code} -- {r.text[:200]}")
+            print(f"Blockscout Pro API call failed: HTTP {r.status_code} -- {r.text[:200]}")
             return {}
         return r.json()
     except Exception as e:
-        print(f"Blockscout JSON-RPC call error ({method}): {e}")
-        return {}
-
-
-def blockscout_legacy_call(api_base, params, timeout=20):
-    global _last_blockscout_call
-    elapsed = time.time() - _last_blockscout_call
-    if elapsed < BLOCKSCOUT_MIN_INTERVAL:
-        time.sleep(BLOCKSCOUT_MIN_INTERVAL - elapsed)
-    _last_blockscout_call = time.time()
-    try:
-        r = requests.get(api_base, params=params, timeout=timeout)
-        if not r.ok:
-            print(f"Blockscout legacy call failed: HTTP {r.status_code} -- {r.text[:200]}")
-            return {}
-        return r.json()
-    except Exception as e:
-        print(f"Blockscout legacy call error: {e}")
+        print(f"Blockscout Pro API call error: {e}")
         return {}
 
 
 def rpc_call(chain_cfg, params, timeout=20):
-    if chain_cfg.get("api_type") != "blockscout":
-        return etherscan_call(chain_cfg["chain_id"], params, timeout)
-
-    api_base = chain_cfg["legacy_api_base"]
-    module = params.get("module")
-    action = params.get("action")
-
-    if module == "proxy":
-        if action == "eth_blockNumber":
-            return blockscout_jsonrpc_call(api_base, "eth_blockNumber", [], timeout)
-        if action == "eth_call":
-            return blockscout_jsonrpc_call(api_base, "eth_call", [
-                {"to": params.get("to"), "data": params.get("data")},
-                params.get("tag", "latest"),
-            ], timeout)
-        if action == "eth_getTransactionReceipt":
-            return blockscout_jsonrpc_call(api_base, "eth_getTransactionReceipt",
-                                            [params.get("txhash")], timeout)
-        if action == "eth_getBlockByNumber":
-            bool_flag = str(params.get("boolean", "false")).lower() == "true"
-            return blockscout_jsonrpc_call(api_base, "eth_getBlockByNumber", [
-                _to_hex_block(params.get("tag")), bool_flag,
-            ], timeout)
-        print(f"Blockscout: bilinmeyen proxy action: {action}")
-        return {}
-
-    if module == "logs" and action == "getLogs":
-        result = blockscout_jsonrpc_call(api_base, "eth_getLogs", [{
-            "fromBlock": _to_hex_block(params.get("fromBlock")),
-            "toBlock": _to_hex_block(params.get("toBlock")),
-            "address": params.get("address"),
-            "topics": [params.get("topic0")],
-        }], timeout)
-        if "result" in result:
-            return result
-        return {"result": []}
-
-    return blockscout_legacy_call(api_base, params, timeout)
+    if chain_cfg.get("api_type") == "blockscout":
+        return blockscout_pro_call(chain_cfg["chain_id"], params, timeout)
+    return etherscan_call(chain_cfg["chain_id"], params, timeout)
 
 
 def get_chain_cfg(chain_key):
