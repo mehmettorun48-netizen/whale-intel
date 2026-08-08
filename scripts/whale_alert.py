@@ -130,10 +130,9 @@ def etherscan_call(chain_id, params, timeout=20):
 
 
 def blockscout_pro_call(chain_id, params, timeout=20, _retry=0):
-    """Blockscout Pro API -- gerçek key'in kendi ürettiği örnek URL'ye göre
-    doğru format şu: https://api.blockscout.com/{chain_id}/api?...&apikey=...
-    Chain ID query parametresi değil, URL'nin PATH'inde geçiyor. Bunun
-    dışında (module=proxy&action=... gibi) her şey Etherscan'inkiyle aynı."""
+    """Blockscout Pro API -- key'in kendi ürettiği örnek URL'ye göre doğru
+    format şu: https://api.blockscout.com/{chain_id}/api?...&apikey=...
+    Chain ID query parametresi değil, URL'nin PATH'inde geçiyor."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
