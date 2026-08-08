@@ -583,26 +583,6 @@ def check_dex_token(dexscreener_id, token_address):
     return result
 
 
-def get_chain_native_price_usd(chain_cfg, dex_id, contract):
-    """WETH/native-wrapped token'ın USD fiyatını önce CoinGecko'dan, o
-    başarısız olursa (rate limit ya da desteklenmeyen chain -- Robinhood
-    gibi) DexScreener'ın kendi pool fiyatından çekiyor. Bu run'da
-    Arbitrum'un CoinGecko fiyatı $0 dönmüştü (muhtemelen rate limit),
-    Robinhood'unki de hep $0 dönüyordu (CoinGecko hiç desteklemiyor) --
-    ikisi de discovery'nin tamamen atlanmasına sebep oluyordu."""
-    price = 0.0
-    if chain_cfg["coingecko_platform"]:
-        price = get_token_price_usd(chain_cfg["coingecko_platform"], contract)
-    if price <= 0:
-        fallback_pair = check_dex_token(dex_id, contract)
-        if fallback_pair:
-            price = float(fallback_pair.get("priceUsd", 0) or 0)
-            if price > 0:
-                print(f"[{dex_id}] CoinGecko fiyat vermedi, DexScreener'dan "
-                      f"alındı: ${price}")
-    return price
-
-
 def resolve_token_info_from_pair(pair, token_address):
     base = pair.get("baseToken", {})
     quote = pair.get("quoteToken", {})
@@ -617,6 +597,28 @@ def resolve_token_info_from_pair(pair, token_address):
         return quote, price
 
     return {}, 0.0
+
+
+def get_chain_native_price_usd(chain_cfg, dex_id, contract):
+    """WETH/native-wrapped token'ın USD fiyatını önce CoinGecko'dan, o
+    başarısız olursa DexScreener'dan çekiyor. ÖNEMLİ: pair'in "priceUsd"
+    alanı HER ZAMAN pool'un base token'ının fiyatıdır -- WETH pool'da
+    quote (karşı taraf) konumundaysa priceUsd aslında eşleştiği coin'in
+    fiyatı olur, WETH'in değil (bunu yanlış kullanmak Robinhood'da WETH
+    fiyatını $0.09 gibi tamamen hatalı gösteriyordu). Bu yüzden ham
+    priceUsd yerine, hangi taraf olursa olsun doğru fiyatı hesaplayan
+    resolve_token_info_from_pair kullanılıyor."""
+    price = 0.0
+    if chain_cfg["coingecko_platform"]:
+        price = get_token_price_usd(chain_cfg["coingecko_platform"], contract)
+    if price <= 0:
+        fallback_pair = check_dex_token(dex_id, contract)
+        if fallback_pair:
+            _, price = resolve_token_info_from_pair(fallback_pair, contract)
+            if price > 0:
+                print(f"[{dex_id}] CoinGecko fiyat vermedi, DexScreener'dan "
+                      f"alındı: ${price}")
+    return price
 
 
 def get_counterparty_symbol(pair, token_address):
