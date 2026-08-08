@@ -6,7 +6,7 @@ import requests
 ETHERSCAN_KEY = os.environ["ETHERSCAN_API_KEY"]
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
-BLOCKSCOUT_KEY = os.environ.get("BLOCKSCOUT_API_KEY", "")
+BLOCKSCOUT_KEY = os.environ.get("BLOCKSCOUT_API_KEY", "").strip()
 
 SINGLE_BUY_THRESHOLD_USD = 1000
 LARGE_BUY_THRESHOLD_USD = 5000
@@ -142,8 +142,8 @@ def _to_hex_block(value):
 
 def blockscout_jsonrpc_call(chain_id, method, rpc_params, timeout=20, _retry=0):
     """eth_* metodları (Etherscan'in module=proxy ile sardığı şeyler) için
-    Blockscout Pro API'nin JSON-RPC ucu -- apikey query param'ı burada
-    401 veriyor, bunun yerine Authorization: Bearer header'ı gerekiyor."""
+    Blockscout Pro API'nin JSON-RPC ucu -- Authorization: Bearer header'ı
+    gerekiyor."""
     global _last_blockscout_call
     elapsed = time.time() - _last_blockscout_call
     if elapsed < BLOCKSCOUT_MIN_INTERVAL:
