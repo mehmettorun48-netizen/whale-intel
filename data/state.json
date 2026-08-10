@@ -2809,6 +2809,34 @@
       },
       "total_usd": 11806.32801273751,
       "last_tier": 0
+    },
+    "robinhood:0xd8d1c08a8ba4fc64bac744f74290b89adcb6bf25": {
+      "whales": {
+        "0x5fde42b7a84b82046aaabe12eff15db1a908d9fb": 1786321647
+      },
+      "total_usd": 340.0179165610706,
+      "last_tier": 0
+    },
+    "robinhood:0xc72f232a6869e6cf34dc06129affd07f8a2a246a": {
+      "whales": {
+        "0x8506e43d89d80bb24d678f67f9e063444b8ab536": 1786322203
+      },
+      "total_usd": 10054.298877123827,
+      "last_tier": 0
+    },
+    "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": {
+      "whales": {
+        "0x0457bdd7d70c82f4cb1c850bd49064a544630978": 1786322733
+      },
+      "total_usd": 11104.379852477186,
+      "last_tier": 0
+    },
+    "robinhood:0x232cdfc415d10b673845d83dc02ba2eabe7e30d1": {
+      "whales": {
+        "0xdf76b317ddc126c153f98947c42e614dc76b00fb": 1786322882
+      },
+      "total_usd": 330.45086957508147,
+      "last_tier": 0
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
@@ -15547,11 +15575,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25700743,
+    "last_block": 25700774,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25700743,
+    "last_block": 25700774,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15721,7 +15749,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25700743,
+    "last_block": 25700774,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -15906,7 +15934,10 @@
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 1735731443,
     "ethereum:0xb8d89678e75a973e74698c976716308abb8a46a4": 1763993903,
     "ethereum:0xea51d7853eefb32b6ee06b1c12e6dcca88be0ffe": 1674806111,
-    "ethereum:0x2c4ea51d9dec7cdabe2d1bde01882f87b5231d21": 1637248485
+    "ethereum:0x2c4ea51d9dec7cdabe2d1bde01882f87b5231d21": 1637248485,
+    "robinhood:0xc72f232a6869e6cf34dc06129affd07f8a2a246a": 1786058387,
+    "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": 1784330953,
+    "robinhood:0x232cdfc415d10b673845d83dc02ba2eabe7e30d1": 1783744362
   },
   "infra_status": {
     "ethereum:0xd166337499e176bbc38a1fbd113ab144e5bd2df7": [
@@ -16280,11 +16311,56 @@
     "ethereum:0x467bccd9d29f223bce8043b84e8c8b282827790f": [
       true,
       "CoinGecko kategorisi: Stablecoin Issuer"
+    ],
+    "robinhood:0xd8d1c08a8ba4fc64bac744f74290b89adcb6bf25": [
+      false,
+      ""
+    ],
+    "robinhood:0x5fc5360d0400a0fd4f2af552add042d716f1d168": [
+      false,
+      ""
+    ],
+    "robinhood:0xc72f232a6869e6cf34dc06129affd07f8a2a246a": [
+      false,
+      ""
+    ],
+    "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": [
+      false,
+      ""
+    ],
+    "robinhood:0x232cdfc415d10b673845d83dc02ba2eabe7e30d1": [
+      false,
+      ""
     ]
   },
-  "price_watch": {},
+  "price_watch": {
+    "robinhood:0xd8d1c08a8ba4fc64bac744f74290b89adcb6bf25": {
+      "baseline_price": 0.0003228,
+      "first_seen_ts": 1786321646,
+      "symbol": "seedcoin",
+      "name": "watch it grow"
+    },
+    "robinhood:0xc72f232a6869e6cf34dc06129affd07f8a2a246a": {
+      "baseline_price": 0.003775,
+      "first_seen_ts": 1786322203,
+      "symbol": "MANCER",
+      "name": "Mancer"
+    },
+    "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": {
+      "baseline_price": 0.03192,
+      "first_seen_ts": 1786322270,
+      "symbol": "STONKBROKER",
+      "name": "StonkBroker"
+    },
+    "robinhood:0x232cdfc415d10b673845d83dc02ba2eabe7e30d1": {
+      "baseline_price": 0.01142,
+      "first_seen_ts": 1786322881,
+      "symbol": "IF",
+      "name": "What If"
+    }
+  },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 492899891,
+    "last_block": 492903396,
     "accumulation": {}
   },
   "robinhood_seen_tokens": {
@@ -16351,7 +16427,7 @@
     "ethereum:0x2c4ea51d9dec7cdabe2d1bde01882f87b5231d21": 1
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 32350796,
+    "last_block": 32359644,
     "accumulation": {}
   }
 }
