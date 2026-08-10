@@ -15575,11 +15575,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25700774,
+    "last_block": 25700805,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25700774,
+    "last_block": 25700805,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15749,7 +15749,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25700774,
+    "last_block": 25700805,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -16338,29 +16338,33 @@
       "baseline_price": 0.0003228,
       "first_seen_ts": 1786321646,
       "symbol": "seedcoin",
-      "name": "watch it grow"
+      "name": "watch it grow",
+      "alerted": true
     },
     "robinhood:0xc72f232a6869e6cf34dc06129affd07f8a2a246a": {
       "baseline_price": 0.003775,
       "first_seen_ts": 1786322203,
       "symbol": "MANCER",
-      "name": "Mancer"
+      "name": "Mancer",
+      "alerted": true
     },
     "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": {
       "baseline_price": 0.03192,
       "first_seen_ts": 1786322270,
       "symbol": "STONKBROKER",
-      "name": "StonkBroker"
+      "name": "StonkBroker",
+      "alerted": true
     },
     "robinhood:0x232cdfc415d10b673845d83dc02ba2eabe7e30d1": {
       "baseline_price": 0.01142,
       "first_seen_ts": 1786322881,
       "symbol": "IF",
-      "name": "What If"
+      "name": "What If",
+      "alerted": true
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 492903396,
+    "last_block": 492913397,
     "accumulation": {}
   },
   "robinhood_seen_tokens": {
@@ -16427,7 +16431,7 @@
     "ethereum:0x2c4ea51d9dec7cdabe2d1bde01882f87b5231d21": 1
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 32359644,
+    "last_block": 0,
     "accumulation": {}
   }
 }
