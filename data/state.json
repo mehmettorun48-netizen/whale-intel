@@ -2826,9 +2826,9 @@
     },
     "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": {
       "whales": {
-        "0xfa45c8cb6aaf09a04a1b5462534c17b5293ad4c3": 1786409004
+        "0x8364063a3e5edaa6c9a999a1ad94e8e8dda2c71f": 1786492930
       },
-      "total_usd": 12433.15745007791,
+      "total_usd": 14209.181928193186,
       "last_tier": 0
     },
     "robinhood:0x232cdfc415d10b673845d83dc02ba2eabe7e30d1": {
@@ -2889,6 +2889,20 @@
       },
       "total_usd": 7446.238533509861,
       "last_tier": 2
+    },
+    "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": {
+      "whales": {
+        "0x99074ffa27559a27ead8ba86d203709bdf6c4a06": 1786492968
+      },
+      "total_usd": 501.5737807703123,
+      "last_tier": 0
+    },
+    "robinhood:0x99725b6a4add2f53f1f1fcc3897b253c709d1cc8": {
+      "whales": {
+        "0x85ef0b8551f19167942dba8e3679d6ee4e6ed6f4": 1786493016
+      },
+      "total_usd": 366.310640796278,
+      "last_tier": 0
     }
   },
   "0x514910771af9ca656af840dff83e8264ecf986ca": {
@@ -15627,11 +15641,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25707222,
+    "last_block": 25707253,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25707222,
+    "last_block": 25707253,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15806,7 +15820,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25707222,
+    "last_block": 25707253,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -16005,7 +16019,9 @@
     "robinhood:0x39dbed3a2bd333467115de45665cc57f813c4571": 1783975341,
     "robinhood:0xddec0170ceb4426ea05f2fbd485dffa4fafa6615": 1786306504,
     "robinhood:0xac0f333bbebb62b6d16322650641bd5ef2b849e5": 1784491326,
-    "robinhood:0x62c71cd34a52c30d894419cbcc55db2afa8032ea": 1784099715
+    "robinhood:0x62c71cd34a52c30d894419cbcc55db2afa8032ea": 1784099715,
+    "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": 1784447643,
+    "robinhood:0x99725b6a4add2f53f1f1fcc3897b253c709d1cc8": 1786492165
   },
   "infra_status": {
     "ethereum:0xd166337499e176bbc38a1fbd113ab144e5bd2df7": [
@@ -16499,6 +16515,18 @@
     "ethereum:0x73968b9a57c6e53d41345fd57a6e6ae27d6cdb2f": [
       true,
       "CoinGecko kategorisi: Yield Farming"
+    ],
+    "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": [
+      false,
+      ""
+    ],
+    "robinhood:0x99725b6a4add2f53f1f1fcc3897b253c709d1cc8": [
+      false,
+      ""
+    ],
+    "robinhood:0x69c535c61690c77ff158bcd9ec820d5770084a94": [
+      false,
+      ""
     ]
   },
   "price_watch": {
@@ -16578,10 +16606,22 @@
       "symbol": "YOLO",
       "name": "YOLO",
       "alerted": true
+    },
+    "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": {
+      "baseline_price": 0.01333,
+      "first_seen_ts": 1786492967,
+      "symbol": "HMM",
+      "name": "Thinking Cat"
+    },
+    "robinhood:0x99725b6a4add2f53f1f1fcc3897b253c709d1cc8": {
+      "baseline_price": 0.0001025,
+      "first_seen_ts": 1786493015,
+      "symbol": "HIGHER",
+      "name": "Higher"
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 493584116,
+    "last_block": 493587790,
     "accumulation": {}
   },
   "robinhood_seen_tokens": {
@@ -16649,7 +16689,7 @@
     "ethereum:0x889edc2edab5f40e902b864ad4d7ade8e412f9b1": 1
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 0,
+    "last_block": 34077401,
     "accumulation": {}
   }
 }
