@@ -2862,10 +2862,9 @@
     },
     "robinhood:0x39dbed3a2bd333467115de45665cc57f813c4571": {
       "whales": {
-        "0xf83fb55865b1b7f72827d1855899df34395f2365": 1786408442,
-        "0x361de445b8858af244dcd55d382d7eb80de2e822": 1786408602
+        "0x5765bdefb7ead33f4eb7935c5d5eb130f4299568": 1786494041
       },
-      "total_usd": 1983.6251643662745,
+      "total_usd": 2917.713753812389,
       "last_tier": 2
     },
     "robinhood:0xddec0170ceb4426ea05f2fbd485dffa4fafa6615": {
@@ -2892,16 +2891,48 @@
     },
     "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": {
       "whales": {
-        "0x99074ffa27559a27ead8ba86d203709bdf6c4a06": 1786492968
+        "0x99074ffa27559a27ead8ba86d203709bdf6c4a06": 1786492968,
+        "0x6565051fbfddd7423d511bcddfc1dc0cbef99820": 1786494052
       },
-      "total_usd": 501.5737807703123,
-      "last_tier": 0
+      "total_usd": 762.8494604875283,
+      "last_tier": 2
     },
     "robinhood:0x99725b6a4add2f53f1f1fcc3897b253c709d1cc8": {
       "whales": {
-        "0x85ef0b8551f19167942dba8e3679d6ee4e6ed6f4": 1786493016
+        "0x85ef0b8551f19167942dba8e3679d6ee4e6ed6f4": 1786493016,
+        "0xc8965e86deeef698c73580f7b2a3f3b8551004b9": 1786493875,
+        "0xf7142c2b1e52308c354564a3f3a5cc420947a266": 1786494194,
+        "0x6d08df670b62fd2d0fea3f4c6c0c4de75bd6f15e": 1786494199
       },
-      "total_usd": 366.310640796278,
+      "total_usd": 1083.9795205997254,
+      "last_tier": 2
+    },
+    "robinhood:0xba996feddd47a80375db84a6bd947f8fa1a64e10": {
+      "whales": {
+        "0x9550192ab86c0c6be9fc6bdb11cbcbf5ee580838": 1786493835
+      },
+      "total_usd": 686.6228615743383,
+      "last_tier": 0
+    },
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": {
+      "whales": {
+        "0xcedd1a2b799d38e5956336d74b055c8d5f7b4a4f": 1786494157
+      },
+      "total_usd": 500.0300637435592,
+      "last_tier": 0
+    },
+    "robinhood:0x727701f88f09fed71eb217bcea88b3f314cf7079": {
+      "whales": {
+        "0x67ca6a1531e9cc9da3c4938cd1fc1fef392ebd34": 1786494225
+      },
+      "total_usd": 308.96900258719097,
+      "last_tier": 0
+    },
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": {
+      "whales": {
+        "0x304e33e8a07726518ff17992fa3a2fd8c0d0392e": 1786494242
+      },
+      "total_usd": 447.5429550569408,
       "last_tier": 0
     }
   },
@@ -15641,11 +15672,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25707253,
+    "last_block": 25707284,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25707253,
+    "last_block": 25707284,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -15820,7 +15851,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25707253,
+    "last_block": 25707284,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -16021,7 +16052,11 @@
     "robinhood:0xac0f333bbebb62b6d16322650641bd5ef2b849e5": 1784491326,
     "robinhood:0x62c71cd34a52c30d894419cbcc55db2afa8032ea": 1784099715,
     "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": 1784447643,
-    "robinhood:0x99725b6a4add2f53f1f1fcc3897b253c709d1cc8": 1786492165
+    "robinhood:0x99725b6a4add2f53f1f1fcc3897b253c709d1cc8": 1786492165,
+    "robinhood:0xba996feddd47a80375db84a6bd947f8fa1a64e10": 1784092283,
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": 1784568854,
+    "robinhood:0x727701f88f09fed71eb217bcea88b3f314cf7079": 1784174770,
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": 1786448599
   },
   "infra_status": {
     "ethereum:0xd166337499e176bbc38a1fbd113ab144e5bd2df7": [
@@ -16527,6 +16562,26 @@
     "robinhood:0x69c535c61690c77ff158bcd9ec820d5770084a94": [
       false,
       ""
+    ],
+    "robinhood:0xba996feddd47a80375db84a6bd947f8fa1a64e10": [
+      false,
+      ""
+    ],
+    "robinhood:0x117cc2133c37b721f49de2a7a74833232b3b4c0c": [
+      false,
+      ""
+    ],
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": [
+      false,
+      ""
+    ],
+    "robinhood:0x727701f88f09fed71eb217bcea88b3f314cf7079": [
+      false,
+      ""
+    ],
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": [
+      false,
+      ""
     ]
   },
   "price_watch": {
@@ -16611,17 +16666,43 @@
       "baseline_price": 0.01333,
       "first_seen_ts": 1786492967,
       "symbol": "HMM",
-      "name": "Thinking Cat"
+      "name": "Thinking Cat",
+      "alerted": true
     },
     "robinhood:0x99725b6a4add2f53f1f1fcc3897b253c709d1cc8": {
       "baseline_price": 0.0001025,
       "first_seen_ts": 1786493015,
       "symbol": "HIGHER",
-      "name": "Higher"
+      "name": "Higher",
+      "alerted": true
+    },
+    "robinhood:0xba996feddd47a80375db84a6bd947f8fa1a64e10": {
+      "baseline_price": 6.916e-05,
+      "first_seen_ts": 1786493835,
+      "symbol": "APU",
+      "name": "Apu Apustaja"
+    },
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": {
+      "baseline_price": 0.00058,
+      "first_seen_ts": 1786494156,
+      "symbol": "TYGR",
+      "name": "Tygr"
+    },
+    "robinhood:0x727701f88f09fed71eb217bcea88b3f314cf7079": {
+      "baseline_price": 0.001434,
+      "first_seen_ts": 1786494225,
+      "symbol": "GRID",
+      "name": "GRID by Virtuals"
+    },
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": {
+      "baseline_price": 0.0008489,
+      "first_seen_ts": 1786494241,
+      "symbol": "sushicat",
+      "name": "sushicat"
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 493587790,
+    "last_block": 493591279,
     "accumulation": {}
   },
   "robinhood_seen_tokens": {
@@ -16689,7 +16770,7 @@
     "ethereum:0x889edc2edab5f40e902b864ad4d7ade8e412f9b1": 1
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 34077401,
+    "last_block": 34079602,
     "accumulation": {}
   }
 }
