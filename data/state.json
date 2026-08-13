@@ -15949,11 +15949,11 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25710663,
+    "last_block": 25710694,
     "accumulation": {}
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25710663,
+    "last_block": 25710694,
     "accumulation": {
       "0xada3344693f368cd0ebf510f26617ad4213bf5b3": {
         "total_usd": 108.79961828399999,
@@ -16128,7 +16128,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25710663,
+    "last_block": 25710694,
     "accumulation": {
       "0x00000000009e50a7ddb7a7b0e2ee6604fd120e49": {
         "total_usd": 142.5778942386576,
@@ -17151,34 +17151,6 @@
     ]
   },
   "price_watch": {
-    "robinhood:0xd8d1c08a8ba4fc64bac744f74290b89adcb6bf25": {
-      "baseline_price": 0.0003228,
-      "first_seen_ts": 1786321646,
-      "symbol": "seedcoin",
-      "name": "watch it grow",
-      "alerted": true
-    },
-    "robinhood:0xc72f232a6869e6cf34dc06129affd07f8a2a246a": {
-      "baseline_price": 0.003775,
-      "first_seen_ts": 1786322203,
-      "symbol": "MANCER",
-      "name": "Mancer",
-      "alerted": true
-    },
-    "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": {
-      "baseline_price": 0.03192,
-      "first_seen_ts": 1786322270,
-      "symbol": "STONKBROKER",
-      "name": "StonkBroker",
-      "alerted": true
-    },
-    "robinhood:0x232cdfc415d10b673845d83dc02ba2eabe7e30d1": {
-      "baseline_price": 0.01142,
-      "first_seen_ts": 1786322881,
-      "symbol": "IF",
-      "name": "What If",
-      "alerted": true
-    },
     "robinhood:0x57c0e45cb534413d1c20a4240955d6bb250bb4f1": {
       "baseline_price": 0.33980094500854524,
       "first_seen_ts": 1786407724,
@@ -17442,65 +17414,75 @@
       "baseline_price": 0.004676,
       "first_seen_ts": 1786580028,
       "symbol": "PACK",
-      "name": "Wolf Pack"
+      "name": "Wolf Pack",
+      "alerted": true
     },
     "robinhood:0x6245e67affa44a23077f0ea7f981a8dc743a0c47": {
       "baseline_price": 0.00626,
       "first_seen_ts": 1786580330,
       "symbol": "FRONG",
-      "name": "frong"
+      "name": "frong",
+      "alerted": true
     },
     "robinhood:0xc85900e8f3dccaffca9bea55fc6a5462804c1bcc": {
       "baseline_price": 2.076e-05,
       "first_seen_ts": 1786580465,
       "symbol": "CASHDOG",
-      "name": "CASHDOG"
+      "name": "CASHDOG",
+      "alerted": true
     },
     "robinhood:0x9708efb3ba2e5d23e973cae1a8599606333cd4ad": {
       "baseline_price": 0.0003814,
       "first_seen_ts": 1786580609,
       "symbol": "EQUITY",
-      "name": "EQUITY BROKERS"
+      "name": "EQUITY BROKERS",
+      "alerted": true
     },
     "robinhood:0x9b09c435bc5da088722be47e97989fb1e3ed4eb9": {
       "baseline_price": 0.0001951,
       "first_seen_ts": 1786580651,
       "symbol": "PEPE",
-      "name": "THE CHOSEN FROG"
+      "name": "THE CHOSEN FROG",
+      "alerted": true
     },
     "robinhood:0x616bcd920e1e1f354750bbaf2fb3b3fa3b4aae16": {
       "baseline_price": 0.0002965,
       "first_seen_ts": 1786580717,
       "symbol": "BAG",
-      "name": "Your Bag"
+      "name": "Your Bag",
+      "alerted": true
     },
     "robinhood:0x715922c4af57438f768aa831ecae8a62e646dcf3": {
       "baseline_price": 0.0003019,
       "first_seen_ts": 1786580866,
       "symbol": "BOSSCAT",
-      "name": "Bosscat"
+      "name": "Bosscat",
+      "alerted": true
     },
     "robinhood:0x060a4a3dc546b3e8be120636f8b9806757c71ef5": {
       "baseline_price": 0.0002493,
       "first_seen_ts": 1786580947,
       "symbol": "FLAMINGO",
-      "name": "Flamingo"
+      "name": "Flamingo",
+      "alerted": true
     },
     "robinhood:0x2a836d2b34ecbd8a709832e2f379929c52d87938": {
       "baseline_price": 0.0001315,
       "first_seen_ts": 1786581023,
       "symbol": "MYSTIC",
-      "name": "mystic"
+      "name": "mystic",
+      "alerted": true
     },
     "robinhood:0xa3bfbccd4aeec8ac56b17fee3e02dd2c60722ccc": {
       "baseline_price": 0.0005165,
       "first_seen_ts": 1786581128,
       "symbol": "CATSTR",
-      "name": "Cashcat Strategy"
+      "name": "Cashcat Strategy",
+      "alerted": true
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 493933229,
+    "last_block": 493943230,
     "accumulation": {}
   },
   "robinhood_seen_tokens": {
@@ -17569,7 +17551,7 @@
     "ethereum:0x324c5dc1fc42c7a4d43d92df1eba58a54d13bf2d": 1
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 34948786,
+    "last_block": 0,
     "accumulation": {}
   }
 }
