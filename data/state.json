@@ -1,7 +1,7 @@
 {
   "price_watch": {},
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25746708,
+    "last_block": 25746781,
     "accumulation": {}
   },
   "infra_status": {
@@ -92,24 +92,33 @@
     "ethereum:0x6c3ea9036406852006290770bedfcaba0e23a0e8": [
       true,
       "CoinGecko kategorisi: Stablecoins"
+    ],
+    "ethereum:0xb9e806e8f2d94c015ffefa90cd24ecce18f1663c": [
+      true,
+      "ERC4626 vault (asset() fonksiyonu var)"
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25746708,
+    "last_block": 25746781,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
         "since": 1786629819,
         "count": 1
+      },
+      "0x09ad820aac5779683b481c4674208a4e1b024afa": {
+        "total_usd": 238.69400586243364,
+        "since": 1786632528,
+        "count": 1
       }
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25746708,
+    "last_block": 25746781,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494138147,
+    "last_block": 494141687,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
