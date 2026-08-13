@@ -33,11 +33,6 @@ FIRST_RUN_BLOCK_LOOKBACK = 300
 MAX_BLOCKS_PER_RUN = 30
 
 CLUSTER_WINDOW_SECONDS = 6 * 3600
-# NOT: Bu tier'lar artık "farklı cüzdan sayısı" değil, "farklı fonlama
-# kaynağı sayısı" üzerinden hesaplanıyor -- bkz. get_wallet_funding_source()
-# ve update_cluster(). Aynı adresten fonlanan cüzdanlar artık tek bir
-# "balina" olarak sayılıyor, bu yüzden sybil/bot cüzdan grupları eskisi
-# gibi sayacı şişiremiyor.
 CLUSTER_TIERS = [
     (10, "🔴 Balinalar Yoğun Alıyor"),
     (5, "🟠 Güçlü Balina Birikimi"),
@@ -67,7 +62,7 @@ CHAINS = {
         "dexscreener_id": "ethereum",
         "coingecko_platform": "ethereum",
         "explorer": "https://etherscan.io",
-        "max_blocks_per_run": 300,
+        "max_blocks_per_run": 100,
     },
     "bsc": {
         "chain_id": 56,
@@ -674,77 +669,17 @@ def topic_to_address(topic_hex):
     return "0x" + topic_hex[-40:]
 
 
-# --- YENİ: fonlama kaynağı tespiti ------------------------------------
-#
-# Amaç: "Farklı balina sayısı" hesaplanırken ham cüzdan adresi yerine,
-# o cüzdanın aldığı İLK gelen işlemin gönderenini ("fonlama kaynağı")
-# kullanmak. Böylece aynı kaynaktan (örn. proje sahibinin dağıtım
-# cüzdanından) fonlanmış 5 farklı adres, artık 5 ayrı "balina" değil,
-# TEK bir balina/operasyon olarak sayılır. Bu, sybil/bot cüzdanlarla
-# yapay "balina birikimi" görüntüsü yaratmayı zorlaştırır.
-#
-# NOT: account/txlist Etherscan-uyumlu bir action. Etherscan v2 API'de
-# doğrudan çalışır. Blockscout Pro API tarafında da aynı modül/action
-# isimleriyle destekleniyor olması bekleniyor (rpc_call zaten diğer
-# module='account' çağrılarını blockscout_pro_call'a yönlendiriyor);
-# yine de prod'a almadan önce Robinhood zincirinde bir cüzdanla test
-# etmeni öneririm -- eğer "result" boş/hatalı dönerse fonksiyon otomatik
-# olarak cüzdanın kendisini "izole" fonlama kaynağı sayar, yani en kötü
-# ihtimalle eski davranışa (her cüzdan ayrı sayılır) geri düşer.
-_funding_source_cache = {}
-
-
-def get_wallet_funding_source(chain_cfg, wallet_address):
-    cache_key = (chain_cfg["chain_id"], wallet_address)
-    if cache_key in _funding_source_cache:
-        return _funding_source_cache[cache_key]
-
-    # Bulunamazsa kendi adresini döndürür -- yani "izole/bilinmeyen kaynak"
-    # olarak tek başına sayılır, eski davranışla aynı sonucu verir.
-    funding_source = wallet_address
-    try:
-        data = rpc_call(chain_cfg, {
-            "module": "account",
-            "action": "txlist",
-            "address": wallet_address,
-            "startblock": 0,
-            "endblock": 99999999,
-            "page": 1,
-            "offset": 1,
-            "sort": "asc",
-        })
-        result = data.get("result")
-        if isinstance(result, list) and result:
-            first_tx = result[0]
-            from_addr = (first_tx.get("from") or "").lower()
-            to_addr = (first_tx.get("to") or "").lower()
-            if from_addr and to_addr == wallet_address:
-                funding_source = from_addr
-        else:
-            print(f"Funding source: txlist boş/beklenmedik döndü, "
-                  f"{wallet_address} izole sayılıyor. Yanıt: {data.get('message', data)}")
-    except Exception as e:
-        print(f"Funding source fetch error for {wallet_address}: {e}")
-
-    _funding_source_cache[cache_key] = funding_source
-    return funding_source
-# ------------------------------------------------------------------------
-
-
-def update_cluster(chain_cfg, state, cluster_key, whale_address, usd_value):
+def update_cluster(state, cluster_key, whale_address, usd_value):
     clusters = state.setdefault("clusters", {})
-    c = clusters.setdefault(cluster_key, {"funders": {}, "total_usd": 0.0, "last_tier": 0})
-
-    # Artık ham cüzdan adresi değil, fonlama kaynağı sayılıyor.
-    funding_source = get_wallet_funding_source(chain_cfg, whale_address)
+    c = clusters.setdefault(cluster_key, {"whales": {}, "total_usd": 0.0, "last_tier": 0})
 
     now = int(time.time())
-    c["funders"][funding_source] = now
+    c["whales"][whale_address] = now
     c["total_usd"] += usd_value
 
     cutoff = now - CLUSTER_WINDOW_SECONDS
-    c["funders"] = {addr: ts for addr, ts in c["funders"].items() if ts >= cutoff}
-    distinct_count = len(c["funders"])
+    c["whales"] = {addr: ts for addr, ts in c["whales"].items() if ts >= cutoff}
+    distinct_count = len(c["whales"])
 
     newly_crossed = None
     for threshold, label in CLUSTER_TIERS:
@@ -1105,15 +1040,13 @@ def main():
                     f"Grafik: https://dexscreener.com/{dex_id}/{bought_address}"
                 )
 
-                count, total_usd, tier_label = update_cluster(
-                    chain_cfg, state, f"{chain}:{bought_address}", whale, accurate_usd_value
-                )
+                count, total_usd, tier_label = update_cluster(state, f"{chain}:{bought_address}", whale, accurate_usd_value)
                 if tier_label:
                     send_telegram(
                         f"{tier_label} [{chain.upper()}]\n\n"
                         f"Coin: {bought_name} ({bought_symbol})\n"
                         f"Kontrat: {bought_address}\n"
-                        f"Farklı Fonlama Kaynağı Sayısı: {count}\n"
+                        f"Farklı Balina Sayısı: {count}\n"
                         f"Toplam Alım: ${total_usd:,.0f}\n"
                         f"Grafik: https://dexscreener.com/{dex_id}/{bought_address}"
                     )
