@@ -1,7 +1,7 @@
 {
   "price_watch": {},
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25745964,
+    "last_block": 25746065,
     "accumulation": {}
   },
   "infra_status": {
@@ -28,18 +28,26 @@
     "ethereum:0xae7ab96520de3a18e5e111b5eaab095312d7fe84": [
       true,
       "CoinGecko kategorisi: Liquid Staking Tokens"
+    ],
+    "ethereum:0xf05e58fcea29ab4da01a495140b349f8410ba904": [
+      false,
+      ""
+    ],
+    "ethereum:0x57e114b691db790c35207b2e685d4a43181e6061": [
+      true,
+      "CoinGecko kategorisi: Stablecoin Issuer"
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25745964,
+    "last_block": 25746065,
     "accumulation": {}
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25745964,
+    "last_block": 25746065,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494109360,
+    "last_block": 494113643,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
