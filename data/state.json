@@ -1,7 +1,7 @@
 {
   "price_watch": {},
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25746368,
+    "last_block": 25746469,
     "accumulation": {}
   },
   "infra_status": {
@@ -68,18 +68,22 @@
     "ethereum:0x073598132f37756a7e665fb52f1757463120bd3c": [
       false,
       ""
+    ],
+    "ethereum:0xd166337499e176bbc38a1fbd113ab144e5bd2df7": [
+      true,
+      "CoinGecko kategorisi: Liquid Staking Tokens"
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25746368,
+    "last_block": 25746469,
     "accumulation": {}
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25746368,
+    "last_block": 25746469,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494123762,
+    "last_block": 494127318,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
