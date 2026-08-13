@@ -1,7 +1,7 @@
 {
   "price_watch": {},
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25746166,
+    "last_block": 25746267,
     "accumulation": {}
   },
   "infra_status": {
@@ -44,22 +44,48 @@
     "ethereum:0x01791f726b4103694969820be083196cc7c045ff": [
       false,
       ""
+    ],
+    "ethereum:0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b": [
+      true,
+      "CoinGecko kategorisi: Yield Farming"
+    ],
+    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": [
+      false,
+      ""
+    ],
+    "ethereum:0xf939e0a03fb07f59a73314e73794be0e57ac1b4e": [
+      true,
+      "CoinGecko kategorisi: Stablecoins"
+    ],
+    "ethereum:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": [
+      true,
+      "CoinGecko kategorisi: Wrapped-Tokens"
+    ],
+    "arbitrum:0xcb8fa9a76b8e203d8c3797bf438d8fb81ea3326a": [
+      true,
+      "CoinGecko kategorisi: Stablecoins"
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25746166,
+    "last_block": 25746267,
     "accumulation": {}
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25746166,
+    "last_block": 25746267,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494116594,
+    "last_block": 494120124,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
     "last_block": 0,
     "accumulation": {}
+  },
+  "creation_times": {
+    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 1735731443
+  },
+  "pending_mcap_recheck": {
+    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 1
   }
 }
