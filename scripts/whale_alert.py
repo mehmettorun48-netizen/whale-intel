@@ -62,7 +62,7 @@ CHAINS = {
         "dexscreener_id": "ethereum",
         "coingecko_platform": "ethereum",
         "explorer": "https://etherscan.io",
-        "max_blocks_per_run": 30,
+        "max_blocks_per_run": 300,
     },
     "bsc": {
         "chain_id": 56,
