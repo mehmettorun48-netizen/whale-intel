@@ -233,7 +233,7 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25753359,
+    "last_block": 25753435,
     "accumulation": {}
   },
   "infra_status": {
@@ -688,10 +688,14 @@
     "arbitrum:0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": [
       true,
       "CoinGecko kategorisi: Bridged WBTC"
+    ],
+    "ethereum:0x085780639cc2cacd35e474e71f4d000e2405d8f6": [
+      true,
+      "CoinGecko kategorisi: Stablecoins"
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25753359,
+    "last_block": 25753435,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -721,11 +725,11 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25753359,
+    "last_block": 25753435,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494457173,
+    "last_block": 494460875,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
