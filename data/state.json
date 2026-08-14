@@ -207,17 +207,31 @@
       "baseline_price": 2.66e-05,
       "first_seen_ts": 1786674891,
       "symbol": "HUH",
-      "name": "Huh The Viral Cat"
+      "name": "Huh The Viral Cat",
+      "alerted": true
     },
     "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": {
       "baseline_price": 2.037e-05,
       "first_seen_ts": 1786675027,
       "symbol": "VERTEX",
-      "name": "Vertex"
+      "name": "Vertex",
+      "alerted": true
+    },
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": {
+      "baseline_price": 0.0006221,
+      "first_seen_ts": 1786675919,
+      "symbol": "TYGR",
+      "name": "Tygr"
+    },
+    "robinhood:0x3b7157b6409380e09a131b631dfb8dfd2781d9cc": {
+      "baseline_price": 0.000253,
+      "first_seen_ts": 1786676007,
+      "symbol": "GATO",
+      "name": "EL GATO"
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25750296,
+    "last_block": 25750368,
     "accumulation": {}
   },
   "infra_status": {
@@ -556,10 +570,30 @@
     "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": [
       false,
       ""
+    ],
+    "robinhood:0x2e8c31162b855a2ffa90f6f8634643ad6f111e18": [
+      false,
+      ""
+    ],
+    "robinhood:0x8e62f281f282686fca6dcb39288069a93fc23f1c": [
+      false,
+      ""
+    ],
+    "robinhood:0x5ad6fad7794f4118fa119dc6f5652f360f3b8eb5": [
+      false,
+      ""
+    ],
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": [
+      false,
+      ""
+    ],
+    "robinhood:0x3b7157b6409380e09a131b631dfb8dfd2781d9cc": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25750296,
+    "last_block": 25750368,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -584,15 +618,15 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25750296,
+    "last_block": 25750368,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494310042,
+    "last_block": 494313433,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 35820080,
+    "last_block": 35821581,
     "accumulation": {}
   },
   "creation_times": {
@@ -628,7 +662,9 @@
     "robinhood:0x451b42a15100c340ca12f7c66de06fac5ea2d751": 1786213073,
     "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": 1785902555,
     "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": 1784261266,
-    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": 1786666015
+    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": 1786666015,
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": 1784568854,
+    "robinhood:0x3b7157b6409380e09a131b631dfb8dfd2781d9cc": 1786482384
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 2,
@@ -646,10 +682,11 @@
     },
     "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": {
       "whales": {
-        "0x2517576520784664e360adba7e2e05b6968eb5f7": 1786666475
+        "0x2517576520784664e360adba7e2e05b6968eb5f7": 1786666475,
+        "0x91e959a8fbcb2692628c559b5dfbd8e1978dfc2a": 1786676023
       },
-      "total_usd": 402.7966754265634,
-      "last_tier": 0
+      "total_usd": 2827.199154143581,
+      "last_tier": 2
     },
     "robinhood:0xdbcec8db3e21c1612a22b39d195d7d654cad00af": {
       "whales": {
@@ -716,9 +753,10 @@
         "0x2e0f456c77606e7c49edb431275d5b334c254873": 1786669530,
         "0xa4b6da5140c6e43f5a1324600cde7c4dd7a5c1e4": 1786669627,
         "0xdaeeb30d77ab2b2be96fab93651d78f6c88b10b7": 1786671326,
-        "0x81f1141d216e381d0d8f894faa90d5a8dcc68a7b": 1786671369
+        "0x81f1141d216e381d0d8f894faa90d5a8dcc68a7b": 1786671369,
+        "0xda176ad8d69f90ea3996654915e5708aea8a5b50": 1786675726
       },
-      "total_usd": 2286.970336095556,
+      "total_usd": 3285.6390098080497,
       "last_tier": 5
     },
     "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": {
@@ -815,9 +853,10 @@
       "whales": {
         "0x917548194530c6e7b6db009864e510578dd3799f": 1786671284,
         "0x6d9b0e52d452193305401f4f3fbcb7e0acbe4dc9": 1786671359,
-        "0x2d8b770ff6dcd8d7ff95a546af450a722aa85458": 1786672248
+        "0x2d8b770ff6dcd8d7ff95a546af450a722aa85458": 1786672248,
+        "0x6d08df670b62fd2d0fea3f4c6c0c4de75bd6f15e": 1786676030
       },
-      "total_usd": 2883.3776117170164,
+      "total_usd": 3707.1955890670397,
       "last_tier": 2
     },
     "robinhood:0x0145acbccefbed6f303c420beeaaac72e905430b": {
@@ -838,9 +877,10 @@
     "robinhood:0x459f32cf930aaef71e7a3fe55c6b8fe53e7ba4a1": {
       "whales": {
         "0x314b0b17dc786e0a466ed7134e5800f7eb020e0c": 1786672144,
-        "0x5b4b38665f407bc318e46bb68296329a965b30fc": 1786672213
+        "0x5b4b38665f407bc318e46bb68296329a965b30fc": 1786672213,
+        "0xbd8f827ac95311d11eb99ea12f8cefa3075a7d47": 1786675821
       },
-      "total_usd": 2499.554896781119,
+      "total_usd": 3312.4744648803157,
       "last_tier": 2
     },
     "robinhood:0x451b42a15100c340ca12f7c66de06fac5ea2d751": {
@@ -869,6 +909,20 @@
         "0x194c5dc1f2ab20566705f03ebeac2b45538cae2e": 1786675028
       },
       "total_usd": 363.07820089677796,
+      "last_tier": 0
+    },
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": {
+      "whales": {
+        "0xd78ec718a85abd3e6c9e39443e9e5b1d0d403dbc": 1786675920
+      },
+      "total_usd": 326.5991862114337,
+      "last_tier": 0
+    },
+    "robinhood:0x3b7157b6409380e09a131b631dfb8dfd2781d9cc": {
+      "whales": {
+        "0x0382cc3c6abd07a717f39edd605181d1b69e3d1b": 1786676007
+      },
+      "total_usd": 658.9032977731363,
       "last_tier": 0
     }
   }
