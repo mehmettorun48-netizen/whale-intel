@@ -60,11 +60,54 @@
       "baseline_price": 0.003006,
       "first_seen_ts": 1786667756,
       "symbol": "SEMI",
-      "name": "semivault.xyz"
+      "name": "semivault.xyz",
+      "alerted": true
+    },
+    "robinhood:0x616bcd920e1e1f354750bbaf2fb3b3fa3b4aae16": {
+      "baseline_price": 0.0001999,
+      "first_seen_ts": 1786668555,
+      "symbol": "BAG",
+      "name": "Your Bag"
+    },
+    "robinhood:0x1d5aad3c0d6066078ea60f384a2492a550db30b0": {
+      "baseline_price": 0.001367,
+      "first_seen_ts": 1786668607,
+      "symbol": "STACK",
+      "name": "STACKERS"
+    },
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": {
+      "baseline_price": 0.0005839,
+      "first_seen_ts": 1786668642,
+      "symbol": "sushicat",
+      "name": "sushicat"
+    },
+    "robinhood:0x19057832022790a636fbffc0fec6975c465c8205": {
+      "baseline_price": 0.0001764,
+      "first_seen_ts": 1786668648,
+      "symbol": "Stokki",
+      "name": "Stokki.fun"
+    },
+    "robinhood:0x060a4a3dc546b3e8be120636f8b9806757c71ef5": {
+      "baseline_price": 0.0002706,
+      "first_seen_ts": 1786668682,
+      "symbol": "FLAMINGO",
+      "name": "Flamingo"
+    },
+    "robinhood:0xbed7c1660a01dbeee225bd893ac31727a91a5773": {
+      "baseline_price": 0.001807,
+      "first_seen_ts": 1786668725,
+      "symbol": "SZR",
+      "name": "Sazare"
+    },
+    "robinhood:0x06a6fd8d8679f8997ddd2ac54aa6f45dcca65c65": {
+      "baseline_price": 6.095e-05,
+      "first_seen_ts": 1786668745,
+      "symbol": "BALIN",
+      "name": "Balin Bank"
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25749702,
+    "last_block": 25749775,
     "accumulation": {}
   },
   "infra_status": {
@@ -287,10 +330,42 @@
     "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": [
       false,
       ""
+    ],
+    "robinhood:0x616bcd920e1e1f354750bbaf2fb3b3fa3b4aae16": [
+      false,
+      ""
+    ],
+    "robinhood:0x1d5aad3c0d6066078ea60f384a2492a550db30b0": [
+      false,
+      ""
+    ],
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": [
+      false,
+      ""
+    ],
+    "robinhood:0x19057832022790a636fbffc0fec6975c465c8205": [
+      false,
+      ""
+    ],
+    "robinhood:0x060a4a3dc546b3e8be120636f8b9806757c71ef5": [
+      false,
+      ""
+    ],
+    "robinhood:0xbed7c1660a01dbeee225bd893ac31727a91a5773": [
+      false,
+      ""
+    ],
+    "robinhood:0x06a6fd8d8679f8997ddd2ac54aa6f45dcca65c65": [
+      false,
+      ""
+    ],
+    "robinhood:0x0339f5459fc690ac85f1782e15782a151b4a9e1b": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25749702,
+    "last_block": 25749775,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -315,15 +390,15 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25749702,
+    "last_block": 25749775,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494281515,
+    "last_block": 494285052,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 35808072,
+    "last_block": 35809573,
     "accumulation": {}
   },
   "creation_times": {
@@ -338,7 +413,14 @@
     "robinhood:0x9efe124ac1ce5e54a011437aedacfc12cbcde9cc": 1786645949,
     "robinhood:0xfa416c98d99d87ab63deeacaafd9da9214fdad2c": 1786643807,
     "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": 1786656922,
-    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": 1786662435
+    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": 1786662435,
+    "robinhood:0x616bcd920e1e1f354750bbaf2fb3b3fa3b4aae16": 1786254515,
+    "robinhood:0x1d5aad3c0d6066078ea60f384a2492a550db30b0": 1786559704,
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": 1786448599,
+    "robinhood:0x19057832022790a636fbffc0fec6975c465c8205": 1786663014,
+    "robinhood:0x060a4a3dc546b3e8be120636f8b9806757c71ef5": 1786448875,
+    "robinhood:0xbed7c1660a01dbeee225bd893ac31727a91a5773": 1784654651,
+    "robinhood:0x06a6fd8d8679f8997ddd2ac54aa6f45dcca65c65": 1785510561
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 2,
@@ -407,6 +489,55 @@
         "0x87b0eef2dfa36102943453b4a2243cd3db57e2c5": 1786667756
       },
       "total_usd": 279.1102639649593,
+      "last_tier": 0
+    },
+    "robinhood:0x616bcd920e1e1f354750bbaf2fb3b3fa3b4aae16": {
+      "whales": {
+        "0x130e1e44c1fa1417d118d0e6d60f90db0c930233": 1786668569
+      },
+      "total_usd": 3313.794333855498,
+      "last_tier": 0
+    },
+    "robinhood:0x1d5aad3c0d6066078ea60f384a2492a550db30b0": {
+      "whales": {
+        "0x7b98398e353f8703908f70a25b442b2e19deff72": 1786668608
+      },
+      "total_usd": 551.8694656643694,
+      "last_tier": 0
+    },
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": {
+      "whales": {
+        "0x46bbaf0bee078fa14e81406830dc1573a153206f": 1786668642
+      },
+      "total_usd": 473.8280387473831,
+      "last_tier": 0
+    },
+    "robinhood:0x19057832022790a636fbffc0fec6975c465c8205": {
+      "whales": {
+        "0x6a3fdf18b8d5e00d86373ac1fab94d2645908d8e": 1786668648
+      },
+      "total_usd": 988.7817133136392,
+      "last_tier": 0
+    },
+    "robinhood:0x060a4a3dc546b3e8be120636f8b9806757c71ef5": {
+      "whales": {
+        "0x46bbaf0bee078fa14e81406830dc1573a153206f": 1786668685
+      },
+      "total_usd": 1002.9747642019933,
+      "last_tier": 0
+    },
+    "robinhood:0xbed7c1660a01dbeee225bd893ac31727a91a5773": {
+      "whales": {
+        "0x66cf83424bcd33d6d8d20001f0068583531b44a9": 1786668725
+      },
+      "total_usd": 252.9498212645278,
+      "last_tier": 0
+    },
+    "robinhood:0x06a6fd8d8679f8997ddd2ac54aa6f45dcca65c65": {
+      "whales": {
+        "0xb45c0dcc2cf7845a719e27e2d4ec5b37732a24c5": 1786668745
+      },
+      "total_usd": 644.8216212667611,
       "last_tier": 0
     }
   }
