@@ -4,53 +4,67 @@
       "baseline_price": 0.030777533020161542,
       "first_seen_ts": 1786666447,
       "symbol": "STONKBROKER",
-      "name": "StonkBroker"
+      "name": "StonkBroker",
+      "alerted": true
     },
     "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": {
       "baseline_price": 0.02116,
       "first_seen_ts": 1786666474,
       "symbol": "HMM",
-      "name": "Thinking Cat"
+      "name": "Thinking Cat",
+      "alerted": true
     },
     "robinhood:0xdbcec8db3e21c1612a22b39d195d7d654cad00af": {
       "baseline_price": 6.52e-05,
       "first_seen_ts": 1786666480,
       "symbol": "Jimothy",
-      "name": "Jimothy The Raccoon"
+      "name": "Jimothy The Raccoon",
+      "alerted": true
     },
     "robinhood:0xe3fa12da7fa026b21817f16622e8ae48fa785166": {
       "baseline_price": 0.003213,
       "first_seen_ts": 1786666600,
       "symbol": "YARD",
-      "name": "Yardkeeper"
+      "name": "Yardkeeper",
+      "alerted": true
     },
     "robinhood:0x149d214bf10a37b23a24a3d8499af4f1962307dd": {
       "baseline_price": 3.658e-05,
       "first_seen_ts": 1786666621,
       "symbol": "BIRD",
-      "name": "Alert Bird "
+      "name": "Alert Bird ",
+      "alerted": true
     },
     "robinhood:0x9efe124ac1ce5e54a011437aedacfc12cbcde9cc": {
       "baseline_price": 6.69e-06,
       "first_seen_ts": 1786666650,
       "symbol": "CURSE",
-      "name": "Cursed Cat"
+      "name": "Cursed Cat",
+      "alerted": true
     },
     "robinhood:0xfa416c98d99d87ab63deeacaafd9da9214fdad2c": {
       "baseline_price": 2.308e-05,
       "first_seen_ts": 1786666656,
       "symbol": "OMY",
-      "name": "Omex Finance"
+      "name": "Omex Finance",
+      "alerted": true
     },
     "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": {
       "baseline_price": 18.66,
       "first_seen_ts": 1786666676,
       "symbol": "QVR",
-      "name": "Quiver"
+      "name": "Quiver",
+      "alerted": true
+    },
+    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": {
+      "baseline_price": 0.003006,
+      "first_seen_ts": 1786667756,
+      "symbol": "SEMI",
+      "name": "semivault.xyz"
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25749601,
+    "last_block": 25749702,
     "accumulation": {}
   },
   "infra_status": {
@@ -269,10 +283,14 @@
     "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": [
       false,
       ""
+    ],
+    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25749601,
+    "last_block": 25749702,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -297,15 +315,15 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25749601,
+    "last_block": 25749702,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494276659,
+    "last_block": 494281515,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 35806571,
+    "last_block": 35808072,
     "accumulation": {}
   },
   "creation_times": {
@@ -319,7 +337,8 @@
     "robinhood:0x149d214bf10a37b23a24a3d8499af4f1962307dd": 1786658572,
     "robinhood:0x9efe124ac1ce5e54a011437aedacfc12cbcde9cc": 1786645949,
     "robinhood:0xfa416c98d99d87ab63deeacaafd9da9214fdad2c": 1786643807,
-    "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": 1786656922
+    "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": 1786656922,
+    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": 1786662435
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 2,
@@ -381,6 +400,13 @@
         "0xd9b48de8cf09898ab52d7a9d83e31187e63d7d2e": 1786666676
       },
       "total_usd": 904.8767812671286,
+      "last_tier": 0
+    },
+    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": {
+      "whales": {
+        "0x87b0eef2dfa36102943453b4a2243cd3db57e2c5": 1786667756
+      },
+      "total_usd": 279.1102639649593,
       "last_tier": 0
     }
   }
