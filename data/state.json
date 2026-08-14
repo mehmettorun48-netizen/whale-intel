@@ -193,17 +193,31 @@
       "baseline_price": 0.0003183,
       "first_seen_ts": 1786674076,
       "symbol": "BOW",
-      "name": "Longbow"
+      "name": "Longbow",
+      "alerted": true
     },
     "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": {
       "baseline_price": 0.0003021,
       "first_seen_ts": 1786674120,
       "symbol": "UNIPEG",
-      "name": "Unicorn Pegasus"
+      "name": "Unicorn Pegasus",
+      "alerted": true
+    },
+    "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": {
+      "baseline_price": 2.66e-05,
+      "first_seen_ts": 1786674891,
+      "symbol": "HUH",
+      "name": "Huh The Viral Cat"
+    },
+    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": {
+      "baseline_price": 2.037e-05,
+      "first_seen_ts": 1786675027,
+      "symbol": "VERTEX",
+      "name": "Vertex"
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25750221,
+    "last_block": 25750296,
     "accumulation": {}
   },
   "infra_status": {
@@ -530,10 +544,22 @@
     "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": [
       false,
       ""
+    ],
+    "robinhood:0x532c5583671870723ceef573600208af49c87c54": [
+      false,
+      ""
+    ],
+    "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": [
+      false,
+      ""
+    ],
+    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25750221,
+    "last_block": 25750296,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -558,15 +584,15 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25750221,
+    "last_block": 25750296,
     "accumulation": {}
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 494306469,
+    "last_block": 494310042,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 35818579,
+    "last_block": 35820080,
     "accumulation": {}
   },
   "creation_times": {
@@ -600,7 +626,9 @@
     "robinhood:0x459f32cf930aaef71e7a3fe55c6b8fe53e7ba4a1": 1786619445,
     "robinhood:0x279fa7965da2827f223a0b42a81353373a20cf83": 1786661892,
     "robinhood:0x451b42a15100c340ca12f7c66de06fac5ea2d751": 1786213073,
-    "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": 1785902555
+    "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": 1785902555,
+    "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": 1784261266,
+    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": 1786666015
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 2,
@@ -661,10 +689,11 @@
     },
     "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": {
       "whales": {
-        "0xd9b48de8cf09898ab52d7a9d83e31187e63d7d2e": 1786666676
+        "0xd9b48de8cf09898ab52d7a9d83e31187e63d7d2e": 1786666676,
+        "0x5973a5f9b71bf8344654becf2497757a0c296062": 1786675032
       },
-      "total_usd": 904.8767812671286,
-      "last_tier": 0
+      "total_usd": 1203.778273674963,
+      "last_tier": 2
     },
     "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": {
       "whales": {
@@ -823,9 +852,23 @@
     },
     "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": {
       "whales": {
-        "0x84fd331d07b509e22f11729f795be318d267bef1": 1786674121
+        "0x84fd331d07b509e22f11729f795be318d267bef1": 1786674842
       },
-      "total_usd": 301.2370611989604,
+      "total_usd": 627.5410740868756,
+      "last_tier": 0
+    },
+    "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": {
+      "whales": {
+        "0xef35cd174816ef7e2287c81fce4dc422cbf4ca05": 1786674892
+      },
+      "total_usd": 319.76594268836936,
+      "last_tier": 0
+    },
+    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": {
+      "whales": {
+        "0x194c5dc1f2ab20566705f03ebeac2b45538cae2e": 1786675028
+      },
+      "total_usd": 363.07820089677796,
       "last_tier": 0
     }
   }
