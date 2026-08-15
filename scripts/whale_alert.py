@@ -103,7 +103,7 @@ CHAINS = {
         "coingecko_platform": None,
         "explorer": "https://robinhoodchain.blockscout.com",
         "api_type": "blockscout",
-        "max_blocks_per_run": 1500,
+        "max_blocks_per_run": 400,
         "min_buy_usd": 200,  # diğer chainlerden düşük -- Robinhood henüz
         # küçük/taze bir ekosistem, ortalama işlem büyüklüğü genelde
         # $1000'in çok altında kalıyor.
