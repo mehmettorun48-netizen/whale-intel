@@ -257,4 +257,401 @@
     "ethereum:0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b": [true, "CoinGecko kategorisi: Yield Farming"],
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": [false, ""],
     "ethereum:0xf939e0a03fb07f59a73314e73794be0e57ac1b4e": [true, "CoinGecko kategorisi: Stablecoins"],
-    "ethereum:0xcd5fe23c85820f7b72d0926fc9b05
+    "ethereum:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": [true, "CoinGecko kategorisi: Wrapped-Tokens"],
+    "arbitrum:0xcb8fa9a76b8e203d8c3797bf438d8fb81ea3326a": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0x073598132f37756a7e665fb52f1757463120bd3c": [false, ""],
+    "ethereum:0xd166337499e176bbc38a1fbd113ab144e5bd2df7": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "ethereum:0xcf91b70017eabde82c9671e30e5502d312ea6eb2": [false, ""],
+    "ethereum:0x2b591e99afe9f32eaa6214f7b7629768c40eeb39": [false, ""],
+    "ethereum:0x111111111117dc0aa78b770fa6a738034120c302": [false, ""],
+    "ethereum:0xd533a949740bb3306d119cc777fa900ba034cd52": [true, "CoinGecko kategorisi: Yield Farming"],
+    "ethereum:0x6c3ea9036406852006290770bedfcaba0e23a0e8": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0xb9e806e8f2d94c015ffefa90cd24ecce18f1663c": [true, "ERC4626 vault (asset() fonksiyonu var)"],
+    "arbitrum:0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": [true, "CoinGecko kategorisi: Bridged USDT"],
+    "arbitrum:0xaf88d065e77c8cc2239327c5edb3a432268e5831": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0xdc035d45d973e3ec169d2276ddab16f1e407384f": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0xf280b16ef293d8e534e370794ef26bf312694126": [false, ""],
+    "ethereum:0xbe9895146f7af43049ca1c1ae358b0541ea49704": [true, "CoinGecko kategorisi: Wrapped-Tokens"],
+    "ethereum:0x18084fba666a33d37592fa2633fd49a74dd93a88": [true, "CoinGecko kategorisi: Tokenized BTC"],
+    "ethereum:0x64351fc9810adad17a690e4e1717df5e7e085160": [true, "CoinGecko kategorisi: Synthetic Asset"],
+    "ethereum:0x8ed97a637a790be1feff5e888d43629dc05408f6": [false, ""],
+    "ethereum:0x32708538a107253b51a735a724330a23106ca4ca": [false, ""],
+    "ethereum:0x68749665ff8d2d112fa859aa293f07a622782f38": [false, ""],
+    "ethereum:0x8236a87084f8b84306f72007f36f2618a5634494": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "ethereum:0xe343167631d89b6ffc58b88d6b7fb0228795491d": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0x04c154b66cb340f3ae24111cc767e0184ed00cc6": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "robinhood:0x5fc5360d0400a0fd4f2af552add042d716f1d168": [false, ""],
+    "ethereum:0x0a26c80be4e060e688d7c23addb92cbb5d2c9eca": [false, ""],
+    "robinhood:0x193674b72b6aa1905fc47bdbc19b30a53b666666": [false, ""],
+    "robinhood:0x020bfc650a365f8bb26819deaabf3e21291018b4": [false, ""],
+    "robinhood:0x232cdfc415d10b673845d83dc02ba2eabe7e30d1": [false, ""],
+    "robinhood:0x438ac56065af7c091bfa8f4d6d0214f36e273e02": [false, ""],
+    "robinhood:0xd7321801caae694090694ff55a9323139f043b88": [false, ""],
+    "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": [false, ""],
+    "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": [false, ""],
+    "robinhood:0xdbcec8db3e21c1612a22b39d195d7d654cad00af": [false, ""],
+    "robinhood:0xe8fb470e0685437d7739bd2aacba60b228800335": [false, ""],
+    "robinhood:0x45f82ac5d507e988f7406935da8eefe495a360e0": [false, ""],
+    "robinhood:0xe3fa12da7fa026b21817f16622e8ae48fa785166": [false, ""],
+    "robinhood:0x149d214bf10a37b23a24a3d8499af4f1962307dd": [false, ""],
+    "robinhood:0x9efe124ac1ce5e54a011437aedacfc12cbcde9cc": [false, ""],
+    "robinhood:0xfa416c98d99d87ab63deeacaafd9da9214fdad2c": [false, ""],
+    "robinhood:0x45242320dbb855eea8fd36804c6487e10e97fcf9": [false, ""],
+    "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": [false, ""],
+    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": [false, ""],
+    "robinhood:0x616bcd920e1e1f354750bbaf2fb3b3fa3b4aae16": [false, ""],
+    "robinhood:0x1d5aad3c0d6066078ea60f384a2492a550db30b0": [false, ""],
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": [false, ""],
+    "robinhood:0x19057832022790a636fbffc0fec6975c465c8205": [false, ""],
+    "robinhood:0x060a4a3dc546b3e8be120636f8b9806757c71ef5": [false, ""],
+    "robinhood:0xbed7c1660a01dbeee225bd893ac31727a91a5773": [false, ""],
+    "robinhood:0x06a6fd8d8679f8997ddd2ac54aa6f45dcca65c65": [false, ""],
+    "robinhood:0x0339f5459fc690ac85f1782e15782a151b4a9e1b": [false, ""],
+    "robinhood:0x18e674231a58c239dc7daedcffe15ec3a24cff5c": [false, ""],
+    "robinhood:0x279fa7965da2827f223a0b42a81353373a20cf83": [false, ""],
+    "robinhood:0x6245e67affa44a23077f0ea7f981a8dc743a0c47": [false, ""],
+    "robinhood:0x7b630f080807df83908b4ade46ba6396ee66b098": [false, ""],
+    "robinhood:0x56910d4409f3a0c78c64dd8d0545ff0705389870": [false, ""],
+    "robinhood:0x20024e485c0b22b42855589700721b28320a7777": [false, ""],
+    "robinhood:0xd928a068d2b90798373a470c9d9ba562322acdef": [false, ""],
+    "ethereum:0xa0df17b5ac76ababa36e1450e2cbcd18a620c845": [false, ""],
+    "robinhood:0xd461e73b9cbadff4523cefec512308d89cd8f538": [false, ""],
+    "robinhood:0x0145acbccefbed6f303c420beeaaac72e905430b": [false, ""],
+    "robinhood:0x2a836d2b34ecbd8a709832e2f379929c52d87938": [false, ""],
+    "robinhood:0xf65238fb6588baa402f98821f38a11a909666666": [false, ""],
+    "robinhood:0xca9c78dd337a67f6e0077f65f5e9218719d30edf": [false, ""],
+    "robinhood:0x92b95f32203b5dd508ac272de735ce296f3166da": [false, ""],
+    "robinhood:0x459f32cf930aaef71e7a3fe55c6b8fe53e7ba4a1": [false, ""],
+    "ethereum:0x5ee5bf7ae06d1be5997a1a72006fe6c607ec6de8": [false, ""],
+    "robinhood:0x451b42a15100c340ca12f7c66de06fac5ea2d751": [false, ""],
+    "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": [false, ""],
+    "robinhood:0x532c5583671870723ceef573600208af49c87c54": [false, ""],
+    "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": [false, ""],
+    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": [false, ""],
+    "robinhood:0x2e8c31162b855a2ffa90f6f8634643ad6f111e18": [false, ""],
+    "robinhood:0x8e62f281f282686fca6dcb39288069a93fc23f1c": [false, ""],
+    "robinhood:0x5ad6fad7794f4118fa119dc6f5652f360f3b8eb5": [false, ""],
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": [false, ""],
+    "robinhood:0x3b7157b6409380e09a131b631dfb8dfd2781d9cc": [false, ""],
+    "ethereum:0x5e8422345238f34275888049021821e8e08caa1f": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "ethereum:0x23878914efe38d27c4d67ab83ed1b93a74d4086a": [false, ""],
+    "ethereum:0xf1c9acdc66974dfb6decb12aa385b9cd01190e38": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "ethereum:0xae78736cd615f374d3085123a210448e74fc6393": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "arbitrum:0x5979d7b546e38e414f7e9822514be443a4800529": [true, "CoinGecko kategorisi: Bridged-Tokens"],
+    "ethereum:0x26e550ac11b26f78a04489d5f20f24e3559f7dd9": [false, ""],
+    "ethereum:0x45804880de22913dafe09f4980848ece6ecbaf78": [false, ""],
+    "ethereum:0x1aad217b8f78dba5e6693460e8470f8b1a3977f3": [false, ""],
+    "ethereum:0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": [true, "CoinGecko kategorisi: Tokenized BTC"],
+    "ethereum:0x8292bb45bf1ee4d140127049757c2e0ff06317ed": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0x38eeb52f0771140d10c4e9a9a72349a329fe8a6a": [true, "CoinGecko kategorisi: Yield-Bearing Stablecoin"],
+    "ethereum:0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0xe7c3d8c9a439fede00d2600032d5db0be71c3c29": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0x657e8c867d8b37dcc18fa4caead9c45eb088c642": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "ethereum:0x6f40d4a6237c257fff2db00fa0510deeecd303eb": [false, ""],
+    "ethereum:0xd1b5651e55d4ceed36251c61c50c889b36f6abb5": [false, ""],
+    "arbitrum:0xcc5f65809fef01bfb7270345f993f19771b132bb": [false, ""],
+    "ethereum:0x9396dcbf78fc526bb003665337c5e73b699571ef": [true, "ERC4626 vault (asset() fonksiyonu var)"],
+    "ethereum:0x35fa164735182de50811e8e2e824cfb9b6118ac2": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "ethereum:0x4d5f47fa6a74757f35c14fd3a6ef8e3c9bc514e8": [false, ""],
+    "ethereum:0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "ethereum:0xb1c2db5d6ca03fce73dbd304d320bf76c55ae1b1": [false, ""],
+    "ethereum:0x98c23e9d8f34fefb1b7bd6a91b7ff122f4e16f5c": [false, ""],
+    "arbitrum:0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": [true, "CoinGecko kategorisi: Bridged WBTC"],
+    "ethereum:0x085780639cc2cacd35e474e71f4d000e2405d8f6": [true, "CoinGecko kategorisi: Stablecoins"],
+    "arbitrum:0xf97f4df75117a78c1a5a0dbb814af92458539fb4": [false, ""],
+    "ethereum:0xcacd6fd266af91b8aed52accc382b4e165586e29": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0x0100546f2cd4c9d97f798ffc9755e47865ff7ee6": [true, "CoinGecko kategorisi: Yield-Bearing Tokens"],
+    "ethereum:0x031b8d752d73d7fe9678acef26e818280d0646b4": [false, ""],
+    "ethereum:0x4d0528598f916fd1d8dc80e5f54a8feedcfd4b18": [false, ""],
+    "ethereum:0x98a878b1cd98131b271883b390f68d2c90674665": [true, "CoinGecko kategorisi: Stablecoins"],
+    "arbitrum:0x17573150d67d820542efb24210371545a4868b03": [true, "CoinGecko kategorisi: Yield-Bearing Tokens"],
+    "ethereum:0xa0d3707c569ff8c87fa923d3823ec5d81c98be78": [true, "ERC4626 vault (asset() fonksiyonu var)"],
+    "ethereum:0x8f294a99a0609822c233b24867f331c292ce2da9": [false, ""],
+    "ethereum:0xae1edabac9a0dda644b2f7ec48759d37ab257f78": [false, ""],
+    "ethereum:0xbc6da0fe9ad5f3b0d58160288917aa56653660e9": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0x1776e1f26f98b1a5df9cd347953a26dd3cb46671": [false, ""],
+    "ethereum:0x01980bd1b58313bd3767f6adc75af8b6464f3db7": [false, ""],
+    "ethereum:0x7987f03462200b3d8a072e02c89a8a41dcb124ee": [false, ""],
+    "ethereum:0x8207c1ffc5b6804f6024322ccf34f29c3541ae26": [true, "CoinGecko kategorisi: Liquid Staking"],
+    "ethereum:0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": [true, "CoinGecko kategorisi: Yield Farming"],
+    "ethereum:0x802ee5c9a6b1aa7c782889c59f2c3a2b51131af3": [false, ""],
+    "ethereum:0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb": [true, "CoinGecko kategorisi: Restaking"],
+    "ethereum:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7": [true, "CoinGecko kategorisi: Yield Farming"],
+    "ethereum:0x467bccd9d29f223bce8043b84e8c8b282827790f": [true, "CoinGecko kategorisi: Stablecoin Issuer"],
+    "ethereum:0xdd8bb20fdf690a5fa2465e5a14ff747045d112ed": [false, ""],
+    "ethereum:0xa35b1b31ce002fbf2058d22f30f95d405200a15b": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "arbitrum:0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": [true, "CoinGecko kategorisi: Bridged DAI"],
+    "robinhood:0x743acf789e0f5419f550323a2349732a61c15439": [false, ""],
+    "ethereum:0x4a220e6096b25eadb88358cb44068a3248254675": [false, ""],
+    "ethereum:0x92d5942f468447f1f21c2092580f15544923b434": [false, ""],
+    "ethereum:0x8143182a775c54578c8b7b3ef77982498866945d": [true, "CoinGecko kategorisi: Wrapped-Tokens"],
+    "ethereum:0xaca92e438df0b2401ff60da7e4337b687a2435da": [true, "CoinGecko kategorisi: Stablecoins"],
+    "ethereum:0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": [true, "CoinGecko kategorisi: Restaking"],
+    "ethereum:0xe95a203b1a91a908f9b9ce46459d101078c2c3cb": [true, "CoinGecko kategorisi: Liquid Staking Tokens"],
+    "ethereum:0x8de39b057cc6522230ab19c0205080a8663331ef": [false, ""],
+    "ethereum:0x236501327e701692a281934230af0b6be8df3353": [false, ""],
+    "ethereum:0xc84782858b7bef5d25182dbac956a6aa463aefe5": [false, ""],
+    "ethereum:0x68bbed6a47194eff1cf514b50ea91895597fc91e": [false, ""],
+    "ethereum:0x37f04733c7e1c762f0ed86533c9052be5822c1fd": [false, ""],
+    "ethereum:0x9ca8530ca349c966fe9ef903df17a75b8a778927": [false, ""],
+    "ethereum:0x6942040b6d25d6207e98f8e26c6101755d67ac89": [false, ""],
+    "ethereum:0x163f8c2467924be0ae7b5347228cabf260318753": [false, ""],
+    "ethereum:0xddb3422497e61e13543bea06989c0789117555c5": [false, ""],
+    "ethereum:0x056b269eb1f75477a8666ae8c7fe01b64dd55ecc": [true, "ERC4626 vault (asset() fonksiyonu var)"],
+    "robinhood:0x4c87b69f0d862cd66b84f7bef639180980b8ae67": [false, ""],
+    "ethereum:0x6982508145454ce325ddbe47a25d4ec3d2311933": [false, ""],
+    "robinhood:0xe0eba1b76b73be7bfa7716b6ca96f724930e2263": [false, ""],
+    "robinhood:0x0817b4bae4d153126405c2995cb94afa5987bc48": [false, ""],
+    "ethereum:0x01a8b61e7b03891a736b5df865e0ef9c511850ad": [true, "CoinGecko kategorisi: Synthetic Asset"],
+    "ethereum:0xe820c06321e60d36257c666643fa5436643445e3": [true, "CoinGecko kategorisi: Stablecoins"],
+    "robinhood:0x39dbed3a2bd333467115de45665cc57f813c4571": [false, ""]
+  },
+  "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
+    "last_block": 25766650,
+    "accumulation": {
+      "0xae0562f6349e1b574a75248bd53848a3039751aa": {"total_usd": 191.92975912009143, "since": 1786629819, "count": 1},
+      "0x09ad820aac5779683b481c4674208a4e1b024afa": {"total_usd": 652.244588504446, "since": 1786632528, "count": 2},
+      "0x9a47f3289794e9bbc6a3c571f6d96ad4e7baed16": {"total_usd": 190.05255271821238, "since": 1786639808, "count": 1},
+      "0x111111125421ca6dc452d289314280a0f8842a65": {"total_usd": 1412.981000642098, "since": 1786762007, "count": 4},
+      "0x0889e9327b98d7d1be3c301a4585ff3330502c9a": {"total_usd": 831.4458920237349, "since": 1786697269, "count": 1},
+      "0x111116053f09d34a7eae8102887004445176ca11": {"total_usd": 184.54114926491195, "since": 1786716252, "count": 1},
+      "0xb300000b72deaeb607a12d5f54773d1c19c7028d": {"total_usd": 526.1999999999999, "since": 1786720672, "count": 1}
+    }
+  },
+  "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
+    "last_block": 25766650,
+    "accumulation": {
+      "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {"total_usd": 748.763141727852, "since": 1786789932, "count": 1},
+      "0x111116053f09d34a7eae8102887004445176ca11": {"total_usd": 882.7371204213301, "since": 1786799900, "count": 2},
+      "0x74de5d4fcbf63e00296fd95d33236b9794016631": {"total_usd": 387.6, "since": 1786813319, "count": 1},
+      "0x0ccd5dd5bcf1af77dc358d1e2f06ee880ef63c3c": {"total_usd": 134.5101283614061, "since": 1786818742, "count": 1},
+      "0x111111125421ca6dc452d289314280a0f8842a65": {"total_usd": 288.5634121712788, "since": 1786828271, "count": 1}
+    }
+  },
+  "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
+    "last_block": 495092973,
+    "accumulation": {}
+  },
+  "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
+    "last_block": 37861167,
+    "accumulation": {}
+  },
+  "creation_times": {
+    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 1735731443,
+    "ethereum:0x073598132f37756a7e665fb52f1757463120bd3c": 1776144059,
+    "robinhood:0x438ac56065af7c091bfa8f4d6d0214f36e273e02": 1784397889,
+    "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": 1784330953,
+    "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": 1784447643,
+    "robinhood:0xdbcec8db3e21c1612a22b39d195d7d654cad00af": 1784176683,
+    "robinhood:0xe3fa12da7fa026b21817f16622e8ae48fa785166": 1786489201,
+    "robinhood:0x149d214bf10a37b23a24a3d8499af4f1962307dd": 1786658572,
+    "robinhood:0x9efe124ac1ce5e54a011437aedacfc12cbcde9cc": 1786645949,
+    "robinhood:0xfa416c98d99d87ab63deeacaafd9da9214fdad2c": 1786643807,
+    "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": 1786656922,
+    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": 1786662435,
+    "robinhood:0x616bcd920e1e1f354750bbaf2fb3b3fa3b4aae16": 1786254515,
+    "robinhood:0x1d5aad3c0d6066078ea60f384a2492a550db30b0": 1786559704,
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": 1786448599,
+    "robinhood:0x19057832022790a636fbffc0fec6975c465c8205": 1786663014,
+    "robinhood:0x060a4a3dc546b3e8be120636f8b9806757c71ef5": 1786448875,
+    "robinhood:0xbed7c1660a01dbeee225bd893ac31727a91a5773": 1784654651,
+    "robinhood:0x06a6fd8d8679f8997ddd2ac54aa6f45dcca65c65": 1785510561,
+    "robinhood:0x193674b72b6aa1905fc47bdbc19b30a53b666666": 1786658112,
+    "robinhood:0x6245e67affa44a23077f0ea7f981a8dc743a0c47": 1785442619,
+    "robinhood:0x20024e485c0b22b42855589700721b28320a7777": 1785801361,
+    "robinhood:0xd928a068d2b90798373a470c9d9ba562322acdef": 1786168967,
+    "ethereum:0xa0df17b5ac76ababa36e1450e2cbcd18a620c845": 1784223743,
+    "robinhood:0xd461e73b9cbadff4523cefec512308d89cd8f538": 1786663998,
+    "robinhood:0x0145acbccefbed6f303c420beeaaac72e905430b": 1786570285,
+    "robinhood:0x2a836d2b34ecbd8a709832e2f379929c52d87938": 1786573958,
+    "robinhood:0x459f32cf930aaef71e7a3fe55c6b8fe53e7ba4a1": 1786619445,
+    "robinhood:0x279fa7965da2827f223a0b42a81353373a20cf83": 1786661892,
+    "robinhood:0x451b42a15100c340ca12f7c66de06fac5ea2d751": 1786213073,
+    "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": 1785902555,
+    "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": 1784261266,
+    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": 1786666015,
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": 1784568854,
+    "robinhood:0x3b7157b6409380e09a131b631dfb8dfd2781d9cc": 1786482384,
+    "ethereum:0x01980bd1b58313bd3767f6adc75af8b6464f3db7": 1777336067,
+    "ethereum:0x802ee5c9a6b1aa7c782889c59f2c3a2b51131af3": 1770256775,
+    "robinhood:0x743acf789e0f5419f550323a2349732a61c15439": 1785440068
+  },
+  "pending_mcap_recheck": {
+    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 10,
+    "ethereum:0x073598132f37756a7e665fb52f1757463120bd3c": 1,
+    "ethereum:0x01980bd1b58313bd3767f6adc75af8b6464f3db7": 1,
+    "ethereum:0x802ee5c9a6b1aa7c782889c59f2c3a2b51131af3": 1
+  },
+  "clusters": {
+    "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": {
+      "whales": {"0x5a50e4a2f652386fb2a5f837295343e87fe6dc5f": 1786666448, "0x8c98db66e75af82621e7bbb91ce826b2848040db": 1786673954, "0x054774ccd88d4416e56f0aa02adfc6bcf1a71502": 1786672240},
+      "total_usd": 18273.5178027732,
+      "last_tier": 2
+    },
+    "robinhood:0x7fe995a80075df3dc8ae11a9b82c7fe4202cd87f": {
+      "whales": {"0x2517576520784664e360adba7e2e05b6968eb5f7": 1786666475, "0x91e959a8fbcb2692628c559b5dfbd8e1978dfc2a": 1786676023},
+      "total_usd": 2827.199154143581,
+      "last_tier": 2
+    },
+    "robinhood:0xdbcec8db3e21c1612a22b39d195d7d654cad00af": {
+      "whales": {"0x8911017dab2bbf2f5d2cde2b6b02d60a9ce8aafe": 1786666480},
+      "total_usd": 972.0466509606395,
+      "last_tier": 0
+    },
+    "robinhood:0xe3fa12da7fa026b21817f16622e8ae48fa785166": {
+      "whales": {"0x89f83d8c4593845cb4a484087ac9c59e9722995b": 1786666601},
+      "total_usd": 226.5084861354216,
+      "last_tier": 0
+    },
+    "robinhood:0x149d214bf10a37b23a24a3d8499af4f1962307dd": {
+      "whales": {"0x11bd5979b8583bee134f6b9eee3dd426a5a1f7b3": 1786666622, "0x188c3dbd7bc1c93175117d6bdc840ed2205c5318": 1786672197},
+      "total_usd": 1048.8480596629904,
+      "last_tier": 2
+    },
+    "robinhood:0x9efe124ac1ce5e54a011437aedacfc12cbcde9cc": {
+      "whales": {"0xaa9bb2dcd4ef94572d1a58c8296df1fa364c41cf": 1786666650},
+      "total_usd": 486.9188833326903,
+      "last_tier": 0
+    },
+    "robinhood:0xfa416c98d99d87ab63deeacaafd9da9214fdad2c": {
+      "whales": {"0x46e39b9d4d71ba867e417b55f1591967c3794b7e": 1786666657},
+      "total_usd": 494.7873223573873,
+      "last_tier": 0
+    },
+    "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": {
+      "whales": {"0xd9b48de8cf09898ab52d7a9d83e31187e63d7d2e": 1786666676, "0x5973a5f9b71bf8344654becf2497757a0c296062": 1786675032},
+      "total_usd": 1203.778273674963,
+      "last_tier": 2
+    },
+    "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": {
+      "whales": {"0x87b0eef2dfa36102943453b4a2243cd3db57e2c5": 1786667756, "0xece44882dd18e7ef9ef26a2bef12a1b969cffd85": 1786674161},
+      "total_usd": 950.5351798481261,
+      "last_tier": 2
+    },
+    "robinhood:0x616bcd920e1e1f354750bbaf2fb3b3fa3b4aae16": {
+      "whales": {"0x130e1e44c1fa1417d118d0e6d60f90db0c930233": 1786668569},
+      "total_usd": 3313.794333855498,
+      "last_tier": 0
+    },
+    "robinhood:0x1d5aad3c0d6066078ea60f384a2492a550db30b0": {
+      "whales": {"0x7b98398e353f8703908f70a25b442b2e19deff72": 1786668608, "0x2e0f456c77606e7c49edb431275d5b334c254873": 1786669530, "0xa4b6da5140c6e43f5a1324600cde7c4dd7a5c1e4": 1786669627, "0xdaeeb30d77ab2b2be96fab93651d78f6c88b10b7": 1786671326, "0x81f1141d216e381d0d8f894faa90d5a8dcc68a7b": 1786671369, "0xda176ad8d69f90ea3996654915e5708aea8a5b50": 1786675726},
+      "total_usd": 3285.6390098080497,
+      "last_tier": 5
+    },
+    "robinhood:0x0ab8d01664d4bb625705f9f3c595a8a19b3dcfb0": {
+      "whales": {"0x46bbaf0bee078fa14e81406830dc1573a153206f": 1786668642},
+      "total_usd": 473.8280387473831,
+      "last_tier": 0
+    },
+    "robinhood:0x19057832022790a636fbffc0fec6975c465c8205": {
+      "whales": {"0x6a3fdf18b8d5e00d86373ac1fab94d2645908d8e": 1786668648, "0xd223225ccac5e89d75bc373786e5c71edcbb41f8": 1786669560, "0x0453610f4c982152303fe644da4c26896595ee72": 1786669632, "0x273e09118ff7da9f032e322613c9d83bf480ac3b": 1786670393, "0x64194e94774225dfd16c55c8e55978b58825f960": 1786670473},
+      "total_usd": 5203.158116629865,
+      "last_tier": 5
+    },
+    "robinhood:0x060a4a3dc546b3e8be120636f8b9806757c71ef5": {
+      "whales": {"0x46bbaf0bee078fa14e81406830dc1573a153206f": 1786668685},
+      "total_usd": 1002.9747642019933,
+      "last_tier": 0
+    },
+    "robinhood:0xbed7c1660a01dbeee225bd893ac31727a91a5773": {
+      "whales": {"0x66cf83424bcd33d6d8d20001f0068583531b44a9": 1786668725},
+      "total_usd": 252.9498212645278,
+      "last_tier": 0
+    },
+    "robinhood:0x06a6fd8d8679f8997ddd2ac54aa6f45dcca65c65": {
+      "whales": {"0xb45c0dcc2cf7845a719e27e2d4ec5b37732a24c5": 1786668745},
+      "total_usd": 644.8216212667611,
+      "last_tier": 0
+    },
+    "robinhood:0x193674b72b6aa1905fc47bdbc19b30a53b666666": {
+      "whales": {"0xc9232177b9772b9cd88c64750aeff81bd2ea697d": 1786669451, "0xbb19d3e508e5509ad8663aab3eb047fd7f768072": 1786672263},
+      "total_usd": 4453.060145014516,
+      "last_tier": 2
+    },
+    "robinhood:0x18e674231a58c239dc7daedcffe15ec3a24cff5c": {
+      "whales": {"0xfdf9614b5dd9b9a7f5347410aa238b0455a6f5f0": 1786669462},
+      "total_usd": 408.7196726259739,
+      "last_tier": 0
+    },
+    "robinhood:0x6245e67affa44a23077f0ea7f981a8dc743a0c47": {
+      "whales": {"0xa5185f4c5143c67c79243a29aebc93985a4b7ee8": 1786669592},
+      "total_usd": 742.849005774063,
+      "last_tier": 0
+    },
+    "robinhood:0x7b630f080807df83908b4ade46ba6396ee66b098": {
+      "whales": {"0xc10c1ab56f29eb873445705cec00490f4663f80d": 1786669618},
+      "total_usd": 498.02416013627385,
+      "last_tier": 0
+    },
+    "robinhood:0x20024e485c0b22b42855589700721b28320a7777": {
+      "whales": {"0x6c458ee1c24fede06196e71ad1efbd9482a97b39": 1786670419},
+      "total_usd": 303.68466564191857,
+      "last_tier": 0
+    },
+    "robinhood:0xd928a068d2b90798373a470c9d9ba562322acdef": {
+      "whales": {"0x8f86b823cd79b0cbc328e18b1cc0c66cc1b583f5": 1786670498, "0xffd43c97dec40e5e5db2d9c159bebb2bb25d251a": 1786672125},
+      "total_usd": 2075.632847939734,
+      "last_tier": 2
+    },
+    "ethereum:0xa0df17b5ac76ababa36e1450e2cbcd18a620c845": {
+      "whales": {"0xc4b6fa62393b099ba297671978b3b8014fc447d8": 1786671066},
+      "total_usd": 1663.500434248327,
+      "last_tier": 0
+    },
+    "robinhood:0xd461e73b9cbadff4523cefec512308d89cd8f538": {
+      "whales": {"0x917548194530c6e7b6db009864e510578dd3799f": 1786671284, "0x6d9b0e52d452193305401f4f3fbcb7e0acbe4dc9": 1786671359, "0x2d8b770ff6dcd8d7ff95a546af450a722aa85458": 1786672248, "0x6d08df670b62fd2d0fea3f4c6c0c4de75bd6f15e": 1786676030},
+      "total_usd": 3707.1955890670397,
+      "last_tier": 2
+    },
+    "robinhood:0x0145acbccefbed6f303c420beeaaac72e905430b": {
+      "whales": {"0x882c8a2ac6b6c5b21132b8db04ae35c4fb9611db": 1786671300, "0x2daa0456786a065ee17d1edacc231f9acd6f018b": 1786671328},
+      "total_usd": 3266.8208246469053,
+      "last_tier": 2
+    },
+    "robinhood:0x2a836d2b34ecbd8a709832e2f379929c52d87938": {
+      "whales": {"0xdc533073ff2a97126ec83d2d188b3df9b91f8dc4": 1786671312},
+      "total_usd": 256.8619169688845,
+      "last_tier": 0
+    },
+    "robinhood:0x459f32cf930aaef71e7a3fe55c6b8fe53e7ba4a1": {
+      "whales": {"0x314b0b17dc786e0a466ed7134e5800f7eb020e0c": 1786672144, "0x5b4b38665f407bc318e46bb68296329a965b30fc": 1786672213, "0xbd8f827ac95311d11eb99ea12f8cefa3075a7d47": 1786675821},
+      "total_usd": 3312.4744648803157,
+      "last_tier": 2
+    },
+    "robinhood:0x451b42a15100c340ca12f7c66de06fac5ea2d751": {
+      "whales": {"0x5d2f3b43e2b40c10cf4a20e7b623744f84bb0332": 1786674076},
+      "total_usd": 355.4809108619901,
+      "last_tier": 0
+    },
+    "robinhood:0xd3d5be6558f84e628ee091b511df92b4e461a53b": {
+      "whales": {"0x84fd331d07b509e22f11729f795be318d267bef1": 1786674842},
+      "total_usd": 627.5410740868756,
+      "last_tier": 0
+    },
+    "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": {
+      "whales": {"0xef35cd174816ef7e2287c81fce4dc422cbf4ca05": 1786674892},
+      "total_usd": 319.76594268836936,
+      "last_tier": 0
+    },
+    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": {
+      "whales": {"0x194c5dc1f2ab20566705f03ebeac2b45538cae2e": 1786675028},
+      "total_usd": 363.07820089677796,
+      "last_tier": 0
+    },
+    "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": {
+      "whales": {"0xd78ec718a85abd3e6c9e39443e9e5b1d0d403dbc": 1786675920},
+      "total_usd": 326.5991862114337,
+      "last_tier": 0
+    },
+    "robinhood:0x3b7157b6409380e09a131b631dfb8dfd2781d9cc": {
+      "whales": {"0x0382cc3c6abd07a717f39edd605181d1b69e3d1b": 1786676007},
+      "total_usd": 658.9032977731363,
+      "last_tier": 0
+    },
+    "robinhood:0x743acf789e0f5419f550323a2349732a61c15439": {
+      "whales": {"0x9d11c979d891da5cbdeb4f9c2add0946c1ebd822": 1786756779},
+      "total_usd": 454.382591800901,
+      "last_tier": 0
+    }
+  }
+}
