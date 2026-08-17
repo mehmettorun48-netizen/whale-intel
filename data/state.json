@@ -1,33 +1,5 @@
 {
   "price_watch": {
-    "ethereum:0xa0df17b5ac76ababa36e1450e2cbcd18a620c845": {
-      "baseline_price": 0.0249,
-      "first_seen_ts": 1786671066,
-      "symbol": "FWA",
-      "name": "Fake World Assets",
-      "alerted": true
-    },
-    "robinhood:0xd461e73b9cbadff4523cefec512308d89cd8f538": {
-      "baseline_price": 0.0001656,
-      "first_seen_ts": 1786671284,
-      "symbol": "SHINY",
-      "name": "Magpie",
-      "alerted": true
-    },
-    "robinhood:0x0145acbccefbed6f303c420beeaaac72e905430b": {
-      "baseline_price": 0.001248,
-      "first_seen_ts": 1786671300,
-      "symbol": "PACK",
-      "name": "Wolf Pack",
-      "alerted": true
-    },
-    "robinhood:0x2a836d2b34ecbd8a709832e2f379929c52d87938": {
-      "baseline_price": 0.0001318,
-      "first_seen_ts": 1786671312,
-      "symbol": "MYSTIC",
-      "name": "mystic",
-      "alerted": true
-    },
     "robinhood:0x459f32cf930aaef71e7a3fe55c6b8fe53e7ba4a1": {
       "baseline_price": 9.064e-05,
       "first_seen_ts": 1786672143,
@@ -86,7 +58,7 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25771524,
+    "last_block": 25771597,
     "accumulation": {}
   },
   "infra_status": {
@@ -800,7 +772,7 @@
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25771524,
+    "last_block": 25771597,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -845,7 +817,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25771524,
+    "last_block": 25771597,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -875,11 +847,11 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 495325176,
+    "last_block": 495328675,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 38391729,
+    "last_block": 38392130,
     "accumulation": {}
   },
   "creation_times": {
