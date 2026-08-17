@@ -1,19 +1,5 @@
 {
   "price_watch": {
-    "robinhood:0xbb067737314e04b350c1d35e4784bcbc98405855": {
-      "baseline_price": 2.66e-05,
-      "first_seen_ts": 1786674891,
-      "symbol": "HUH",
-      "name": "Huh The Viral Cat",
-      "alerted": true
-    },
-    "robinhood:0xd8236e3dc58d8d0d85cf9f585b527903aeddb11f": {
-      "baseline_price": 2.037e-05,
-      "first_seen_ts": 1786675027,
-      "symbol": "VERTEX",
-      "name": "Vertex",
-      "alerted": true
-    },
     "robinhood:0x69984ad3322300039f2855f81c44dbc532efe744": {
       "baseline_price": 0.0006221,
       "first_seen_ts": 1786675919,
@@ -37,7 +23,7 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25771822,
+    "last_block": 25771896,
     "accumulation": {}
   },
   "infra_status": {
@@ -748,10 +734,14 @@
     "ethereum:0xa27ec0006e59f245217ff08cd52a7e8b169e62d2": [
       false,
       ""
+    ],
+    "robinhood:0x8ff92566f2e81bdd68edfaa8cde73942a723796b": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25771822,
+    "last_block": 25771896,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -769,9 +759,9 @@
         "count": 1
       },
       "0x111111125421ca6dc452d289314280a0f8842a65": {
-        "total_usd": 486.640095190773,
+        "total_usd": 725.43242660459,
         "since": 1786893366,
-        "count": 1
+        "count": 2
       },
       "0x0889e9327b98d7d1be3c301a4585ff3330502c9a": {
         "total_usd": 831.4458920237349,
@@ -796,7 +786,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25771822,
+    "last_block": 25771896,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -826,11 +816,11 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 495339539,
+    "last_block": 495343062,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 38393333,
+    "last_block": 38393734,
     "accumulation": {}
   },
   "creation_times": {
