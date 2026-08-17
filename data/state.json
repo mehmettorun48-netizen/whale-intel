@@ -1,40 +1,5 @@
 {
   "price_watch": {
-    "robinhood:0xe3fa12da7fa026b21817f16622e8ae48fa785166": {
-      "baseline_price": 0.003213,
-      "first_seen_ts": 1786666600,
-      "symbol": "YARD",
-      "name": "Yardkeeper",
-      "alerted": true
-    },
-    "robinhood:0x149d214bf10a37b23a24a3d8499af4f1962307dd": {
-      "baseline_price": 3.658e-05,
-      "first_seen_ts": 1786666621,
-      "symbol": "BIRD",
-      "name": "Alert Bird ",
-      "alerted": true
-    },
-    "robinhood:0x9efe124ac1ce5e54a011437aedacfc12cbcde9cc": {
-      "baseline_price": 6.69e-06,
-      "first_seen_ts": 1786666650,
-      "symbol": "CURSE",
-      "name": "Cursed Cat",
-      "alerted": true
-    },
-    "robinhood:0xfa416c98d99d87ab63deeacaafd9da9214fdad2c": {
-      "baseline_price": 2.308e-05,
-      "first_seen_ts": 1786666656,
-      "symbol": "OMY",
-      "name": "Omex Finance",
-      "alerted": true
-    },
-    "robinhood:0xf130c9630efa5fd5f660c90e71aaada344ff8d2b": {
-      "baseline_price": 18.66,
-      "first_seen_ts": 1786666676,
-      "symbol": "QVR",
-      "name": "Quiver",
-      "alerted": true
-    },
     "robinhood:0x5f038759f6de38fd3a85c0440daff1240238bac8": {
       "baseline_price": 0.003006,
       "first_seen_ts": 1786667756,
@@ -219,7 +184,7 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25771150,
+    "last_block": 25771225,
     "accumulation": {}
   },
   "infra_status": {
@@ -933,7 +898,7 @@
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25771150,
+    "last_block": 25771225,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -978,7 +943,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25771150,
+    "last_block": 25771225,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -1008,11 +973,11 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 495307326,
+    "last_block": 495310918,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
-    "last_block": 38389724,
+    "last_block": 38390125,
     "accumulation": {}
   },
   "creation_times": {
