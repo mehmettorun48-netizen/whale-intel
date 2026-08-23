@@ -1,12 +1,5 @@
 {
   "price_watch": {
-    "robinhood:0x5fc5360d0400a0fd4f2af552add042d716f1d168": {
-      "baseline_price": 494.51,
-      "first_seen_ts": 1787224539,
-      "symbol": "USDG",
-      "name": "Global Dollar",
-      "alerted": true
-    },
     "ethereum:0xce6170ea245dc8d1f275a710a062b70f125f0110": {
       "baseline_price": 1.47,
       "first_seen_ts": 1787409895,
