@@ -1,7 +1,7 @@
 {
   "price_watch": {},
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25883180,
+    "last_block": 25883281,
     "accumulation": {}
   },
   "infra_status": {
@@ -1560,10 +1560,14 @@
     "ethereum:0xc43c6bfeda065fe2c4c11765bf838789bd0bb5de": [
       false,
       ""
+    ],
+    "arbitrum:0x727c6fbfd4c6a1aaf256b863312d61a2f6c4da37": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25883180,
+    "last_block": 25883281,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -1638,7 +1642,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25883180,
+    "last_block": 25883281,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -1698,7 +1702,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 499937391,
+    "last_block": 499947392,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
@@ -1770,7 +1774,8 @@
     "ethereum:0xba96292ee7673e3b546cc90db6d97111cd9a314f": 1786220795,
     "ethereum:0x6e52cce4eafdf77091dd1c82183b2d97b776b397": 1680428543,
     "ethereum:0x3a283d9c08e8b55966afb64c515f5143cf907611": 1639219947,
-    "ethereum:0xe8a5677171c87fcb65b76957f2852515b404c7b1": 1684880603
+    "ethereum:0xe8a5677171c87fcb65b76957f2852515b404c7b1": 1684880603,
+    "arbitrum:0x727c6fbfd4c6a1aaf256b863312d61a2f6c4da37": 1788066561
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 30,
@@ -2097,6 +2102,13 @@
         "0x4ccf6deb3d1895373f604b418ff55d8adae8b846": 1788316376
       },
       "total_usd": 1106.7830000000001,
+      "last_tier": 0
+    },
+    "arbitrum:0x727c6fbfd4c6a1aaf256b863312d61a2f6c4da37": {
+      "whales": {
+        "0xb01c8f7804917b3de632cecfb5279d96881e1a55": 1788368986
+      },
+      "total_usd": 1099.4083787126647,
       "last_tier": 0
     }
   }
