@@ -1,7 +1,7 @@
 {
   "price_watch": {},
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25888331,
+    "last_block": 25888432,
     "accumulation": {}
   },
   "infra_status": {
@@ -1580,10 +1580,18 @@
     "arbitrum:0x3d15fd46ce9e551498328b1c83071d9509e2c3a0": [
       true,
       "CoinGecko kategorisi: Yield-Bearing Tokens"
+    ],
+    "ethereum:0x0bfc9d54fc184518a81162f8fb99c2eaca081202": [
+      true,
+      "CoinGecko kategorisi: Wrapped-Tokens"
+    ],
+    "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25888331,
+    "last_block": 25888432,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -1658,7 +1666,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25888331,
+    "last_block": 25888432,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -1723,7 +1731,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 500447442,
+    "last_block": 500457443,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
@@ -1797,10 +1805,11 @@
     "ethereum:0x3a283d9c08e8b55966afb64c515f5143cf907611": 1639219947,
     "ethereum:0xe8a5677171c87fcb65b76957f2852515b404c7b1": 1684880603,
     "arbitrum:0x727c6fbfd4c6a1aaf256b863312d61a2f6c4da37": 1788066561,
-    "ethereum:0xf985005a3793dba4cce241b3c19ddcd3fe069ff4": 1662208869
+    "ethereum:0xf985005a3793dba4cce241b3c19ddcd3fe069ff4": 1662208869,
+    "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": 1676243879
   },
   "pending_mcap_recheck": {
-    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 31,
+    "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 32,
     "ethereum:0x073598132f37756a7e665fb52f1757463120bd3c": 1,
     "ethereum:0x01980bd1b58313bd3767f6adc75af8b6464f3db7": 2,
     "ethereum:0x802ee5c9a6b1aa7c782889c59f2c3a2b51131af3": 3,
@@ -1828,7 +1837,8 @@
     "ethereum:0x6e52cce4eafdf77091dd1c82183b2d97b776b397": 1,
     "ethereum:0x3a283d9c08e8b55966afb64c515f5143cf907611": 3,
     "ethereum:0xe8a5677171c87fcb65b76957f2852515b404c7b1": 1,
-    "ethereum:0xf985005a3793dba4cce241b3c19ddcd3fe069ff4": 3
+    "ethereum:0xf985005a3793dba4cce241b3c19ddcd3fe069ff4": 3,
+    "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": 1
   },
   "clusters": {
     "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": {
