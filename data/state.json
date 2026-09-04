@@ -1,7 +1,7 @@
 {
   "price_watch": {},
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25890856,
+    "last_block": 25890957,
     "accumulation": {}
   },
   "infra_status": {
@@ -1592,10 +1592,14 @@
     "ethereum:0x72e5390edb7727e3d4e3436451dadaff675dbcc0": [
       false,
       ""
+    ],
+    "arbitrum:0x2584e8b0616b3e750492c9629a3b27679c410cb9": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25890856,
+    "last_block": 25890957,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -1670,7 +1674,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25890856,
+    "last_block": 25890957,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -1735,7 +1739,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 500697467,
+    "last_block": 500707468,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
@@ -1810,7 +1814,8 @@
     "ethereum:0xe8a5677171c87fcb65b76957f2852515b404c7b1": 1684880603,
     "arbitrum:0x727c6fbfd4c6a1aaf256b863312d61a2f6c4da37": 1788066561,
     "ethereum:0xf985005a3793dba4cce241b3c19ddcd3fe069ff4": 1662208869,
-    "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": 1676243879
+    "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": 1676243879,
+    "arbitrum:0x2584e8b0616b3e750492c9629a3b27679c410cb9": 1776141088
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 33,
@@ -1842,7 +1847,8 @@
     "ethereum:0x3a283d9c08e8b55966afb64c515f5143cf907611": 3,
     "ethereum:0xe8a5677171c87fcb65b76957f2852515b404c7b1": 1,
     "ethereum:0xf985005a3793dba4cce241b3c19ddcd3fe069ff4": 3,
-    "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": 2
+    "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": 2,
+    "arbitrum:0x2584e8b0616b3e750492c9629a3b27679c410cb9": 1
   },
   "clusters": {
     "robinhood:0xe934e36a439c94017b64a3fece66af12099abf50": {
