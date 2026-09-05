@@ -1,7 +1,14 @@
 {
-  "price_watch": {},
+  "price_watch": {
+    "ethereum:0x5886e4d8d6a41a5ea2f3f77f23d7a7e942d581f1": {
+      "baseline_price": 0.005408,
+      "first_seen_ts": 1788593877,
+      "symbol": "KLIK",
+      "name": "Klik"
+    }
+  },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25893179,
+    "last_block": 25893280,
     "accumulation": {}
   },
   "infra_status": {
@@ -1604,10 +1611,14 @@
     "ethereum:0x1ec8eaa3f68261e793c48486b12092336a03c479": [
       false,
       ""
+    ],
+    "ethereum:0x5886e4d8d6a41a5ea2f3f77f23d7a7e942d581f1": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25893179,
+    "last_block": 25893280,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -1682,7 +1693,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25893179,
+    "last_block": 25893280,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -1747,7 +1758,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 500927490,
+    "last_block": 500937491,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
@@ -1823,7 +1834,8 @@
     "arbitrum:0x727c6fbfd4c6a1aaf256b863312d61a2f6c4da37": 1788066561,
     "ethereum:0xf985005a3793dba4cce241b3c19ddcd3fe069ff4": 1662208869,
     "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": 1676243879,
-    "arbitrum:0x2584e8b0616b3e750492c9629a3b27679c410cb9": 1776141088
+    "arbitrum:0x2584e8b0616b3e750492c9629a3b27679c410cb9": 1776141088,
+    "ethereum:0x5886e4d8d6a41a5ea2f3f77f23d7a7e942d581f1": 1788389507
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 33,
@@ -2160,6 +2172,13 @@
         "0xb01c8f7804917b3de632cecfb5279d96881e1a55": 1788368986
       },
       "total_usd": 1099.4083787126647,
+      "last_tier": 0
+    },
+    "ethereum:0x5886e4d8d6a41a5ea2f3f77f23d7a7e942d581f1": {
+      "whales": {
+        "0xd7923e2d853b13d3e84a5edae6dcacd009856f3a": 1788593878
+      },
+      "total_usd": 19144.382013310613,
       "last_tier": 0
     }
   }
