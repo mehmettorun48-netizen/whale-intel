@@ -11,11 +11,18 @@
       "baseline_price": 14.89890415187529,
       "first_seen_ts": 1788933703,
       "symbol": "kMIL",
-      "name": "Milady Reserve"
+      "name": "Milady Reserve",
+      "alerted": true
+    },
+    "ethereum:0xb22550636ea56f6b6e3c5d13d7fe714638b22087": {
+      "baseline_price": 0.09314,
+      "first_seen_ts": 1788934581,
+      "symbol": "NOMEME",
+      "name": "there is no meme i love you"
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25908228,
+    "last_block": 25908329,
     "accumulation": {}
   },
   "infra_status": {
@@ -1718,10 +1725,14 @@
     "ethereum:0x1aa7c7fbdf78b440033f4c737eea5b77f7dd0b33": [
       false,
       ""
+    ],
+    "ethereum:0xb22550636ea56f6b6e3c5d13d7fe714638b22087": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25908228,
+    "last_block": 25908329,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -1801,7 +1812,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25908228,
+    "last_block": 25908329,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -1866,7 +1877,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 502417639,
+    "last_block": 502427640,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
@@ -2306,6 +2317,13 @@
         "0x000000000004444c5dc75cb358380d2e3de08a90": 1788933704
       },
       "total_usd": 436292.9316812643,
+      "last_tier": 0
+    },
+    "ethereum:0xb22550636ea56f6b6e3c5d13d7fe714638b22087": {
+      "whales": {
+        "0xfafe6d9d7fac6004dd7b1ff31496b4cc02d643b4": 1788934581
+      },
+      "total_usd": 633342.1083800407,
       "last_tier": 0
     }
   }
