@@ -1,13 +1,5 @@
 {
-  "price_watch": {
-    "ethereum:0x75e2fc69ff2ac12af65ba7d321bbf4f878c535d2": {
-      "baseline_price": 0.00113,
-      "first_seen_ts": 1789138905,
-      "symbol": "STOCKER",
-      "name": "Stockereum.fun",
-      "alerted": true
-    }
-  },
+  "price_watch": {},
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
     "last_block": 25937316,
     "accumulation": {}
