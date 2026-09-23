@@ -9,7 +9,7 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25977918,
+    "last_block": 25978019,
     "accumulation": {}
   },
   "infra_status": {
@@ -1967,7 +1967,7 @@
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25977918,
+    "last_block": 25978019,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -2067,7 +2067,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25977918,
+    "last_block": 25978019,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -2152,7 +2152,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 508008297,
+    "last_block": 508018298,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
@@ -2263,7 +2263,7 @@
     "ethereum:0x7af50a047ac5c37eecf38025fad92a81aa02ac9b": 2,
     "arbitrum:0x078f358208685046a11c85e8ad32895ded33a249": 3,
     "arbitrum:0xc36442b4a4522e871399cd717abdd847ab11fe88": 7,
-    "ethereum:0x0b925ed163218f6662a35e0f0371ac234f9e9371": 4,
+    "ethereum:0x0b925ed163218f6662a35e0f0371ac234f9e9371": 5,
     "ethereum:0x65f228ed6a6001ed6485535e0dc33e525734f54c": 2,
     "ethereum:0x5ee5bf7ae06d1be5997a1a72006fe6c607ec6de8": 5,
     "ethereum:0xcfcecfe2bd2fed07a9145222e8a7ad9cf1ccd22a": 1,
@@ -2283,7 +2283,7 @@
     "ethereum:0xf985005a3793dba4cce241b3c19ddcd3fe069ff4": 3,
     "ethereum:0x6c38ce8984a890f5e46e6df6117c26b3f1ecfc9c": 3,
     "arbitrum:0x2584e8b0616b3e750492c9629a3b27679c410cb9": 2,
-    "ethereum:0xb34e1a3d07f9d180bc2fdb9fd90b8994423e33c1": 1,
+    "ethereum:0xb34e1a3d07f9d180bc2fdb9fd90b8994423e33c1": 2,
     "ethereum:0xe06a65e09ae18096b99770a809ba175fa05960e2": 3,
     "ethereum:0xc34993c9adf6a5ab3b4ca27dc71b9c7894a53974": 1,
     "ethereum:0x13285bcbc27f92b47b4edb99d744c07b48c977c0": 1,
