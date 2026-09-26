@@ -1,7 +1,14 @@
 {
-  "price_watch": {},
+  "price_watch": {
+    "ethereum:0xbd965230588eaa536de6aa45e8ebbc01638535e0": {
+      "baseline_price": 0.001906,
+      "first_seen_ts": 1790453830,
+      "symbol": "MOTO",
+      "name": "Motoswap"
+    }
+  },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 25992462,
+    "last_block": 25992563,
     "accumulation": {}
   },
   "infra_status": {
@@ -2024,10 +2031,18 @@
     "ethereum:0x1cfa5641c01406ab8ac350ded7d735ec41298372": [
       true,
       "CoinGecko kategorisi: Stablecoins"
+    ],
+    "ethereum:0xbd965230588eaa536de6aa45e8ebbc01638535e0": [
+      false,
+      ""
+    ],
+    "ethereum:0x672fdba7055bddfa8fd6bd45b1455ce5eb97f499": [
+      false,
+      ""
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 25992462,
+    "last_block": 25992563,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -2142,7 +2157,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 25992462,
+    "last_block": 25992563,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -2232,7 +2247,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 509180850,
+    "last_block": 509184118,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
@@ -2330,7 +2345,8 @@
     "ethereum:0x126f5ece91d971f8ad62fa4fc1054456b8bd1111": 1789081247,
     "ethereum:0xa7606952845269dc7377cba3c7c7bda133dd97f7": 1788171155,
     "ethereum:0x6abd955ad9f52e565327cb21b256e2549d80c7cf": 1681864631,
-    "ethereum:0x10ac93971cdb1f5c778144084242374473c350da": 1727090507
+    "ethereum:0x10ac93971cdb1f5c778144084242374473c350da": 1727090507,
+    "ethereum:0xbd965230588eaa536de6aa45e8ebbc01638535e0": 1789409819
   },
   "pending_mcap_recheck": {
     "ethereum:0xed92dde3214c24ae04f5f96927e3be8f8dbc3289": 77,
@@ -2752,6 +2768,13 @@
         "0x8270400d528c34e1596ef367eedec99080a1b592": 1790447829
       },
       "total_usd": 6389.51721379083,
+      "last_tier": 0
+    },
+    "ethereum:0xbd965230588eaa536de6aa45e8ebbc01638535e0": {
+      "whales": {
+        "0x4aed30b25404531c4192e1acf94b4853d58154aa": 1790453830
+      },
+      "total_usd": 1028.1606375644535,
       "last_tier": 0
     }
   }
