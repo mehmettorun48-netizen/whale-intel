@@ -16,7 +16,7 @@
     }
   },
   "ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
-    "last_block": 26050638,
+    "last_block": 26050739,
     "accumulation": {}
   },
   "infra_status": {
@@ -2318,7 +2318,7 @@
     ]
   },
   "ethereum:0x514910771af9ca656af840dff83e8264ecf986ca": {
-    "last_block": 26050638,
+    "last_block": 26050739,
     "accumulation": {
       "0xae0562f6349e1b574a75248bd53848a3039751aa": {
         "total_usd": 191.92975912009143,
@@ -2438,7 +2438,7 @@
     }
   },
   "ethereum:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": {
-    "last_block": 26050638,
+    "last_block": 26050739,
     "accumulation": {
       "0x28bf6006d87de7f44445905aa4f5cb8c0d8cba02": {
         "total_usd": 748.763141727852,
@@ -2533,7 +2533,7 @@
     }
   },
   "arbitrum:0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
-    "last_block": 511808013,
+    "last_block": 511811242,
     "accumulation": {}
   },
   "robinhood:0x0bd7d308f8e1639fab988df18a8011f41eacad73": {
@@ -3052,10 +3052,10 @@
     },
     "ethereum:0x47accd13264d8f954105256faac8376ce6a55999": {
       "whales": {
-        "0xfea88b2d22aec102401e3c138d6e2ba0f1ef403c": 1791144163,
-        "0x5f543465c4bc32f460bbeeb8d65190d5dcc5a6e8": 1791154861
+        "0x5f543465c4bc32f460bbeeb8d65190d5dcc5a6e8": 1791154861,
+        "0x4e50f7d961b93610b332ceb3973f0e9222d915ee": 1791172870
       },
-      "total_usd": 13178.351916108042,
+      "total_usd": 14712.521248092653,
       "last_tier": 2
     },
     "ethereum:0x9813f688d022192ff7fe6854d9fa0a9529bc5fdb": {
